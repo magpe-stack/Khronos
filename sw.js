@@ -1,7 +1,7 @@
 
 "use strict";
 
-const CACHE_NAME = "khronos-static-v1";
+const CACHE_NAME = "khronos-static-v2";
 
 const APP_SHELL = [
   "./",
@@ -25,12 +25,16 @@ self.addEventListener("activate", event => {
   event.waitUntil(
     (async () => {
       const keys = await caches.keys();
+
       await Promise.all(
-        keys.filter(key =>
-          key.startsWith("khronos-static-") &&
-          key !== CACHE_NAME
-        ).map(key => caches.delete(key))
+        keys
+          .filter(key =>
+            key.startsWith("khronos-static-") &&
+            key !== CACHE_NAME
+          )
+          .map(key => caches.delete(key))
       );
+
       await self.clients.claim();
     })()
   );
@@ -54,15 +58,19 @@ self.addEventListener("fetch", event => {
 
       try {
         const response = await fetch(request);
+
         if (response.ok && response.type === "basic") {
           await cache.put(request, response.clone());
         }
+
         return response;
       } catch {
         if (request.mode === "navigate") {
           const fallback = await cache.match("./index.html");
+
           if (fallback) return fallback;
         }
+
         return Response.error();
       }
     })()
