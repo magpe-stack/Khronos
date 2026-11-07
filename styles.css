@@ -198,7 +198,7 @@ footer{
     height:150px;
     object-fit:contain;
     transform-origin:center center;
-    animation:gear 1.2s linear infinite;
+  animation:gear 0.4s linear infinite;
     will-change:transform
   }
 }
