@@ -26,7 +26,7 @@ Em vez de apresentar apenas horas e minutos, o Khronos representa o esforço por
 
 ### Khronos App
 
-![Khronos App](KhronosApp.png)
+![Khronos App](KhronosCover.png)
 
 A interface do Khronos foi projetada com foco em usabilidade, desempenho e uma experiência visual limpa, facilitando o acompanhamento de tarefas e atividades em tempo real.
 
