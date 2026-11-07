@@ -22,6 +22,14 @@ O Khronos é um motor de hábitos atômicos que transforma tempo dedicado a proj
 
 Em vez de apresentar apenas horas e minutos, o Khronos representa o esforço por meio de Pulsos, Giros, Turnos, Fases e Propulsões. O usuário pode iniciar e pausar sessões, registrar atividades realizadas fora do aplicativo, acompanhar o avanço contra chefões simbólicos e desbloquear conquistas conforme os graus se acumulam.
 
+## Screenshots
+
+### Khronos App
+
+![Khronos App](KhronosApp.png)
+
+A interface do Khronos foi projetada com foco em usabilidade, desempenho e uma experiência visual limpa, facilitando o acompanhamento de tarefas e atividades em tempo real.
+
 O aplicativo não avalia a qualidade do trabalho nem verifica automaticamente se uma tarefa foi realmente executada. Sua medida é o tempo declarado e contabilizado. A interpretação desse tempo como produtividade depende da honestidade do registro e dos critérios pessoais do usuário.
 
 ## 2. Por que o nome Khronos?
