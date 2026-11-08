@@ -284,13 +284,14 @@
         : ""}`;
   }
 
+
   function stats(ms) {
     return `<div class="grid stats">
       <div class="card">
         <div class="stat-number">${degreeText(ms)}</div>
         <div class="stat-label">Graus acumulados</div>
       </div>
-      ${counts(ms).slice(0, 3).map(u => `
+      ${counts(ms).map(u => `
         <div class="card">
           <div class="stat-number">${fmt(u.count)}</div>
           <div class="stat-label">
@@ -300,6 +301,7 @@
       `).join("")}
     </div>`;
   }
+
 
   function progressBar(value, label) {
     return `<div class="progress" role="progressbar"
