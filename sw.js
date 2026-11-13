@@ -1,78 +1,9 @@
-
-"use strict";
-
-const CACHE_NAME = "khronos-static-v2";
-
-const APP_SHELL = [
-  "./",
-  "./index.html",
-  "./styles.css",
-  "./app.js",
-  "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png"
-];
-
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
-  );
-});
-
-self.addEventListener("activate", event => {
-  event.waitUntil(
-    (async () => {
-      const keys = await caches.keys();
-
-      await Promise.all(
-        keys
-          .filter(key =>
-            key.startsWith("khronos-static-") &&
-            key !== CACHE_NAME
-          )
-          .map(key => caches.delete(key))
-      );
-
-      await self.clients.claim();
-    })()
-  );
-});
-
-self.addEventListener("fetch", event => {
-  const request = event.request;
-
-  if (request.method !== "GET") return;
-
-  const url = new URL(request.url);
-
-  if (url.origin !== self.location.origin) return;
-
-  event.respondWith(
-    (async () => {
-      const cache = await caches.open(CACHE_NAME);
-      const cached = await cache.match(request);
-
-      if (cached) return cached;
-
-      try {
-        const response = await fetch(request);
-
-        if (response.ok && response.type === "basic") {
-          await cache.put(request, response.clone());
-        }
-
-        return response;
-      } catch {
-        if (request.mode === "navigate") {
-          const fallback = await cache.match("./index.html");
-
-          if (fallback) return fallback;
-        }
-
-        return Response.error();
-      }
-    })()
-  );
+const CACHE='impulso-v72-propulsao';
+const ASSETS=['./','./index.html','./styles.css?v=72','./theme-impulso.css?v=72','./theme-impulso-analogo.css?v=72','./theme-impulso-triadico.css?v=72','./theme-impulso-granfino.css?v=72','./theme-impulso-ecologico.css?v=72','./theme-impulso-mistico.css?v=72','./app.js?v=72','./manifest.json?v=13','./rocket-192-v11.png','./rocket-512-v11.png','./logo.svg','./logo.png','./habitos_elixires_v2.json','./ImpulsoVision.svg'];
+self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('impulso-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+self.addEventListener('fetch',e=>{
+ const req=e.request;if(req.method!=='GET'||new URL(req.url).origin!==location.origin)return;
+ if(req.mode==='navigate'){e.respondWith(fetch(req).catch(()=>caches.match('./index.html')));return;}
+ e.respondWith(caches.match(req).then(cached=>cached||fetch(req).then(res=>{if(res.ok){const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy))}return res})));
 });

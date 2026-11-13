@@ -1,0 +1,62 @@
+/* Impulso 44 — Blue Sky, harmonia análoga. Escopo exclusivo da paleta. */
+body[data-palette="blue-sky"]{
+ --itten-primary:#00C7B0;--itten-secondary:#007BC7;--itten-accent:#0018C7;
+ --itten-color-1:#00C7B0;--itten-color-2:#007BC7;--itten-color-3:#0018C7;
+ --itten-color-4:#008071;--itten-color-5:#004F80;--itten-color-6:#000F80;
+ --itten-color-7:#0FFFE3;--itten-color-8:#0FA3FF;--itten-color-9:#0F2CFF;
+ --itten-color-10:#003D36;--itten-color-11:#00263D;--itten-color-12:#00073D;
+ --itten-gradient:linear-gradient(135deg,#00C7B0 0%,#007BC7 50%,#0018C7 100%);
+ --base-1:#00C7B0;--base-2:#007BC7;--base-3:#0018C7;
+ --primary:#0018C7;--secondary:#004F80;--accent:#008071;
+ --color-1:#00C7B0;--color-2:#007BC7;--color-3:#0018C7;--color-4:#008071;
+ --color-5:#004F80;--color-6:#000F80;--color-7:#0FFFE3;--color-8:#0FA3FF;
+ --color-9:#0F2CFF;--color-10:#003D36;--color-11:#00263D;--color-12:#00073D;
+ --gradient-linear:var(--itten-gradient);--gradient-radial:radial-gradient(circle,#00C7B0,#007BC7 55%,#0018C7);
+ --bg:#FFFFFF;--panel:#FFFFFF;--soft:#F1F7FA;--surface:#F1F7FA;
+ --text:#10141D;--muted:#334155;--line:#B8CBD5;--focus:#0018C7;
+ --btn:#0018C7;--shadow:0 12px 28px #10141d12;
+ --bg-surface:#FFFFFF;--text-primary:#10141D;--text-accent:#004F80;
+ --btn-primary-bg:#0018C7;--btn-primary-text:#FFFFFF;
+ --btn-accent-bg:#00C7B0;--btn-accent-text:#10141D;
+ --status-success-bg:#003D36;--status-success-text:#FFFFFF;
+ --status-danger-bg:#000F80;--status-danger-text:#FFFFFF;
+ --status-warning-bg:#007BC7;--status-warning-text:#000000;
+ --status-rare-bg:#0F2CFF;--status-rare-text:#FFFFFF;
+ --progress-track:#DCE9EF;--focus-ring:#0018C7;color-scheme:light;
+}
+body[data-palette="blue-sky"].dark{
+ --bg:#10141D;--panel:#1D2834;--soft:#253544;--surface:#253544;
+ --text:#FFFFFF;--muted:#D4E4ED;--line:#526878;--focus:#0FFFE3;
+ --btn:#00C7B0;--shadow:0 12px 28px #0004;
+ --bg-surface:#1D2834;--text-primary:#FFFFFF;--text-accent:#0FFFE3;
+ --btn-primary-bg:#00C7B0;--btn-primary-text:#10141D;
+ --btn-accent-bg:#0FFFE3;--btn-accent-text:#10141D;
+ --status-success-bg:#00C7B0;--status-success-text:#10141D;
+ --status-warning-bg:#0FA3FF;--status-warning-text:#10141D;
+ --progress-track:#344455;--focus-ring:#0FFFE3;color-scheme:dark;
+}
+body[data-palette="blue-sky"] .btn.primary{background:var(--btn-primary-bg);color:var(--btn-primary-text);border-color:var(--btn-primary-bg)}
+body[data-palette="blue-sky"] .btn.danger{background:#000F80;color:#FFFFFF;border-color:#000F80}
+body[data-palette="blue-sky"] .hero{background:#00073D;color:#FFFFFF;border-left:5px solid #00C7B0}
+body[data-palette="blue-sky"] .brandmark,body[data-palette="blue-sky"] .splash-mark{background:#0018C7;color:#FFFFFF}
+body[data-palette="blue-sky"] .progress>span{background:var(--itten-gradient)}
+body[data-palette="blue-sky"] .tag.start{background:#003D36;color:#FFFFFF}
+body[data-palette="blue-sky"] .tag.end{background:#0FA3FF;color:#10141D}
+body[data-palette="blue-sky"] .tag.habit{background:#00C7B0;color:#10141D}
+body[data-palette="blue-sky"] .storage-track span{background:#007BC7}
+body[data-palette="blue-sky"] :is(button,a,input,select,textarea):focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+body[data-palette="blue-sky"] .bs-btn--primary{background:var(--btn-primary-bg);color:var(--btn-primary-text)}
+body[data-palette="blue-sky"] .bs-btn--elixir{background:#0FFFE3;color:#10141D}
+body[data-palette="blue-sky"] .bs-badge--success{background:var(--status-success-bg);color:var(--status-success-text)}
+body[data-palette="blue-sky"] .bs-badge--danger{background:#000F80;color:#FFFFFF;border-style:dashed}
+body[data-palette="blue-sky"] .bs-badge--rare{background:#0F2CFF;color:#FFFFFF;border-style:double}
+body[data-palette="blue-sky"] .bs-progress{background:var(--progress-track)}
+body[data-palette="blue-sky"] .bs-progress__fill{background:var(--itten-gradient)}
+body[data-palette="blue-sky"] .palette-swatches.blue-sky i:nth-child(1){background:#00C7B0}
+body[data-palette="blue-sky"] .palette-swatches.blue-sky i:nth-child(2){background:#007BC7}
+body[data-palette="blue-sky"] .palette-swatches.blue-sky i:nth-child(3){background:#0018C7}
+/* Amostras visíveis independentemente da identidade atualmente selecionada. */
+.palette-swatches.blue-sky i:nth-child(1){background:#00C7B0}
+.palette-swatches.blue-sky i:nth-child(2){background:#007BC7}
+.palette-swatches.blue-sky i:nth-child(3){background:#0018C7}
+@media(prefers-reduced-motion:reduce){body[data-palette="blue-sky"] *,body[data-palette="blue-sky"] *::before,body[data-palette="blue-sky"] *::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}

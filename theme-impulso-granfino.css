@@ -1,0 +1,20 @@
+/* IMPULSO GRANFINO — identidade Itten, quinto tema */
+:root{
+ --itten-primary:#1F1F1F;--itten-secondary:#3E3E3E;--itten-accent:#616161;
+ --itten-color-4:#808080;--itten-color-5:#3B2B2B;--itten-color-6:#48614F;
+ --itten-color-7:#786487;--itten-color-8:#A6A287;--itten-color-9:#ADBFC2;
+ --itten-color-10:#3B2B34;--itten-color-11:#4E6148;--itten-color-12:#656487;
+}
+body[data-palette="granfino"]{--accent:#ADBFC2;--accent2:#A6A287;--primary:#ADBFC2;--ignite:#ADBFC2;--ignite-rgb:173,191,194;--bg:#f3f3f0;--surface:#fff;--text:#1F1F1F;--muted:#3E3E3E;--border:#808080;color-scheme:light}
+body.dark[data-palette="granfino"]{--bg:#1F1F1F;--surface:#3E3E3E;--text:#FFFFFF;--muted:#ADBFC2;--border:#808080;color-scheme:dark}
+body[data-palette="granfino"] :is(.btn.primary,.primary,.inventory-pill.selected){background:#3E3E3E!important;color:#fff!important;border-color:#808080!important}
+body[data-palette="granfino"] :is(.btn,.inventory-card,.list-card,.panel,.palette-option){border-color:var(--itten-color-4)}
+body[data-palette="granfino"] .inventory-tag{background:var(--itten-color-5);color:#fff}
+body[data-palette="granfino"] .inventory-count{color:var(--text)}
+body[data-palette="granfino"] .progress>span{background:var(--itten-color-6)}
+body[data-palette="granfino"] :is(button,input,select,textarea):focus-visible{outline:3px solid var(--itten-color-7);outline-offset:3px}
+body[data-palette="granfino"] #splash{background:radial-gradient(circle at 50% 38%,#3E3E3E 0%,#1F1F1F 68%,#131313 100%);color:#fff}
+body[data-palette="granfino"] #splash .splash-wordmark strong{color:#fff}
+body[data-palette="granfino"] #splash :is(.splash-caption,.splash-kicker,.splash-wordmark small){color:#ADBFC2}
+body[data-palette="granfino"] #splash .splash-loading-bar{background:#ADBFC2}
+.palette-swatches.granfino i:nth-child(1){background:#1F1F1F}.palette-swatches.granfino i:nth-child(2){background:#616161}.palette-swatches.granfino i:nth-child(3){background:#ADBFC2}

@@ -1,0 +1,62 @@
+/* Impulso 45 — Trinity: harmonia triádica, isolada por identidade. */
+body[data-palette="trinity"]{
+ --itten-primary:#FF6B00;--itten-base-1:#FF6B00;
+ --itten-secondary:#00FF6B;--itten-base-2:#00FF6B;
+ --itten-accent:#6B00FF;--itten-base-3:#6B00FF;
+ --itten-color-1:#FF6B00;--itten-color-2:#00FF6B;--itten-color-3:#6B00FF;
+ --itten-color-4:#B84D00;--itten-color-5:#00B84D;--itten-color-6:#4D00B8;
+ --itten-color-7:#FF9447;--itten-color-8:#47FF94;--itten-color-9:#9447FF;
+ --itten-color-10:#702F00;--itten-color-11:#00702F;--itten-color-12:#2F0070;
+ --itten-gradient:linear-gradient(135deg,#FF6B00 0%,#00FF6B 50%,#6B00FF 100%);
+ --base-1:#FF6B00;--base-2:#00FF6B;--base-3:#6B00FF;
+ --primary:#702F00;--secondary:#4D00B8;--accent:#00702F;
+ --color-1:#FF6B00;--color-2:#00FF6B;--color-3:#6B00FF;
+ --color-4:#B84D00;--color-5:#00B84D;--color-6:#4D00B8;
+ --color-7:#FF9447;--color-8:#47FF94;--color-9:#9447FF;
+ --color-10:#702F00;--color-11:#00702F;--color-12:#2F0070;
+ --gradient-linear:var(--itten-gradient);--gradient-radial:radial-gradient(circle,#FF6B00,#00FF6B 55%,#6B00FF);
+ --bg:#FFFFFF;--panel:#FFFFFF;--soft:#F7F5F2;--surface:#F7F5F2;
+ --text:#10141D;--muted:#394252;--line:#C8C5CD;--focus:#4D00B8;
+ --btn:#702F00;--shadow:0 12px 28px #10141d12;
+ --bg-surface:#FFFFFF;--text-primary:#10141D;--text-accent:#4D00B8;
+ --btn-primary-bg:#702F00;--btn-primary-text:#FFFFFF;
+ --btn-accent-bg:#FF6B00;--btn-accent-text:#10141D;
+ --status-success-bg:#00702F;--status-success-text:#FFFFFF;
+ --status-danger-bg:#702F00;--status-danger-text:#FFFFFF;
+ --status-warning-bg:#FF6B00;--status-warning-text:#10141D;
+ --status-rare-bg:#4D00B8;--status-rare-text:#FFFFFF;
+ --progress-track:#E9E5EB;--focus-ring:#4D00B8;color-scheme:light;
+}
+body[data-palette="trinity"].dark{
+ --bg:#10141D;--panel:#202632;--soft:#2B3340;--surface:#2B3340;
+ --text:#FFFFFF;--muted:#D6DCE6;--line:#5B6474;--focus:#47FF94;
+ --primary:#FF9447;--secondary:#47FF94;--accent:#FF9447;
+ --btn:#FF6B00;--shadow:0 12px 28px #0004;
+ --bg-surface:#202632;--text-primary:#FFFFFF;--text-accent:#47FF94;
+ --btn-primary-bg:#FF6B00;--btn-primary-text:#10141D;
+ --btn-accent-bg:#00FF6B;--btn-accent-text:#10141D;
+ --status-success-bg:#00FF6B;--status-success-text:#10141D;
+ --status-warning-bg:#FF9447;--status-warning-text:#10141D;
+ --progress-track:#3C4554;--focus-ring:#47FF94;color-scheme:dark;
+}
+body[data-palette="trinity"] .btn.primary{background:var(--btn-primary-bg);color:var(--btn-primary-text);border-color:var(--btn-primary-bg)}
+body[data-palette="trinity"] .btn.danger{background:#702F00;color:#FFFFFF;border-color:#702F00}
+body[data-palette="trinity"] .hero{background:#2F0070;color:#FFFFFF;border-left:5px solid #FF9447}
+body[data-palette="trinity"] .brandmark,body[data-palette="trinity"] .splash-mark{background:#4D00B8;color:#FFFFFF}
+body[data-palette="trinity"] .progress>span{background:var(--itten-gradient)}
+body[data-palette="trinity"] .tag.start{background:#00702F;color:#FFFFFF}
+body[data-palette="trinity"] .tag.end{background:#FF9447;color:#10141D}
+body[data-palette="trinity"] .tag.habit{background:#00FF6B;color:#10141D}
+body[data-palette="trinity"] .storage-track span{background:#FF6B00}
+body[data-palette="trinity"] :is(button,a,input,select,textarea):focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+body[data-palette="trinity"] .it-btn--primary{background:var(--btn-primary-bg);color:var(--btn-primary-text)}
+body[data-palette="trinity"] .it-btn--elixir{background:#00FF6B;color:#10141D}
+body[data-palette="trinity"] .it-badge--success{background:var(--status-success-bg);color:var(--status-success-text)}
+body[data-palette="trinity"] .it-badge--danger{background:#702F00;color:#FFFFFF;border-style:dashed}
+body[data-palette="trinity"] .it-badge--rare{background:#4D00B8;color:#FFFFFF;border-style:double}
+body[data-palette="trinity"] .it-progress{background:var(--progress-track)}
+body[data-palette="trinity"] .it-progress__fill{background:var(--itten-gradient)}
+.palette-swatches.trinity i:nth-child(1){background:#FF6B00}
+.palette-swatches.trinity i:nth-child(2){background:#00FF6B}
+.palette-swatches.trinity i:nth-child(3){background:#6B00FF}
+@media(prefers-reduced-motion:reduce){body[data-palette="trinity"] *,body[data-palette="trinity"] *::before,body[data-palette="trinity"] *::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}

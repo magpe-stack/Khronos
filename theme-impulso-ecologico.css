@@ -1,0 +1,22 @@
+/* IMPULSO ECOLÓGICO — harmonia análoga verde de Itten */
+:root{
+ --itten-primary:#628000;--itten-secondary:#228000;--itten-accent:#00801E;
+ --itten-color-4:#2F3D00;--itten-color-5:#103D00;--itten-color-6:#003D0E;
+ --itten-color-7:#99C700;--itten-color-8:#35C700;--itten-color-9:#00C72F;
+ --itten-color-10:#C7FF10;--itten-color-11:#4FFF10;--itten-color-12:#10FF48;
+}
+body[data-palette="ecologico"]{--accent:#103D00;--accent2:#228000;--primary:#103D00;--ignite:#C7FF10;--ignite-rgb:199,255,16;--bg:#f6faed;--surface:#fff;--text:#103D00;--muted:#2F3D00;--border:#628000;color-scheme:light}
+body.dark[data-palette="ecologico"]{--accent:#C7FF10;--accent2:#4FFF10;--primary:#C7FF10;--bg:#10200d;--surface:#103D00;--text:#fff;--muted:#e5f4d8;--border:#99C700;color-scheme:dark}
+body[data-palette="ecologico"] :is(.btn.primary,.primary,.inventory-pill.selected){background:#003D0E!important;color:#fff!important;border-color:#99C700!important}
+body.dark[data-palette="ecologico"] :is(.btn.primary,.primary,.inventory-pill.selected){background:#C7FF10!important;color:#10141D!important;border-color:#C7FF10!important}
+body[data-palette="ecologico"] :is(.inventory-card,.list-card,.panel,.palette-option){border-color:var(--border)}
+body[data-palette="ecologico"] .inventory-tag{background:#003D0E;color:#fff}
+body[data-palette="ecologico"] .inventory-count{color:var(--text)}
+body[data-palette="ecologico"] .progress>span{background:#35C700}
+body[data-palette="ecologico"] :is(button,input,select,textarea):focus-visible{outline:3px solid #00801E;outline-offset:3px}
+body.dark[data-palette="ecologico"] :is(button,input,select,textarea):focus-visible{outline-color:#C7FF10}
+body[data-palette="ecologico"] #splash{background:radial-gradient(circle at 50% 38%,#103D00 0%,#003D0E 65%,#071e0c 100%);color:#fff}
+body[data-palette="ecologico"] #splash .splash-wordmark strong{color:#fff}
+body[data-palette="ecologico"] #splash :is(.splash-caption,.splash-kicker,.splash-wordmark small){color:#C7FF10}
+body[data-palette="ecologico"] #splash .splash-loading-bar{background:#C7FF10}
+.palette-swatches.ecologico i:nth-child(1){background:#003D0E}.palette-swatches.ecologico i:nth-child(2){background:#228000}.palette-swatches.ecologico i:nth-child(3){background:#C7FF10}

@@ -1,30 +1,22 @@
-
 {
-  "id": "./",
-  "name": "Khronos — Motor de Hábitos Atômicos",
-  "short_name": "Khronos",
-  "description": "Motor de hábitos atômicos com progressão temporal em graus, projetos, chefões e conquistas.",
+  "name": "Impulso — Motor de Produtividade Pessoal",
+  "short_name": "Impulso",
+  "description": "Projetos, hábitos, ponto, arena e 10.000 horas",
   "lang": "pt-BR",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "any",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
-  "categories": [
-    "productivity",
-    "lifestyle",
-    "utilities"
-  ],
+  "background_color": "#FFFFFF",
+  "theme_color": "#FF0080",
   "icons": [
     {
-      "src": "./icon-192.png",
+      "src": "rocket-192-v11.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./icon-512.png",
+      "src": "rocket-512-v11.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

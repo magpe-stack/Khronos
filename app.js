@@ -1,1377 +1,808 @@
-"use strict";
+(()=>{'use strict';
+const KEY='impulso-data-v1',THEME='impulso-theme', $=s=>document.querySelector(s), main=$('#main'),nav=$('#nav'),modal=$('#modal');
+const BOSS_TIERS=[{"id":1,"title":"Os Hábitos Menores","start":1,"end":20,"description":"Monstros que representam as micro-hesitações do dia a dia, fáceis de ignorar, mas que drenam os primeiros minutos."},{"id":2,"title":"As Distrações Cotidianas","start":21,"end":40,"description":"Criaturas que se alimentam de pequenos desvios de atenção e rituais de adiamento."},{"id":3,"title":"Os Bloqueios Mentais Leves","start":41,"end":60,"description":"Inimigos que começam a atacar a autoconfiança e a clareza mental do jogador."},{"id":4,"title":"A Erosão do Tempo","start":61,"end":80,"description":"Chefes que aceleram a percepção de perda temporal e geram os primeiros sinais de pânico leve."},{"id":5,"title":"O Labirinto da Fuga","start":81,"end":100,"description":"Entidades que constroem labirintos psicológicos onde o jogador se perde em rationalizações."},{"id":6,"title":"A Ansiedade Antecipatória","start":101,"end":120,"description":"O peso emocional começa a esmagar. O medo do fracasso e o medo do esforço se materializam."},{"id":7,"title":"A Saturação Digital e Mental","start":121,"end":140,"description":"Inimigos colossais alimentados pelo excesso de informação, dopamina barata e colapso de atenção."},{"id":8,"title":"O Abismo da Inércia Crônica","start":141,"end":160,"description":"O jogador enfrenta a paralisia profunda, onde o corpo e a mente parecem de pedra, incapazes de iniciar qualquer movimento."},{"id":9,"title":"A Véspera do Colapso","start":161,"end":180,"description":"A fase final de crise. O prazo final estourou ou está prestes a estourar de forma catastrófica. O pânico produtivo supremo."},{"id":10,"title":"Os Chefes Supremos do Domínio da Procrastinação","start":181,"end":200,"description":"As divindades primordiais da inércia, do tempo perdido e da auto-sabotagem em escala cósmica."}];
+const BOSSES=[{"id":1,"name":"O Soneca de Cinco Minutos — Sono leve","note":"","tier":1},{"id":2,"name":"A Notificação Fantasma — Tique","note":"","tier":1},{"id":3,"name":"O Impulso da Aba Aberta — Dispersão","note":"","tier":1},{"id":4,"name":"O Guardião do \"Só Mais Um Vídeo\" — Hipnose","note":"","tier":1},{"id":5,"name":"O Espreitador de Geladeira — Gula fútil","note":"O que abre a porta sem fome","tier":1},{"id":6,"name":"O Mestre do \"Depois Eu Faço\" — Preguiça","note":"","tier":1},{"id":7,"name":"O Espectro da Mesa Limpa — Falso foco","note":"Procrastinação produtiva inicial","tier":1},{"id":8,"name":"O Golem de Rascunhos — Inacabado","note":"","tier":1},{"id":9,"name":"O Espião do Feed — Vício leve","note":"","tier":1},{"id":10,"name":"A Sombra do Café Extra — Agitação","note":"","tier":1},{"id":11,"name":"O Gnoll da Alerta Vibratória — Susto","note":"","tier":1},{"id":12,"name":"O Diabrete da Gaveta Desorganizada — Desvio","note":"","tier":1},{"id":13,"name":"O Titereiro do \"De manhã eu começo\" — Ilusão","note":"","tier":1},{"id":14,"name":"O Falsificador de Prioridades Menores — Engano","note":"","tier":1},{"id":15,"name":"O Verme dos Links Salvos para Ler Depois — Acúmulo","note":"","tier":1},{"id":16,"name":"O Guardião do E-mail Sem Importância — Ruído","note":"","tier":1},{"id":17,"name":"A Brisa da Janela Vazia — Devaneio","note":"","tier":1},{"id":18,"name":"O Eco do \"Ainda Tenho Tempo\" — Folga","note":"","tier":1},{"id":19,"name":"O Fantasma da Toalha Molhada na Cama — Desleixo","note":"","tier":1},{"id":20,"name":"O Iniciador de Buscas Inúteis no Google — Curioso","note":"","tier":1},{"id":21,"name":"O Hidra das Redes Sociais — Zumbi","note":"Cabeças de Stories infinitos","tier":2},{"id":22,"name":"O Senhor dos Memes em Cadeia — Riso oco","note":"","tier":2},{"id":23,"name":"A Coruja da Insônia por Rolagem Infinita — Olheiras","note":"","tier":2},{"id":24,"name":"O Mímico da Organização de Pastas — Mania","note":"","tier":2},{"id":25,"name":"O Alquimista da Playlist Perfeita — Demora","note":"que gasta 2h escolhendo música","tier":2},{"id":26,"name":"O Devorador de Curtidas — Vaidade","note":"","tier":2},{"id":27,"name":"O Colecionador de Tutoriais Inúteis — Teoria","note":"","tier":2},{"id":28,"name":"O Monstro da Limpeza Forçada — Fuga limpa","note":"Varre a casa inteira para não estudar","tier":2},{"id":29,"name":"O Gigante do \"De Segunda-feira Eu Mudarei\" — Promessa","note":"","tier":2},{"id":30,"name":"A Sereia dos Jogos de Celular \"Rápidos\" — Vício","note":"","tier":2},{"id":31,"name":"O Cavaleiro do Fone de Ouvido Desconectado — Isolado","note":"","tier":2},{"id":32,"name":"O Falso Urgente — Alarme","note":"Notificações de aplicativos comerciais","tier":2},{"id":33,"name":"O Guardião do Modo Avião Desligado — Aberto","note":"","tier":2},{"id":34,"name":"O Espírito do Apagador de Arquivos Antigos — Nostalgia","note":"","tier":2},{"id":35,"name":"O Duende da Dúvida sobre Coisas Fúteis — Trava","note":"","tier":2},{"id":36,"name":"O Mago da Compra Online por Impulso — Gasto","note":"","tier":2},{"id":37,"name":"O Verme do \"Deixa eu ver só o WhatsApp\" — Espiada","note":"","tier":2},{"id":38,"name":"O Titã da Checagem de Clima Sem Sair de Casa — Tédio","note":"","tier":2},{"id":39,"name":"A Névoa das Leituras de Comentários Tóxicos — Raiva","note":"","tier":2},{"id":40,"name":"O Sombra do Café que Esfriou na Xícara — Esquecido","note":"","tier":2},{"id":41,"name":"O Monstro da Página em Branco — Branco","note":"","tier":3},{"id":42,"name":"O Espectro do Primeiro Parágrafo Apagado — Apagão","note":"","tier":3},{"id":43,"name":"O Guardião da Caneta sem Tinta — Falha","note":"","tier":3},{"id":44,"name":"O Gnoll do Pensamento Interrompido — Corte","note":"","tier":3},{"id":45,"name":"A Bruxa da Comparação com os Outros — Inveja","note":"","tier":3},{"id":46,"name":"O Titã da Dúvida de Vocabulário — Gagueira","note":"","tier":3},{"id":47,"name":"O Eco da Voz Crítica do Professor Antigo — Medo","note":"","tier":3},{"id":48,"name":"O Ladrão de Foco Matutino — Névoa","note":"","tier":3},{"id":49,"name":"A Sombra do Rascunho Permanente — Rascunho","note":"","tier":3},{"id":50,"name":"O Mago da Perfeição Prematura — Rigidez","note":"","tier":3},{"id":51,"name":"O Golem de Livros Não Lidos na Estante — Peso","note":"","tier":3},{"id":52,"name":"O Fantasma da Tarefa Mal Definida — Confusão","note":"","tier":3},{"id":53,"name":"O Colecionador de Desculpas Plausíveis — Álibi","note":"","tier":3},{"id":54,"name":"O Guardião do \"Não Tenho o Equipamento Ideal\" — Carência","note":"","tier":3},{"id":55,"name":"O Demônio do \"Preciso Pesquisar Mais Antes\" — Excesso","note":"","tier":3},{"id":56,"name":"A Névoa da Inércia Pós-Almoço — Moleza","note":"","tier":3},{"id":57,"name":"O Cão de Três Cabeças do \"Estou Cansado Hoje\" — Fadiga","note":"","tier":3},{"id":58,"name":"O Esfinge do \"Por Onde Eu Começo?\" — Enigma","note":"","tier":3},{"id":59,"name":"O Cavaleiro da Ociosidade Calculada — Calma oca","note":"","tier":3},{"id":60,"name":"O Senhor da Fuga Disfarçada de Descanso — Mentira","note":"","tier":3},{"id":61,"name":"O Cronometrista Corrompido — Atraso","note":"","tier":4},{"id":62,"name":"O Devorador de Manhãs Perdidas — Manhã oca","note":"","tier":4},{"id":63,"name":"O Espectro do Meio-Dia Desperdiçado — Vazio","note":"","tier":4},{"id":64,"name":"O Titã dos Dias Iguais — Loop","note":"","tier":4},{"id":65,"name":"O Guardião do Relógio que Anda para Trás — Regresso","note":"","tier":4},{"id":66,"name":"A Hidra dos Prazos Acumulados — Bola neve","note":"","tier":4},{"id":67,"name":"O Cavaleiro da Tarde Vazia — Tédio","note":"","tier":4},{"id":68,"name":"O Sombra do Crepúsculo Inútil — Melancolia","note":"","tier":4},{"id":69,"name":"O Mago da Ilusão de que \"Ainda Há o Fim de Semana\" — Miragem","note":"","tier":4},{"id":70,"name":"O Golem de Segundas-Feiras Infinitas — Ciclo","note":"","tier":4},{"id":71,"name":"O Fantasma do Calendário Desatualizado — Perdido","note":"","tier":4},{"id":72,"name":"O Monstro da Hora Extra Desnecessária — Exaustão","note":"","tier":4},{"id":73,"name":"O Arquiteto das Férias que Nunca Acontecem — Cansaço","note":"","tier":4},{"id":74,"name":"O Colecionador de Prazos Perdidos por Pouco — Quase","note":"","tier":4},{"id":75,"name":"O Vento do Tempo Escoando pelos Dedos — Escoa","note":"","tier":4},{"id":76,"name":"O Guardião da Agenda em Brancura — Nulo","note":"","tier":4},{"id":77,"name":"O Espectro do Aniversário Sem Metas Conquistadas — Velhice","note":"","tier":4},{"id":78,"name":"O Senhor dos Anos Que Voam — Vertigem","note":"","tier":4},{"id":79,"name":"A Correnteza da Rotina Estagnada — Estagna","note":"","tier":4},{"id":80,"name":"O Monstro do Relógio de Ponto Emocional — Pressão","note":"","tier":4},{"id":81,"name":"O Labirintista da Racionalização — Lábia","note":"","tier":5},{"id":82,"name":"O Mestre das Justificativas Complexas — Desculpa","note":"","tier":5},{"id":83,"name":"A Sombra da Autoilusão — Cegueira","note":"","tier":5},{"id":84,"name":"O Guardião da Porta dos \"Outros Projetos Mais Fáceis\" — Atalho","note":"","tier":5},{"id":85,"name":"O Falsificador de Metas Inalcançáveis — Irreal","note":"para ter desculpa de desistir","tier":5},{"id":86,"name":"O Demônio da Complexidade Inventada — Nó mental","note":"","tier":5},{"id":87,"name":"O Golem de Desculpas Técnicas — Jargão","note":"","tier":5},{"id":88,"name":"O Espelho da Autoimagem Distorcida pela Inércia — Distorção","note":"","tier":5},{"id":89,"name":"O Arquiteto do \"Agora Não É o Momento Ideal\" — Espera","note":"","tier":5},{"id":90,"name":"A Bruxa da \"Inspiração que Nunca Chega\" — Seca","note":"","tier":5},{"id":91,"name":"O Monstro do \"Preciso Estudar Mais Sobre Isso Primeiro\" — Trava","note":"","tier":5},{"id":92,"name":"O Guardião do Ciclo Vicioso — Prisão","note":"","tier":5},{"id":93,"name":"O Fantasma da Energia Desperdiçada em Planejamento — Gasto oco","note":"","tier":5},{"id":94,"name":"O Cavaleiro do \"Projeto Eternamente em Beta\" — Incompleto","note":"","tier":5},{"id":95,"name":"O Sombra da Pilha de Tarefas Acumuladas — Soterrado","note":"","tier":5},{"id":96,"name":"O Labirinto Vivo do \"Fazendo Nada com Pressa\" — Agitado","note":"","tier":5},{"id":97,"name":"O Senhor das Promessas Não Cumpridas a Si Mesmo — Descrédito","note":"","tier":5},{"id":98,"name":"O Monstro da Ilusão de Produtividade — Farsa","note":"","tier":5},{"id":99,"name":"A Névoa do Esforço sem Direção — Deriva","note":"","tier":5},{"id":100,"name":"O Guardião do Meio do Caminho Abandonado — Desiste","note":"","tier":5},{"id":101,"name":"O Titã da Culpa Noturna — Culpa","note":"","tier":6},{"id":102,"name":"O Espectro do Remorso Matinal — Remorso","note":"","tier":6},{"id":103,"name":"O Monstro da Ansiedade de Desempenho — Pavor","note":"","tier":6},{"id":104,"name":"A Fera do Medo de Errar em Público — Vergonha","note":"","tier":6},{"id":105,"name":"O Guardião da Expectativa Alheia — Fardo","note":"","tier":6},{"id":106,"name":"O Cavaleiro do Pânico Silencioso — Sufoco","note":"","tier":6},{"id":107,"name":"O Sombra do \"Vão Descobrir que Sou uma Fraude\" — Impostor","note":"Síndrome do Impostor Procrastinador","tier":6},{"id":108,"name":"O Golem de Suor Frio diante da Tela — Calafrio","note":"","tier":6},{"id":109,"name":"O Demônio do Aperto no Peito — Angústia","note":"","tier":6},{"id":110,"name":"A Bruxa dos Cenários Catastróficos na mente — Catástrofe","note":"","tier":6},{"id":111,"name":"O Guardião da Insônia por Excesso de Cobrança — Insônia","note":"","tier":6},{"id":112,"name":"O Fantasma da Oportunidade Perdida no Ano Passado — Lamento","note":"","tier":6},{"id":113,"name":"O Senhor dos Suspiros Profundos — Desânimo","note":"","tier":6},{"id":114,"name":"A Hidra do Medo do Sucesso — Recuo","note":"e da responsabilidade que ele traz","tier":6},{"id":115,"name":"O Mago da Paralisia por Excesso de Opções — Paralisia","note":"","tier":6},{"id":116,"name":"O Abismo da Autocrítica Destruidora — Autoódio","note":"","tier":6},{"id":117,"name":"O Monstro do Coração Acelerado sem Exercício — Taquicardia","note":"","tier":6},{"id":118,"name":"O Guardião do Travesseiro Molhado de Pranto Silencioso — Choro","note":"","tier":6},{"id":119,"name":"A Névoa da Desesperança Temporária — Descrença","note":"","tier":6},{"id":120,"name":"O Eco do \"Eu Deveria Estar Tão Longe Agora\" — Atrasado","note":"","tier":6},{"id":121,"name":"O Colosso do Algoritmo sem Fim — Vício","note":"","tier":7},{"id":122,"name":"O Titã da Dopamina Rápida — Abstinência","note":"","tier":7},{"id":123,"name":"A Hidra de Abas Infinitas do Navegador — Travado","note":"O Dragão de Mil Cabeças de Cromo","tier":7},{"id":124,"name":"O Mago do Zumbido no Ouvido Digital — Zumbido","note":"","tier":7},{"id":125,"name":"O Senhor da Carga Cognitiva Esgotada — Pane","note":"","tier":7},{"id":126,"name":"O Golem de Notícias Catastróficas em Cadeia — Doomscroll","note":"","tier":7},{"id":127,"name":"O Monstro da Câmera Desligada e Cérebro Desligado — Apagado","note":"","tier":7},{"id":128,"name":"O Guardião do Wi-Fi que Nunca Cai na Hora Certa — Tentação","note":"","tier":7},{"id":129,"name":"O Espectro do Chat Vazio e da Solidão Conectada — Solidão","note":"","tier":7},{"id":130,"name":"A Sombra do E-mail Não Lido — Caos","note":"Contador em 999+","tier":7},{"id":131,"name":"O Devorador de Span e Lixo Eletrônico Mental — Poluição","note":"","tier":7},{"id":132,"name":"O Cavaleiro da Tabela de Excel Abandonada — Desordem","note":"","tier":7},{"id":133,"name":"O Demônio da Atualização Constante de Página — Compulsão","note":"","tier":7},{"id":134,"name":"O Arquiteto da Multitarefa Impossível — Estilhaço","note":"","tier":7},{"id":135,"name":"O Fantasma dos 50 Livros em PDF Não Lidos — Acúmulo","note":"","tier":7},{"id":136,"name":"O Monstro da Bateria 1% — Desespero","note":"Desespero por recarga e fuga simultânea","tier":7},{"id":137,"name":"O Guardião do Cache Cheio e Memória Destruída — Amnésia","note":"","tier":7},{"id":138,"name":"O Senhor dos Links Perdidos nos Favoritos — Esquecido","note":"","tier":7},{"id":139,"name":"A Névoa da Informação Superficial — Raso","note":"","tier":7},{"id":140,"name":"O Titã do Cansaço Crônico de Tela — Vista turva","note":"","tier":7},{"id":141,"name":"O Monstro da Paralisia Total — Abulia","note":"Abulia Crônica","tier":8},{"id":142,"name":"O Titã de Pedra da Inércia Absoluta — Petrifica","note":"","tier":8},{"id":143,"name":"O Guardião do Sofá Grudado à Alma — Enraizado","note":"","tier":8},{"id":144,"name":"O Espectro do Dia Inteiro no Pijamas — Abandono","note":"","tier":8},{"id":145,"name":"O Senhor dos Membros de Chumbo — Peso morto","note":"","tier":8},{"id":146,"name":"A Fera do Silêncio EnsurDECedor do Quarto Escuro — Isolado","note":"","tier":8},{"id":147,"name":"O Golem de Desistência Silenciosa — Apatia","note":"Quiet Quitting Pessoal","tier":8},{"id":148,"name":"O Mago do Torpor Mental — Torpor","note":"","tier":8},{"id":149,"name":"O Abismo do \"Para Que Tentar?\" — Niilismo","note":"","tier":8},{"id":150,"name":"O Cavaleiro da Cinza e do Pó Acumulado — Desuso","note":"","tier":8},{"id":151,"name":"O Demônio da Cadeira Vazia na Mesa de Trabalho — Ausência","note":"","tier":8},{"id":152,"name":"A Sombra do Potencial Desperdiçado — Ruína","note":"","tier":8},{"id":153,"name":"O Guardião da Porta Trancada por Dentro — Clausura","note":"","tier":8},{"id":154,"name":"O Fantasma de Quem Você Poderia Ter Sido — Sombra","note":"","tier":8},{"id":155,"name":"O Monstro do Espelho que Reflete um Estranho Parado — Estranho","note":"","tier":8},{"id":156,"name":"A Névoa da Apatia Profunda — Acídia","note":"Acídia Suprema","tier":8},{"id":157,"name":"O Titã da Vontade Morta — Sem alma","note":"","tier":8},{"id":158,"name":"O Senhor dos Anos em Branco no Currículo da Vida — Lacuna","note":"","tier":8},{"id":159,"name":"O Cão de Guarda do Limbo Existencial — Limbo","note":"","tier":8},{"id":160,"name":"O Monstro do Fim da Linha da Rotina Morta — Fim","note":"","tier":8},{"id":161,"name":"O Lorde do Prazo Fatal Expirado — Estouro","note":"","tier":9},{"id":162,"name":"O Titã do Pânico da Última Hora — Pânico","note":"A Adrenalina Desesperada","tier":9},{"id":163,"name":"O Dragão da Noite em Claro de Desespero — Insônia","note":"","tier":9},{"id":164,"name":"O Mago do Trabalho Feito em 3 Horas que Exigia Meses — Gambiarra","note":"","tier":9},{"id":165,"name":"O Espectro da Banca de Avaliação Imminente — Terror","note":"","tier":9},{"id":166,"name":"A Hidra dos Erros por Pressa Extrema — Falha","note":"","tier":9},{"id":167,"name":"O Guardião da Impressora que Trava no Último Minuto — Sabotagem","note":"","tier":9},{"id":168,"name":"O Cavaleiro do \"Deus, Salve Meus Dados Salvos na Pressão\" — Prece","note":"","tier":9},{"id":169,"name":"O Demônio do Choro Abafado sob a Escrivaninha — Colapso","note":"","tier":9},{"id":170,"name":"O Monstro do Cafeína-Vampiro — Tremor","note":"Bebendo café frio para sobreviver ao caos","tier":9},{"id":171,"name":"O Arquiteto da Torre de Erros de Última Hora — Desastre","note":"","tier":9},{"id":172,"name":"A Sombra do Acidente de Percurso por Fadiga — Erro fatal","note":"","tier":9},{"id":173,"name":"O Senhor das Desculpas Finais ao Chefe/Professor — Humilhação","note":"","tier":9},{"id":174,"name":"O Golem de Documentos Corrompidos na Hora H — Perda","note":"","tier":9},{"id":175,"name":"O Fantasma da Reprovação por Margem Mínima — Quase lá","note":"","tier":9},{"id":176,"name":"O Guardião do Botão \"Enviar com Erro de Digitação\" — Vergonha","note":"","tier":9},{"id":177,"name":"A Fera do Colapso Nervoso no Altar do Prazo — Surto","note":"","tier":9},{"id":178,"name":"O Titã da Ruína Previsível — Queda","note":"","tier":9},{"id":179,"name":"O Abismo da Consequência Direta — Impacto","note":"","tier":9},{"id":180,"name":"O Senhor do \"Nunca Mais Faço Isso\" — Mentira","note":"Mentira","tier":9},{"id":181,"name":"Chronos-Vazio, O Devorador de Horas Mortas — Tempo zero","note":"O deus menor que consome os minutos não vividos","tier":10},{"id":182,"name":"Atelofobia, A Rainha da Perfeição Paralisante — Paralisia","note":"A entidade que impede qualquer começo por medo de falhar","tier":10},{"id":183,"name":"Acedia Prime, O Demônio da Indiferença Existencial — Vazio","note":"O soberano do torpor espiritual e mental","tier":10},{"id":184,"name":"O Autossabotador Cósmico — Traição","note":"A personificação de todas as vezes que o próprio usuário puxou o tapete de si mesmo","tier":10},{"id":185,"name":"O Arquiteto do Amanhã Eterno — Amanhã","note":"A entidade que governa o lugar onde tudo será feito \"amanhã\"","tier":10},{"id":186,"name":"O Monarca do Arquivo Morto da Vida — Enterrado","note":"O guardião de tudo o que foi planejado e jamais executado","tier":10},{"id":187,"name":"O Grande Inerte, Leviatã do Sofá de Chumbo — Inércia","note":"A massa infinita de preguiça e adiamento acumulados por gerações","tier":10},{"id":188,"name":"O Juiz dos Anos Perdidos — Sentença","note":"A encarnação do peso do tempo que não volta mais","tier":10},{"id":189,"name":"O Tecelão da Teia de Abas Infinitas — Prisão","note":"A aranha cibernética que prende a mente humana em labirintos de abas abertas","tier":10},{"id":190,"name":"O Senhor do E-mail Não Respondido de 2024 — Pendência","note":"Um deus espectral feito de culpa pendente","tier":10},{"id":191,"name":"A Sombra do Potencial Infinito Desperdiçado — Luto","note":"O reflexo escuro de tudo o que o herói poderia ser se tivesse começado cedo","tier":10},{"id":192,"name":"O Imperador do \"Deixa Pra Lá\" — Desistir","note":"O soberano da desistência silenciosa e resignada","tier":10},{"id":193,"name":"O Titã da Racionalização Suprema — Ilusão","note":"A mente fria que justifica qualquer falha de iniciativa com lógica impecável","tier":10},{"id":194,"name":"O Corvo do Presságio Tardio — Tarde","note":"A ave que canta apenas quando já é tarde demais para consertar","tier":10},{"id":195,"name":"O Labirinto Sem Fim da Preparação Infinita — Sem saída","note":"O chefe que é um mapa vivo que nunca leva a lugar nenhum","tier":10},{"id":196,"name":"O Deus-Relógio de Ponteiros Congelados — Estático","note":"O controlador da ilusão de que o tempo parou enquanto o usuário procrastinava","tier":10},{"id":197,"name":"O Espectro da Última Chance Perdida — Fim","note":"O guardião do portão onde o prazo final fecha para sempre","tier":10},{"id":198,"name":"A Entropia da Vontade — Dissolve","note":"O princípio físico e mágico que corrói o foco humano até restar apenas pó de inércia","tier":10},{"id":199,"name":"Procrasta, O Senhor das Mil Desculpas — Submissão","note":"O arqui-inimigo clássico, a própria essência condensada do verbo procrastinar","tier":10},{"id":200,"name":"O Abismo do Presente Eternamente Adiado (O chefe final do jogo: a entidade que consome o \"agora\", fazendo com que o jogador perceba que a única batalha real de toda a jornada era contra o próprio hábito de esperar o momento perfeito para viver). — Não-ser","note":"","tier":10}];
+const CODEX_MONSTERS=[{"id":1,"name":"O Soneca de Cinco Minutos","effect":"Sono leve","description":"Mestre da falsa misericórdia, este espectro sussurra promessas doces de descanso imediato a cada toque no despertador. Ele rouba segundos preciosos da sua manhã, fragmenta o seu ciclo de sono e instala um estado letárgico crônico que sabota a sua clareza mental antes mesmo do dia começar."},{"id":2,"name":"A Notificação Fantasma","effect":"Tique","description":"Criado pelas engrenagens da ansiedade digital, ele simula vibrações inexistentes no seu bolso. Ele treina o seu cérebro para buscar validação externa constante, fragmentando sua atenção em dezenas de microdesvios que impedem o surgimento de qualquer estado profundo de foco ou concentração contínua e produtiva."},{"id":3,"name":"O Impulso da Aba Aberta","effect":"Dispersão","description":"Um parasita do navegador que sussurra que você precisa pesquisar algo totalmente irrelevante agora. Ele multiplica suas abas ativas exponencialmente, sobrecarregando sua memória de trabalho com dezenas de estímulos visuais incompletos que geram exaustão cognitiva precoce e drenam sua capacidade de concluir tarefas centrais."},{"id":4,"name":"O Guardião do \"Só Mais Um Vídeo\"","effect":"Hipnose","description":"Soberano do autoplay e das recomendações algorítmicas hipnóticas. Ele paralisa seu senso temporal, transformando minutos inofensivos em horas perdidas de consumo passivo. Deixa sua mente entorpecida, incapaz de transitar de volta para o esforço produtivo sem enfrentar uma forte onda de irritação e apatia."},{"id":5,"name":"O Espreitador de Geladeira","effect":"Gula fútil","description":"Atrai você para a cozinha repetidas vezes, mesmo sem fome real, apenas para abrir a porta e encarar as prateleiras vazias. Ele explora sua busca inconsciente por dopamina barata e conforto oral, usando a mastigação mecânica como escudo protetor contra o medo de iniciar tarefas difíceis."},{"id":6,"name":"O Mestre do \"Depois Eu Faço\"","effect":"Preguiça","description":"A voz mansa que normaliza o empurrar de obrigações para um futuro abstrato e distante. Ele cria uma falsa sensação de alívio momentâneo, enquanto acumula silenciosamente uma montanha invisível de pendências que retornarão mais tarde multiplicadas, esmagando sua paz de espírito e paralisando suas iniciativas seguintes."},{"id":7,"name":"O Espectro da Mesa Limpa","effect":"Falso foco","description":"O demônio da procrastinação produtiva disfarçada de virtude. Ele convence você a organizar lápis, alinhar cadernos e limpar poeira milimétrica, gastando toda a sua energia vital em rituais cosméticos estéreis para evitar o confronto direto com o verdadeiro trabalho difícil que realmente importa realizar."},{"id":8,"name":"O Golem de Rascunhos","effect":"Inacabado","description":"Uma massa disforme composta por dezenas de ideias iniciadas com brilho nos olhos e abandonadas na metade. Ele assombra suas pastas digitais, lembrando-o constantemente de sua suposta incapacidade de finalizar ciclos, gerando um sentimento persistente de insuficiência e incompetência criativa crônica."},{"id":9,"name":"O Espião do Feed","effect":"Vício leve","description":"Escondido nas dobras da interface do seu smartphone, ele puxa seu polegar para deslizar a tela infinitamente. Alimenta-se da sua curiosidade vazia, injetando fluxos incessantes de novidades inúteis que anestesiam sua ambição e destroem sua tolerância ao tédio necessário para o trabalho profundo."},{"id":10,"name":"A Sombra do Café Extra","effect":"Agitação","description":"Impulsiona você a preparar a quinta xícara de café do dia não por gosto, mas como desculpa física para levantar da cadeira. Ele acelera seu batimento cardíaco artificialmente, gerando tremores e uma falsa sensação de atividade enquanto sua mente continua estagnada e improdutiva."},{"id":11,"name":"O Gnoll da Alerta Vibratória","effect":"Susto","description":"Uma criatura invisível que salta sobre sua concentração toda vez que o celular emite um som ou pulso. Ele destrói seu estado de fluxo instantaneamente, fragmentando sua atenção em estilhaços tão pequenos que seu cérebro perde a capacidade de reter linhas de raciocínio complexas."},{"id":12,"name":"O Diabrete da Gaveta Desorganizada","effect":"Desvio","description":"Especialista em fazer você encontrar aquele cabo antigo, foto perdida ou manual esquecido bem na hora em que deveria estar escrevendo ou estudando. Ele sequestra sua atenção através da nostalgia e da curiosidade infantil, sabotando seu cronograma com desvios perfeitamente justificados."},{"id":13,"name":"O Titereiro do \"De manhã eu começo\"","effect":"Ilusão","description":"Uma entidade ilusória que projeta uma versão futura de você que é infinitamente mais disciplinada, enérgica e focada. Ele convence você a desperdiçar o presente sob a promessa mágica de que o amanhecer trará uma força de vontade mística que nunca se materializa de fato."},{"id":14,"name":"O Falsificador de Prioridades Menores","effect":"Engano","description":"Mestre em inflar tarefas irrelevantes com uma urgência falsa e magnética. Ele faz você responder e-mails irrelevantes de menor importância enquanto o projeto principal mofa na gaveta, dando-lhe a ilusão reconfortante de que foi produtivo enquanto fugia do verdadeiro desafio."},{"id":15,"name":"O Verme dos Links Salvos para Ler Depois","effect":"Acúmulo","description":"Habita suas ferramentas de salvamento digital, acumulando centenas de artigos longos, vídeos e tutoriais que jamais serão abertos. Ele alimenta sua vaidade intelectual com a ilusão barata de que acumular informação equivale a absorvê-la, soterrando seu foco sob uma pilha gigantesca de leituras fantasmas."},{"id":16,"name":"O Guardião do E-mail Sem Importância","effect":"Ruído","description":"Atrai seu olhar para boletins comerciais, spam inútil e mensagens promocionais logo na primeira hora da manhã. Ele drena sua energia mental com decisões insignificantes de exclusão, deixando seu cérebro fadigado antes mesmo de encarar o trabalho criativo ou intelectual de alto valor."},{"id":17,"name":"A Brisa da Janela Vazia","effect":"Devaneio","description":"Captura seu olhar através do vidro por minutos intermináveis enquanto você contempla o movimento da rua sem pensar em nada. Ele suspende o tempo real, induzindo um transe leve que desliga suas engrenagens produtivas e substitui a ação real por fantasias diurnas vazias."},{"id":18,"name":"O Eco do \"Ainda Tenho Tempo\"","effect":"Folga","description":"Uma voz sussurrada que ecoa sempre que você olha para o calendário e calcula os dias restantes até o prazo final. Ele distorce sua percepção temporal, fazendo semanas parecerem séculos e incentivando uma lentidão perigosa que culminará em desespero na reta final."},{"id":19,"name":"O Fantasma da Toalha Molhada na Cama","effect":"Desleixo","description":"Representa o hábito acumulado de pequenas negligências domésticas e pessoais que refletem desleixo mental. Ele drena sua energia sutilmente ao criar pequenos atritos visuais no seu ambiente, lembrando-o da sua própria desorganização e minando seu orgulho e brio pessoal para realizar grandes feitos."},{"id":20,"name":"O Iniciador de Buscas Inúteis no Google","effect":"Curioso","description":"Transforma uma dúvida pontual em uma maratona de três horas investigando biografias de atores secundários ou teorias obscuras. Ele sequestra sua curiosidade natural, desviando seus recursos cognitivos para caminhos completamente marginais e deixando-o exausto sem ter produzido nada útil."},{"id":21,"name":"O Hidra das Redes Sociais","effect":"Zumbi","description":"Com múltiplas cabeças algorítmicas, cada corte de vídeo ou foto consumida gera mais duas atrações. Ele transforma o usuário num zumbi digital de olhar fixo, anestesiando pensamentos críticos e sugando horas preciosas de vida em troca de dopamina sintética vazia e passageira."},{"id":22,"name":"O Senhor dos Memes em Cadeia","effect":"Riso oco","description":"Especialista em enviar sequências intermináveis de piadas e figurinhas para grupos de amigos. Ele converte o humor em um entorpecente social, mascarando o vazio da inércia com gargalhadas superficiais enquanto o relógio avança implacável sobre as tarefas que continuam totalmente abandonadas."},{"id":23,"name":"A Coruja da Insônia por Rolagem Infinita","effect":"Olheiras","description":"Desperta na escuridão da madrugada quando a casa silencia e a culpa deveria surgir. Iluminada pela luz azul do visor, ela mantém o usuário acordado devorando conteúdos irrelevantes, destruindo o descanso reparador e garantindo um despertar físico e mental completamente esfacelado."},{"id":24,"name":"O Mímico da Organização de Pastas","effect":"Mania","description":"Disfarça-se de eficiência extrema ao propor criar subdiretórios coloridos, tags e categorizações perfeitas no computador. Na prática, é apenas uma fuga sofisticada que substitui a criação de conteúdo real por uma burocracia cibernética inútil e autoindulgente."},{"id":25,"name":"O Alquimista da Playlist Perfeita","effect":"Demora","description":"Gasta duas horas inteiras pesquisando transições musicais, batidas de lo-fi e capas de álbuns antes de escrever uma única linha de texto. Ele manipula a estética da preparação até que a energia criativa se esgote antes mesmo do início da execução real."},{"id":26,"name":"O Devorador de Curtidas","effect":"Vaidade","description":"Mantém o usuário refém do contador de aprovações sociais a cada postagem insignificante. Ele desvia o foco da obra real para a validação externa passageira, gerando dependência emocional de métricas digitais e ansiedade crônica por atenção."},{"id":27,"name":"O Colecionador de Tutoriais Inúteis","effect":"Teoria","description":"Acumula cursos em vídeo, masterclasses e e-books avançados que nunca passa da primeira aula. Ele alimenta a ilusão narcisista de que está evoluindo e aprendendo, enquanto na verdade apenas coleciona certificados de inércia e promessas não cumpridas."},{"id":28,"name":"O Monstro da Limpeza Forçada","effect":"Fuga limpa","description":"Surge subitamente transformando a ojeriza a tarefas chatas em um frenesi doméstico onde o chão brilha e os armários são reorganizados. Usa a faxina impecável como álibi moral para justificar o completo abandono das obrigações profissionais pendentes."},{"id":29,"name":"O Gigante do \"De Segunda-feira Eu Mudarei\"","effect":"Promessa","description":"Um titã colossal que ergue barreiras intransponíveis no presente, condicionando qualquer atitude virtuosa a marcos temporais futuros arbitrários. Ele sabota a ação imediata sob a desculpa de que ciclos novos exigem segundas-feiras perfeitas que nunca chegam."},{"id":30,"name":"A Sereia dos Jogos de Celular \"Rápidos\"","effect":"Vício","description":"Atrai o usuário com a promessa de apenas uma partida rápida de cinco minutos para relaxar as ideias. Prende a atenção em loops mecânicos de recompensas e fases, devorando tardes inteiras de trabalho produtivo sob um entorpecimento lúdico."},{"id":31,"name":"O Cavaleiro do Fone de Ouvido Desconectado","effect":"Isolado","description":"Usa fones nos ouvidos sem tocar música alguma, apenas para evitar qualquer interação social ou pedido de ajuda externa. Ele constrói uma bolha de falsa ocupação e hostilidade passiva que afasta oportunidades e paralisa a comunicação construtiva."},{"id":32,"name":"O Falso Urgente","effect":"Alarme","description":"Dispara notificações de promoções relâmpago, entregas e alertas comerciais fingindo ser prioridades existenciais. Ele manipula a urgência biológica do usuário para desviar seu foco de metas nobres para o consumo impulsivo e o barulho digital irrelevante."},{"id":33,"name":"O Guardião do Modo Avião Desligado","effect":"Aberto","description":"Mantém todas as portas de comunicação eletrônica escancaradas durante o horário de trabalho. Garante que qualquer mensagem banal interrompa o raciocínio criativo, mantendo o cérebro em estado constante de alerta fragmentado e improdutivo."},{"id":34,"name":"O Espírito do Apagador de Arquivos Antigos","effect":"Nostalgia","description":"Convence você a revisar fotos de viagens de dez anos atrás ou pastas empoeiradas do disco rígido em horário nobre de expediente. Usa a nostalgia como arma de distração temporal massiva, roubando o foco do presente."},{"id":35,"name":"O Duende da Dúvida sobre Coisas Fúteis","effect":"Trava","description":"Injeta dilemas absurdos na mente, como qual fonte usar em um rascunho sem importância ou qual cor de caneta escolher. Ele paralisa a tomada de decisões através do perfeccionismo microscópico, travando o progresso real em detalhes insignificantes."},{"id":36,"name":"O Mago da Compra Online por Impulso","effect":"Gasto","description":"Enche carrinhos virtuais em lojas eletrônicas com quinquilharias desnecessárias sob o pretexto de que o produto vai otimizar sua rotina futura. Transforma a ansiedade de produzir em impulso de consumo rápido e vazio."},{"id":37,"name":"O Verme do \"Deixa eu ver só o WhatsApp\"","effect":"Espiada","description":"Uma armadilha mental sutil que finge ser apenas uma olhada rápida em mensagens recebidas. Converte-se em uma sessão de trinta minutos de respostas em cadeia, áudios longos e fofocas que destroem qualquer vestígio de concentração."},{"id":38,"name":"O Titã da Checagem de Clima Sem Sair de Casa","effect":"Tédio","description":"Atualiza aplicativos de previsão meteorológica de hora em hora, analisando radares de chuva e umidade sem a menor intenção de sair de casa. É a personificação da ociosidade disfarçada de precaução ambiental inútil."},{"id":39,"name":"A Névoa das Leituras de Comentários Tóxicos","effect":"Raiva","description":"Atrai o usuário para o submundo das seções de comentários em portais de notícias e redes sociais. Alimenta a mente com fúria gratuita, indignação estéril e debates inúteis com desconhecidos, envenenando o humor e destruindo a energia mental."},{"id":40,"name":"O Sombra do Café que Esfriou na Xícara","effect":"Esquecido","description":"Representa o ciclo contínuo de preparar bebidas quentes, esquecê-las na mesa enquanto se distrai com redes sociais e precisar esquentá-las repetidas vezes. É o símbolo físico da atenção fragmentada e do tempo escoando sem rumo."},{"id":41,"name":"O Monstro da Página em Branco","effect":"Branco","description":"Aterroriza o escritor com sua imensidão imaculada e silenciosa. Bloqueia o primeiro impulso criativo ao convencer o usuário de que a primeira frase deve ser perfeita, gerando um bloqueio mental severo e paralisando os dedos antes mesmo de tocarem o teclado."},{"id":42,"name":"O Espectro do Primeiro Parágrafo Apagado","effect":"Apagão","description":"Incentiva o ciclo infinito de reescrever e apagar a introdução do texto dezenas de vezes. Destrói o ritmo produtivo sob a ilusão de que o início precisa ser absoluto, impedindo o desenvolvimento do restante do conteúdo."},{"id":43,"name":"O Guardião da Caneta sem Tinta","effect":"Falha","description":"Manipula o mundo físico para garantir que ferramentas analógicas falhem na hora H. Gera microatritos irritantes que servem de desculpa imediata para abandonar o planejamento e adiar a execução de tarefas importantes."},{"id":44,"name":"O Gnoll do Pensamento Interrompido","effect":"Corte","description":"Salta sobre a linha de raciocínio exato no momento em que a inspiração surgia. Deixa o usuário perdido em um vazio mental frustrante, incapaz de lembrar o que pretendia fazer ou escrever em seguida."},{"id":45,"name":"A Bruxa da Comparação com os Outros","effect":"Inveja","description":"Projeta o sucesso alheio como medida de fracasso pessoal prematuro. Envenena a mente com sentimentos de inadequação, fazendo o usuário acreditar que se não pode competir com os melhores, tentar já não vale a pena."},{"id":46,"name":"O Titã da Dúvida de Vocabulário","effect":"Gagueira","description":"Semeia insegurança sobre o significado ou ortografia de palavras comuns no meio de uma frase. Converte a escrita em uma busca incessante por dicionários, quebrando o fluxo criativo e gerando exaustão mental desnecessária."},{"id":47,"name":"O Eco da Voz Crítica do Professor Antigo","effect":"Medo","description":"Ressurge das memórias escolares para sussurrar julgamentos punitivos sobre cada erro potencial. Paralisa a criatividade com o medo constante de ser ridicularizado ou considerado ignorante pelos leitores ou pares."},{"id":48,"name":"O Ladrão de Foco Matutino","effect":"Névoa","description":"Invade as primeiras horas do dia com uma letargia mental densa e inexplicável. Dissipa a energia fresca da manhã em atividades passivas, roubando o momento mais precioso para a realização de trabalhos complexos."},{"id":49,"name":"A Sombra do Rascunho Permanente","effect":"Rascunho","description":"Condena projetos inteiros a viverem eternamente na pasta de rascunhos sem ver a luz do dia. Convence o criador de que o material nunca está bom o suficiente para ser finalizado e publicado."},{"id":50,"name":"O Mago da Perfeição Prematura","effect":"Rigidez","description":"Exige excelência absoluta na primeira versão de qualquer empreendimento. Cria regras rígidas e impossíveis de cumprir, garantindo que o usuário desista antes de concluir a etapa inicial por medo de imperfeições."},{"id":51,"name":"O Golem de Livros Não Lidos na Estante","effect":"Peso","description":"Acusa silenciosamente o usuário com sua pilha de clássicos e manuais empoeirados. Gera culpa acumulada pela leitura negligenciada, transformando o prazer literário em um lembrete pesado de incompetência intelectual."},{"id":52,"name":"O Fantasma da Tarefa Mal Definida","effect":"Confusão","description":"Esconde os objetivos reais por trás de instruções vagas e abstratas como 'trabalhar no projeto'. Deixa o cérebro paralisado por não saber exatamente qual deve ser o primeiro passo prático da ação."},{"id":53,"name":"O Colecionador de Desculpas Plausíveis","effect":"Álibi","description":"Fabrica justificativas lógicas, racionais e socialmente aceitáveis para cada falha de entrega. Torna o hábito de procrastinar tão razoável que o próprio indivíduo passa a acreditar em suas próprias mentiras."},{"id":54,"name":"O Guardião do \"Não Tenho o Equipamento Ideal\"","effect":"Carência","description":"Condiciona a produtividade à aquisição de ferramentas caras, softwares modernos ou acessórios sofisticados. Usa a escassez material como desculpa intransponível para jamais iniciar o trabalho com o que já possui."},{"id":55,"name":"O Demônio do \"Preciso Pesquisar Mais Antes\"","effect":"Excesso","description":"Transforma a fase inicial de pesquisa em um poço sem fundo de leitura acumulada. Impede a transição para a produção ativa sob o pretexto de que o conhecimento coletado ainda é insuficiente."},{"id":56,"name":"A Névoa da Inércia Pós-Almoço","effect":"Moleza","description":"Aproveita a queda natural de energia metabólica após a refeição para anestesiar a vontade. Transforma o início da tarde em um período letárgico onde qualquer esforço cognitivo parece uma montanha intransponível."},{"id":57,"name":"O Cão de Três Cabeças do \"Estou Cansado Hoje\"","effect":"Fadiga","description":"Multiplica a sensação de esgotamento físico e mental ao menor sinal de esforço. Convence o corpo de que o descanso total é necessário, mesmo após dias inteiros de completa ociosidade produtiva."},{"id":58,"name":"O Esfinge do \"Por Onde Eu Começo?\"","effect":"Enigma","description":"Bloqueia o progresso ao apresentar projetos grandes como blocos monolíticos indissociáveis. Aterroriza o usuário com a vastidão da obra, impedindo que ele identifique a pequenez do primeiro passo necessário."},{"id":59,"name":"O Cavaleiro da Ociosidade Calculada","effect":"Calma oca","description":"Dissimula a procrastinação sob a máscara de momentos de contemplação estratégica e descanso mental. Permite que o tempo escoe sorrateiramente enquanto o indivíduo finge meditar sobre soluções que nunca executa."},{"id":60,"name":"O Senhor da Fuga Disfarçada de Descanso","effect":"Mentira","description":"Confunde deliberadamente o repouso legítimo com a evasão ansiosa de responsabilidades. Deixa o usuário exausto de tanto evitar o trabalho, sem conseguir desfrutar nem do lazer nem da produtividade."},{"id":61,"name":"O Cronometrista Corrompido","effect":"Atraso","description":"Distorce a passagem dos relógios internos, fazendo horas parecerem minutos e dias evaporarem sem aviso. Ele sabota a percepção temporal, garantindo que o usuário perceba o atraso apenas quando o prazo já se tornou irreversível."},{"id":62,"name":"O Devorador de Manhãs Perdidas","effect":"Manhã oca","description":"Engole as primeiras horas do dia com rituais vazios, café requentado e enrolação digital. Rouba o período de maior vigor biológico e clareza mental, deixando apenas restos de energia para o resto do dia."},{"id":63,"name":"O Espectro do Meio-Dia Desperdiçado","effect":"Vazio","description":"Aparece quando o sol atinge o topo e o usuário percebe que a metade do dia se foi sem produtividade. Instala um aperto no peito e uma sensação de culpa corrosiva que paralisa ainda mais as horas seguintes."},{"id":64,"name":"O Titã dos Dias Iguais","effect":"Loop","description":"Funde os dias em uma massa cinzenta e indistinguível de rotina ociosa e adiamentos repetidos. Cria a ilusão de que o tempo está estagnado, enquanto anos inteiros escapam silenciosamente pelos dedos do indivíduo."},{"id":65,"name":"O Guardião do Relógio que Anda para Trás","effect":"Regresso","description":"Alimenta a fantasia ilusória de que o tempo pode ser recuperado ou pausado por força de vontade mágica. Mantém o usuário preso em devaneios sobre o passado em vez de encarar as urgências do presente."},{"id":66,"name":"A Hidra dos Prazos Acumulados","effect":"Bola neve","description":"Multiplica tarefas adiadas até que formem uma avalanche imensa de entregas simultâneas. Cada cabeça da criatura cobra um preço insuportável de atenção, sufocando qualquer tentativa de organização metódica e racional."},{"id":67,"name":"O Cavaleiro da Tarde Vazia","effect":"Tédio","description":"Despeja uma monotonia profunda e melancólica sobre as horas vespertinas. Transforma a tarde em um deserto estéril onde o indivíduo vaga sem rumo entre abas de navegador e longos suspiros de apatia."},{"id":68,"name":"O Sombra do Crepúsculo Inútil","effect":"Melancolia","description":"Chega com o pôr do sol trazendo o peso amargo de mais um dia desperdiçado com futilidades. Alimenta o arrependimento noturno e prepara o terreno para a insônia e a ansiedade antecipatória do dia seguinte."},{"id":69,"name":"O Mago da Ilusão de que \"Ainda Há o Fim de Semana\"","effect":"Miragem","description":"Promete que os dias de descanso compensarão toda a preguiça acumulada ao longo da semana útil. Trata-se de uma armadilha cruel que resulta em fins de semana estressantes e igualmente improdutivos."},{"id":70,"name":"O Golem de Segundas-Feiras Infinitas","effect":"Ciclo","description":"Recria eternamente o peso opressivo do início da semana de trabalho para quem nunca conclui nada. Cada ciclo traz o mesmo desespero renovado e a mesma incapacidade crônica de iniciar mudanças reais."},{"id":71,"name":"O Fantasma do Calendário Desatualizado","effect":"Perdido","description":"Mantém datas antigas fixadas na mente, fazendo o usuário acreditar que ainda está semanas antes do prazo real. O choque com a data verdadeira causa colapsos instantâneos de pânico e desorientação."},{"id":72,"name":"O Monstro da Hora Extra Desnecessária","effect":"Exaustão","description":"Força o indivíduo a trabalhar até tarde da noite unicamente porque passou o dia inteiro procrastinando. Premia a inércia com o castigo do cansaço extremo e da destruição do ciclo natural de descanso."},{"id":73,"name":"O Arquiteto das Férias que Nunca Acontecem","effect":"Cansaço","description":"Planeja viagens, roteiros e pausas mirabolantes como fuga psicológica para o esgotamento atual. Cria expectativas de descanso futuro para justificar a paralisia e a ineficiência contínua no presente."},{"id":74,"name":"O Colecionador de Prazos Perdidos por Pouco","effect":"Quase","description":"Garante que o envio de tarefas ocorra segundos após o encerramento do portal ou do horário limite. Alimenta a adrenalina tóxica do quase acerto, viciando o cérebro no risco desnecessário e na humilhação constante."},{"id":75,"name":"O Vento do Tempo Escoando pelos Dedos","effect":"Escoa","description":"Simula a sensação física de areia fina deslizando pelas mãos sem poder ser contida. Transmite a vertigem melancólica de ver a juventude e o potencial intelectual evaporarem em atividades irrelevantes e vazias."},{"id":76,"name":"O Guardião da Agenda em Brancura","effect":"Nulo","description":"Mantém páginas de planejadores diários impecavelmente brancas e sem nenhum compromisso anotado. Representa o medo paralisante de estruturar o próprio tempo e assumir responsabilidades reais perante a própria vida."},{"id":77,"name":"O Espectro do Aniversário Sem Metas Conquistadas","effect":"Velhice","description":"Visita o usuário na data natalícia para lembrá-lo de que mais um ano passou sem grandes realizações. Desencadeia crises existenciais profundas e um sentimento avassalador de tempo perdido e estagnação."},{"id":78,"name":"O Senhor dos Anos Que Voam","effect":"Vertigem","description":"Acelera a percepção cósmica da idade enquanto o indivíduo permanece paralisado nos mesmos hábitos de sempre. Provoca um susto terrível ao confrontar o contraste entre os sonhos de infância e a realidade ociosa."},{"id":79,"name":"A Correnteza da Rotina Estagnada","effect":"Estagna","description":"Arrasta o usuário em um fluxo monótono onde dias, semanas e meses se misturam sem eventos marcantes. Mata a iniciativa individual e substitui a vivência plena por uma sobrevivência automatizada e vazia."},{"id":80,"name":"O Monstro do Relógio de Ponto Emocional","effect":"Pressão","description":"Mede o valor da própria existência com base na quantidade de horas gastas fingindo trabalhar. Mantém o indivíduo acorrentado à mesa em estado de transe improdutivo, culpando-se por cada segundo livre."},{"id":81,"name":"O Labirintista da Racionalização","effect":"Lábia","description":"Constrói argumentos lógicos impecáveis para justificar a inércia e o adiamento contínuo. Usa a inteligência contra o próprio dono, transformando o raciocínio em uma ferramenta sofisticada de autossabotagem e desculpa."},{"id":82,"name":"O Mestre das Justificativas Complexas","effect":"Desculpa","description":"Elabora teses complexas sobre fatores externos, conjunturas econômicas e problemas sistêmicos para explicar fracassos pessoais. Isenta o indivíduo de qualquer responsabilidade sobre sua falta de ação."},{"id":83,"name":"A Sombra da Autoilusão","effect":"Cegueira","description":"Venda os olhos do usuário diante de sua própria decadência produtiva e perda de tempo. Cria um espelho falso que reflete um trabalhador dedicado e injustiçado, impedindo qualquer autocrítica honesta."},{"id":84,"name":"O Guardião da Porta dos \"Outros Projetos Mais Fáceis\"","effect":"Atalho","description":"Abre passagens tentadoras para tarefas secundárias e prazerosas sempre que o projeto principal exige esforço. Desvia o foco para frentes menos importantes que oferecem gratificação imediata e indolor."},{"id":85,"name":"O Falsificador de Metas Inalcançáveis","effect":"Irreal","description":"Estabelece objetivos monstruosos e desproporcionais de propósito para garantir o fracasso antecipado. Usa a desculpa da grandiosidade para paralisar qualquer tentativa de dar o primeiro passo realista."},{"id":86,"name":"O Demônio da Complexidade Inventada","effect":"Nó mental","description":"Transforma tarefas simples em enigmas burocráticos cheios de subetapas e exigências desnecessárias. Cria barreiras mentais intransponíveis que tornam a execução prática algo assustador e impraticável."},{"id":87,"name":"O Golem de Desculpas Técnicas","effect":"Jargão","description":"Usa termos técnicos rebuscados para explicar por que um sistema, roteiro ou código não pôde ser iniciado. Esconde a preguiça pura por trás de uma fachada de rigor metodológico falso."},{"id":88,"name":"O Espelho da Autoimagem Distorcida pela Inércia","effect":"Distorção","description":"Exibe uma imagem mental grotesca onde o usuário se enxerga como incapaz, preguiçoso e sem jeito. Alimenta uma profecia autorrealizável de fracasso que paralisa ainda mais a iniciativa."},{"id":89,"name":"O Arquiteto do \"Agora Não É o Momento Ideal\"","effect":"Espera","description":"Aguarda condições climáticas, emocionais, astrológicas e financeiras perfeitas para iniciar qualquer ação. Condena o presente à completa esterilidade sob a promessa de um futuro alinhado e mágico."},{"id":90,"name":"A Bruxa da \"Inspiração que Nunca Chega\"","effect":"Seca","description":"Convence o criador de que o trabalho artístico ou intelectual só pode nascer de transes divinos. Paralisa a produção diária regular, transformando a ausência de epifanias em desculpa para o ócio."},{"id":91,"name":"O Monstro do \"Preciso Estudar Mais Sobre Isso Primeiro\"","effect":"Trava","description":"Soterra o usuário em livros, apostilas e cursos preparatórios infinitos antes de permitir a prática. Cria uma armadilha de eterno aprendiz que nunca se sente pronto para aplicar o conhecimento."},{"id":92,"name":"O Guardião do Ciclo Vicioso","effect":"Prisão","description":"Tranca o indivíduo em um loop perpétuo de culpa, promessa, recaída e desespero. Cada volta na espiral corrói a autoestima e torna a saída para a produtividade cada vez mais improvável."},{"id":93,"name":"O Fantasma da Energia Desperdiçada em Planejamento","effect":"Gasto oco","description":"Gasta cem porcento da bateria mental desenhando fluxogramas, tabelas e planos de ação impecáveis. Deixa o usuário exausto antes mesmo da execução, garantindo que o plano nunca saia do papel."},{"id":94,"name":"O Cavaleiro do \"Projeto Eternamente em Beta\"","effect":"Incompleto","description":"Mantém criações em estado perpétuo de lapidação e teste preliminar sem nunca lançá-las ao mundo. Protege o criador do julgamento externo ao recusar-se a finalizar e expor o trabalho real."},{"id":95,"name":"O Sombra da Pilha de Tarefas Acumuladas","effect":"Soterrado","description":"Projeta uma torre colossal de pendências que ameaça desabar sobre a cabeça do usuário a qualquer instante. Gera um pavor paralisante que impede a escolha de uma única tarefa para começar."},{"id":96,"name":"O Labirinto Vivo do \"Fazendo Nada com Pressa\"","effect":"Agitado","description":"Mantém o corpo correndo de um lado para o outro em microtarefas irrelevantes sem sair do lugar. Simula uma agitação febril que consome energia preciosa sem produzir nenhum resultado concreto."},{"id":97,"name":"O Senhor das Promessas Não Cumpridas a Si Mesmo","effect":"Descrédito","description":"Destrói a palavra de honra que o indivíduo empenha consigo próprio a cada amanhecer. Instala uma descrença profunda na própria capacidade de cumprir combinados, tornando as metas futuras piadas internas."},{"id":98,"name":"O Monstro da Ilusão de Produtividade","effect":"Farsa","description":"Engana o cérebro fazendo o consumo passivo de vídeos educativos parecer trabalho intelectual pesado. Concede uma sensação falsa de mérito enquanto o portfólio pessoal continua completamente vazio."},{"id":99,"name":"A Névoa do Esforço sem Direção","effect":"Deriva","description":"Dissipa a força de vontade em dezenas de direções opostas ao longo do dia sem foco central. Produz exaustão generalizada e a amarga sensação de ter corrido uma maratona em cima de uma esteira."},{"id":100,"name":"O Guardião do Meio do Caminho Abandonado","effect":"Desiste","description":"Aparece invariavelmente quando faltam apenas vinte porcento para concluir uma grande empreitada. Sussurra que o mais difícil já passou e que o restante pode ser empurrado para o esquecimento."},{"id":101,"name":"O Titã da Culpa Noturna","effect":"Culpa","description":"Desperta ferozmente na calada da noite quando todas as luzes se apagam e as distrações somem. Despeja toneladas de remorso sobre a mente indefesa, lembrando de cada minuto desperdiçado e corrompendo o sono."},{"id":102,"name":"O Espectro do Remorso Matinal","effect":"Remorso","description":"Recebe o usuário nas primeiras horas do dia com o gosto amargo do fracasso do dia anterior. Semeia um desânimo pesado que contamina o despertar e sabota qualquer intenção de redenção matinal."},{"id":103,"name":"O Monstro da Ansiedade de Desempenho","effect":"Pavor","description":"Aterroriza a mente com visões catastróficas de incompetência e falha pública iminente. Converte o desafio profissional em um monstro intransponível, paralisando os dedos antes mesmo do primeiro rascunho."},{"id":104,"name":"A Fera do Medo de Errar em Público","effect":"Vergonha","description":"Sussurra que qualquer trabalho imperfeito será motivo de zombaria universal e escárnio eterno. Exige um padrão sobre-humano de perfeição como condição única para permitir a exposição do esforço."},{"id":105,"name":"O Guardião da Expectativa Alheia","effect":"Fardo","description":"Esmaga os ombros do usuário com o peso insuportável de corresponder aos padrões idealizados por pais, chefes ou cônjuges. Transforma a criação pessoal em uma obrigação sufocante e bloqueada."},{"id":106,"name":"O Cavaleiro do Pânico Silencioso","effect":"Sufoco","description":"Corta a respiração e acelera as batidas do coração diante da tela do computador em branco. Instala um estado de pavor paralisante que impede o raciocínio lógico e afasta qualquer clareza mental."},{"id":107,"name":"O Sombra do \"Vão Descobrir que Sou uma Fraude\"","effect":"Impostor","description":"Sussurra incessantemente que todo sucesso passado foi pura sorte e que o próximo passo revelará a incompetência real. Paralisa o avanço por medo de ser desmascarado perante os pares."},{"id":108,"name":"O Golem de Suor Frio diante da Tela","effect":"Calafrio","description":"Reage fisicamente à pressão dos prazos acumulados gerando arrepios, tensão muscular e tremores. Torna a digitação física dolorosa e desconfortável, reforçando o ciclo de evitação da tarefa."},{"id":109,"name":"O Demônio do Aperto no Peito","effect":"Angústia","description":"Instala uma opressão constante na caixa torácica que acompanha o indivíduo durante todas as horas de ociosidade culpada. Lembra fisicamente que há pendências urgentes ignoradas no escritório."},{"id":110,"name":"A Bruxa dos Cenários Catastróficos na Mente","effect":"Catástrofe","description":"Projeta sequências cinematográficas detalhadas de demissão, falência e humilhação decorrentes de um atraso. Paralisa a ação prática ao consumir todos os recursos cognitivos em tragédias imaginárias."},{"id":111,"name":"O Guardião da Insônia por Excesso de Cobrança","effect":"Insônia","description":"Mantém os olhos abertos na escuridão enquanto a mente revisa mil vezes o que deveria ter sido feito. Destrói o descanso físico através de cobranças sádicas e intermináveis consigo mesmo."},{"id":112,"name":"O Fantasma da Oportunidade Perdida no Ano Passado","effect":"Lamento","description":"Traz à tona trens que já partiram, contratos não assinados e chances jogadas fora por inércia anterior. Envenena o presente com o luto melancólico de um passado que não pode mais ser mudado."},{"id":113,"name":"O Senhor dos Suspiros Profundos","effect":"Desânimo","description":"Extrai exaustões profundas da alma a cada olhar lançado na direção das tarefas pendentes. Preenche o ambiente de trabalho com um ar fúnebre de derrota antecipada e exaustão emocional precoce."},{"id":114,"name":"A Hidra do Medo do Sucesso","effect":"Recrua","description":"Sussurra que vencer trará responsabilidades esmagadoras, cobranças maiores e perda de paz. Sabota o progresso no último segundo para manter o indivíduo na zona de conforto protegida da mediocridade."},{"id":115,"name":"O Mago da Paralisia por Excesso de Opções","effect":"Paralisia","description":"Multiplica caminhos, ferramentas e direções possíveis até que o cérebro entre em pane por excesso de escolha. Impossibilita a seleção de uma rota, mantendo o usuário estagnado no ponto de partida."},{"id":116,"name":"O Abismo da Autocrítica Destruidora","effect":"Autoódio","description":"Despeja julgamentos cruéis, insultos e desprezo sobre a própria capacidade intelectual e moral. Destrói o pouco de confiança que restava, tornando qualquer tentativa futura de produção algo aterrorizante."},{"id":117,"name":"O Monstro do Coração Acelerado sem Exercício","effect":"Taquicardia","description":"Eleva a pulsação do indivíduo sedentário apenas com o peso psicológico das cobranças mentais acumuladas. Simula ataques de pânico em momentos de repouso absoluto diante do computador."},{"id":118,"name":"O Guardião do Travesseiro Molhado de Pranto Silencioso","effect":"Choro","description":"Acompanha as crises de desespero solitário quando o peso da procrastinação se torna insuportável. Recolhe as lágrimas de frustração de quem sente que desperdiçou o próprio talento."},{"id":119,"name":"A Névoa da Desesperança Temporária","effect":"Descrença","description":"Apaga qualquer raio de luz ou crença de que as coisas possam melhorar um dia. Convence o usuário de que a procrastinação é uma condição genética irreversível e imutável."},{"id":120,"name":"O Eco do \"Eu Deveria Estar Tão Longe Agora\"","effect":"Atrasado","description":"Compara a realidade estagnada atual com a trajetória de colegas e contemporâneos bem-sucedidos. Inflige uma dor lancinante de atraso existencial que paralisa qualquer ímpeto de reação."},{"id":121,"name":"O Colosso do Algoritmo sem Fim","effect":"Vício","description":"Alimenta-se de dopamina barata servida em carrosséis infinitos de vídeos curtos e postagens chamativas. Mantém o cérebro em estado de transe catatônico, incapaz de processar textos longos ou pensamentos profundos."},{"id":122,"name":"O Titã da Dopamina Rápida","effect":"Abstinência","description":"Rebaixa o limiar de prazer do cérebro até que qualquer tarefa que exija esforço pareça insuportavelmente entediante. Torna o foco em trabalhos complexos uma verdadeira sessão de tortura psicológica."},{"id":123,"name":"A Hidra de Abas Infinitas do Navegador","effect":"Travado","description":"Consome a memória RAM do computador e da mente humana com duzentas abas abertas simultaneamente. Simula uma atividade intelectual intensa enquanto causa lentidão cognitiva e exaustão mental profunda."},{"id":124,"name":"O Mago do Zumbido no Ouvido Digital","effect":"Zumbido","description":"Instala uma ilusão auditiva constante de que o celular vibrou ou notificou uma mensagem importante. Mantém o sistema nervoso em alerta hipervigilante e dispersivo o dia inteiro."},{"id":125,"name":"O Senhor da Carga Cognitiva Esgotada","effect":"Pane","description":"Entope os circuitos mentais com excesso de inputs irrelevantes, notícias trágicas e memes descartáveis. Deixa o cérebro incapaz de reter informações básicas ou tomar decisões simples no fim do dia."},{"id":126,"name":"O Golem de Notícias Catastróficas em Cadeia","effect":"Doomscroll","description":"Arrasta o usuário por espirais intermináveis de portais de notícias focados em desgraças e tragédias globais. Paralisa a ação individual sob a sombra de um apocalipse iminente e inevitável."},{"id":127,"name":"O Monstro da Câmera Desligada e Cérebro Desligado","effect":"Apagado","description":"Aproveita reuniões virtuais em que a câmera está desligada para navegar em sites de compras e redes sociais. Simula participação profissional enquanto a mente vaga em completos nadas."},{"id":128,"name":"O Guardião do Wi-Fi que Nunca Cai na Hora Certa","effect":"Tentação","description":"Garante conexão de alta velocidade ininterrupta exatamente para eliminar qualquer desculpa física de desconexão. Mantém a porta do abismo digital aberta e escancarada vinte e quatro horas por dia."},{"id":129,"name":"O Espectro do Chat Vazio e da Solidão Conectada","effect":"Solidão","description":"Promove conexões superficiais em aplicativos de mensagens enquanto isola o indivíduo de interações humanas reais. Alimenta uma dependência tóxica de telas para preencher o vazio existencial."},{"id":130,"name":"A Sombra do E-mail Não Lido (999+)","effect":"Caos","description":"Acumula milhares de mensagens comerciais e pendências na caixa de entrada sem coragem de abrir. Transforma a checagem de correio eletrônico em um campo minado de culpa e ansiedade crônica."},{"id":131,"name":"O Devorador de Spam e Lixo Eletrônico Mental","effect":"Poluição","description":"Inunda o córtex cerebral com propagandas, banners chamativos e conteúdos comerciais descartáveis. Substitui valores e metas nobres por impulsos consumistas e fúteis induzidos por inteligência artificial."},{"id":132,"name":"O Cavaleiro da Tabela de Excel Abandonada","effect":"Desordem","description":"Jaz sobre planilhas de controle financeiro ou de projetos que foram preenchidas por três dias e esquecidas. Serve como monumento mudo à inconstância e à falta de disciplina a longo prazo."},{"id":133,"name":"O Demônio da Atualização Constante de Página","effect":"Compulsão","description":"Arrasta o dedo para atualizar feeds e portais de notícias a cada trinta segundos em busca de novidades inexistentes. Condiciona o cérebro a um comportamento compulsivo idêntico ao de caça-níqueis."},{"id":134,"name":"O Arquiteto da Multitarefa Impossível","effect":"Estilhaço","description":"Convence o usuário de que é possível responder e-mails, assistir a aulas e editar textos ao mesmo tempo. Estilhaça a atenção em cacos inúteis que não concluem nenhuma atividade com qualidade."},{"id":135,"name":"O Fantasma dos 50 Livros em PDF Não Lidos","effect":"Acúmulo","description":"Ocupa gigabytes de armazenamento com obras acadêmicas e manuais que o usuário jurou ler nas férias. Zombam da boa intenção intelectual com seu silêncio digital e intocado."},{"id":136,"name":"O Monstro da Bateria 1%","effect":"Desespero","description":"Dispara picos de pânico agudo quando o celular ameaça desligar durante uma sessão de procrastinação noturna. Obriga o usuário a correr atrás do carregador para manter o vício funcionando."},{"id":137,"name":"O Guardião do Cache Cheio e Memória Destruída","effect":"Amnésia","description":"Simboliza a mente sobrecarregada por arquivos temporários, senhas perdidas e abas mentais não fechadas. Provoca lapsos de memória e lentidão extrema no processamento de raciocínios lógicos."},{"id":138,"name":"O Senhor dos Links Perdidos nos Favoritos","effect":"Esquecido","description":"Guarda pastas inteiras de conteúdos salvos que jamais voltarão a ser visitados. Representa cemitérios de curiosidades efêmeras que alimentaram ilusões momentâneas de aprendizado."},{"id":139,"name":"A Névoa da Informação Superficial","effect":"Raso","description":"Gera uma cultura mental de manchetes lidas pela metade e resumos de resumos gerados por robôs. Destrói a capacidade de leitura profunda, análise crítica e reflexão filosófica de longo prazo."},{"id":140,"name":"O Titã do Cansaço Crônico de Tela","effect":"Vista turva","description":"Embaça a visão e inflama os olhos do indivíduo após catorze horas consecutivas encarando monitores brilhantes. Sela o corpo em um estado de exaustão cibernética generalizada e insustentável."},{"id":141,"name":"O Monstro da Paralisia Total","effect":"Abulia","description":"Instala uma abulia profunda onde o indivíduo deseja agir, mas o sistema nervoso recusa-se a enviar o comando motor. O corpo permanece estátua diante de tarefas urgentes que apodrecem na mesa."},{"id":142,"name":"O Titã de Pedra da Inércia Absoluta","effect":"Petrifica","description":"Transforma os músculos e a vontade em rocha maciça imóvel. O tempo passa, o mundo gira ao redor, mas o indivíduo permanece exatamente na mesma posição física e mental por horas a fio."},{"id":143,"name":"O Guardião do Sofá Grudado à Alma","effect":"Enraizado","description":"Funde o corpo do usuário ao estofado da sala através de tentáculos invisíveis de desânimo e gravidade artificial. Levantar exige um esforço físico equivalente a escalar o Everest."},{"id":144,"name":"O Espectro do Dia Inteiro no Pijama","effect":"Abandono","description":"Manteve o indivíduo vestindo roupas de dormir até o anoitecer em uma rendição total aos cuidados pessoais. Simboliza a capitulação silenciosa perante o espelho e a dignidade cotidiana."},{"id":145,"name":"O Senhor dos Membros de Chumbo","effect":"Peso morto","description":"Injeta toneladas de metal líquido nos braços e pernas do usuário ao menor sinal de tentativa de movimento. Torna simples caminhadas até a escrivaninha uma provação homérica."},{"id":146,"name":"A Fera do Silêncio Ensurdecedor do Quarto Escuro","effect":"Isolado","description":"Tranca o indivíduo em um quarto com cortinas fechadas, luz apagada e silêncio sepulcral. Abafa os apelos do mundo exterior e sela a rendição completa à caverna da ociosidade."},{"id":147,"name":"O Golem de Desistência Silenciosa","effect":"Apatia","description":"Executa um desligamento emocional progressivo em relação aos sonhos, metas e projetos de vida. Substitui a raiva ou a tristeza por uma indiferença fria e paralisante perante o futuro."},{"id":148,"name":"O Mago do Torpor Mental","effect":"Torpor","description":"Envolve o cérebro em uma espessa teia de aranha de lentidão e névoa neural. Torna impossível formular pensamentos claros, calcular somas simples ou recordar memórias afetivas importantes."},{"id":149,"name":"O Abismo do \"Para Que Tentar?\"","effect":"Niilismo","description":"Sussurra a pergunta mais venenosa e corrosiva que a mente humana pode conceber sobre o sentido do esforço. Derruba o indivíduo em um niilismo cínico que justifica qualquer forma de abandono."},{"id":150,"name":"O Cavaleiro da Cinza e do Pó Acumulado","effect":"Desuso","description":"Cobre de poeira instrumentos musicais, cadernos de rascunho e ferramentas de trabalho abandonadas há meses. Testemunha muda da morte gradual dos hobbies e paixões do usuário."},{"id":151,"name":"O Demônio da Cadeira Vazia na Mesa de Trabalho","effect":"Ausência","description":"Representa o espaço físico de trabalho que permanece deserto enquanto o dono vagueia pela casa fugindo das obrigações. A cadeira vazia acusa a deserção diária do posto de luta."},{"id":152,"name":"O Sombra do Potencial Desperdiçado","effect":"Ruína","description":"Contrasta dolorosamente os talentos brilhantes que o indivíduo possuía na juventude com a mediocridade ociosa do presente. É o carrasco mais impiedoso da autoestima pessoal."},{"id":153,"name":"O Guardião da Porta Trancada por Dentro","effect":"Clausura","description":"Isola o usuário do convívio social, de convites de amigos e de oportunidades profissionais através de recusas automáticas. Mantém a fortaleza da solidão intransponível."},{"id":154,"name":"O Fantasma de Quem Você Poderia Ter Sido","effect":"Sombra","description":"Exibe visões espectrais da versão bem-sucedida, disciplinada e realizada do usuário em linhas temporais paralelas. Zomba impiedosamente da realidade fracassada do presente."},{"id":155,"name":"O Monstro do Espelho que Reflete um Estranho Parado","effect":"Estranho","description":"Faz com que o indivíduo olhe para o próprio reflexo no banheiro e não reconheça mais a fisionomia cansada e apática que ali habita. O espelho torna-se inimigo."},{"id":156,"name":"A Névoa da Apatia Profunda","effect":"Acídia","description":"A encarnação moderna do antigo pecado mortal da acídia monástica: o desgosto profundo por tudo o que exige esforço espiritual, intelectual ou físico para ser realizado."},{"id":157,"name":"O Titã da Vontade Morta","effect":"Sem alma","description":"Extrai cirurgicamente a centelha de ímpeto e iniciativa que restava no centro do peito do indivíduo. Deixa um corpo ambulante que respira e consome recursos sem nenhuma direção."},{"id":158,"name":"O Senhor dos Anos em Branco no Currículo da Vida","effect":"Lacuna","description":"Abre buracos negros de vários anos na biografia pessoal onde nada de relevante foi construído, aprendido ou vivido. Torna a narrativa da própria história um vazio vergonhoso."},{"id":159,"name":"O Cão de Guarda do Limbo Existencial","effect":"Limbo","description":"Patrulha a fronteira cinzenta entre a vida ativa e a desistência completa. Garante que o usuário não pertença mais ao mundo dos realizadores nem desfrute da paz dos mortos."},{"id":160,"name":"O Monstro do Fim da Linha da Rotina Morta","effect":"Fim","description":"Sela o estágio final da inércia crônica, onde o indivíduo aceita a derrota e vegeta em uma existência puramente mecânica, esperando o tempo passar até o fim."},{"id":161,"name":"O Lorde do Prazo Fatal Expirado","effect":"Estouro","description":"Rompe as barreiras do tempo limite com um estrondo ensurdecedor. O relógio zera, o portal fecha e as consequências reais e irreversíveis despencam sobre a cabeça do procrastinador."},{"id":162,"name":"O Titã do Pânico da Última Hora","effect":"Pânico","description":"Despeja doses massivas de adrenalina desesperada no sangue quando restam apenas duas horas para a entrega. Força o corpo a produzir em minutos o que exigiria meses de planejamento."},{"id":163,"name":"O Dragão da Noite em Claro de Desespero","effect":"Insônia","description":"Incendeia o quarto com cafeína e lágrimas enquanto o usuário digita furiosamente contra o tempo na madrugada anterior à apresentação. O sono é sacrificado no altar do atraso."},{"id":164,"name":"O Mago do Trabalho Feito em 3 Horas que Exigia Meses","effect":"Gambiarra","description":"Milagrosamente entrega um projeto titânico montado às pressas com fita adesiva conceitual e pura audácia. Consagra a gambiarra como método de sobrevivência caótica."},{"id":165,"name":"O Espectro da Banca de Avaliação Iminente","effect":"Terror","description":"Aguarda na porta da sala de reunião ou banca examinadora enquanto o indivíduo transpira frio e revisa slides corrompidos no celular segundos antes de entrar."},{"id":166,"name":"A Hidra dos Erros por Pressa Extrema","effect":"Falha","description":"Deixa dezenas de erros de digitação, fontes trocadas e cálculos furados espalhados pelo trabalho finalizado em pânico a três minutos do prazo."},{"id":167,"name":"O Guardião da Impressora que Trava no Último Minuto","effect":"Sabotagem","description":"Ativa o enguiçamento mecânico exato da impressora ou o travamento do PDF na hora em que o documento precisa ser protocolado com urgência extrema."},{"id":168,"name":"O Cavaleiro do \"Deus, Salve Meus Dados na Pressão\"","effect":"Prece","description":"Invoca divindades esquecidas e faz promessas místicas para que o computador não sofra uma pane elétrica durante o salvamento heroico de última hora."},{"id":169,"name":"O Demônio do Choro Abafado sob a Escrivaninha","effect":"Colapso","description":"Rasteja sob a mesa de trabalho para chorar de exaustão e desespero por dez segundos antes de voltar a digitar com os olhos vermelhos e as mãos trêmulas."},{"id":170,"name":"O Monstro do Cafeína-Vampiro","effect":"Tremor","description":"Alimenta o corpo exausto com litros de café puro e energéticos vencidos, gerando taquicardia severa, tremores nas pálpebras e um sorriso maníaco de sobrevivência."},{"id":171,"name":"O Arquiteto da Torre de Erros de Última Hora","effect":"Desastre","description":"Empilha contradições lógicas, citação sem referência e falhas conceituais graves em uma estrutura frágil que desabará assim que for examinada por um adulto."},{"id":172,"name":"A Sombra do Acidente de Percurso por Fadiga","effect":"Erro fatal","description":"Ameaça a integridade física e digital do usuário que tenta dirigir ou operar sistemas complexos com quarenta horas de vigília ininterrupta decorrentes de atrasos."},{"id":173,"name":"O Senhor das Desculpas Finais ao Chefe/Professor","effect":"Humilhação","description":"Obriga o indivíduo a redigir e-mails patéticos implorando piedade, inventando emergências médicas falsas ou culpando o servidor de internet pelo atraso vexatório."},{"id":174,"name":"O Golem de Documentos Corrompidos na Hora H","effect":"Perda","description":"Exibe a temida mensagem de arquivo corrompido na tela exatamente quando o arquivo final é aberto para envio, coroando o ciclo de procrastinação com o caos total."},{"id":175,"name":"O Fantasma da Reprovação por Margem Mínima","effect":"Quase lá","description":"Condena o usuário a falhar por frações de décimo ou minutos de atraso, provando que a procrastinação cobra seu preço matemático exato."},{"id":176,"name":"O Guardião do Botão \"Enviar com Erro de Digitação\"","effect":"Vergonha","description":"Permite que o clique fatal ocorra com o nome do cliente escrito errado na primeira linha do documento oficial enviado à diretoria."},{"id":177,"name":"A Fera do Colapso Nervoso no Altar do Prazo","effect":"Surso","description":"Derruba o indivíduo em um surto histérico de gritos e gargalhadas nervosas quando a pressão atinge o limite absoluto da suportabilidade humana."},{"id":178,"name":"O Titã da Ruína Previsível","effect":"Queda","description":"Testemunha friamente o desabamento da reputação e das notas do usuário, lembrando que o desastre era perfeitamente evitável desde o primeiro dia."},{"id":179,"name":"O Abismo da Consequência Direta","effect":"Impacto","description":"Aplica o castigo real, financeiro, acadêmico ou profissional decorrente do atraso, sem direito a apelação ou desculpa que funcione."},{"id":180,"name":"O Senhor do \"Nunca Mais Faço Isso\"","effect":"Mentira","description":"Extrai o juramento sollemne e choroso de que o usuário jamais voltará a procrastinar na vida, sabendo perfeitamente que a promessa será quebrada na próxima segunda-feira."},{"id":181,"name":"Chronos-Vazio, O Devorador de Horas Mortas","effect":"Tempo zero","description":"A divindade menor do tempo desperdiçado. Governa os bilhões de minutos que a humanidade passa olhando para o nada, colecionando segundos estéreis em jarros de vidro escuro."},{"id":182,"name":"Atelofobia, A Rainha da Perfeição Paralisante","effect":"Paralisia","description":"A deusa sombria do medo obsessivo da imperfeição. Exige padrões divinos e inalcançáveis para qualquer ação humana, paralisando mortais sob o peso de sua exigência cruel."},{"id":183,"name":"Acedia Prime, O Demônio da Indiferença Existencial","effect":"Vazio","description":"O patriarca milenar de todas as formas de apatia, tédio e preguiça espiritual. Sua presença gélida esvazia o entusiasmo de civilizações inteiras e apaga o brilho dos grandes idealistas."},{"id":184,"name":"O Autossabotador Cósmico","effect":"Traição","description":"A entidade primordial que sussurra na mente de todos os criadores, convencendo-os a puxar o próprio tapete bem na hora da vitória para evitar o peso do sucesso."},{"id":185,"name":"O Arquiteto do Amanhã Eterno","effect":"Amanhã","description":"O senhor do horizonte inalcançável onde todas as tarefas difíceis são rigorosamente agendadas para acontecer, mas cujo sol nunca nasce de verdade."},{"id":186,"name":"O Monarca do Arquivo Morto da Vida","effect":"Enterrado","description":"Guardião das catacumbas onde jazem todos os livros não escritos, empresas não abertas, cartas não enviadas e amores não declarados pela força da inércia."},{"id":187,"name":"O Grande Inerte, Leviatã do Sofá de Chumbo","effect":"Inércia","description":"A massa cósmica colossal de todas as vontades mortas e corpos paralisados da Terra reunidos em um único monstro cinzento e insondável que consome energias vitais."},{"id":188,"name":"O Juiz dos Anos Perdidos","effect":"Sentença","description":"O magistrado implacável que pesa na balança os segundos vividos com propósito versus as décadas gastas na ociosidade, decretando o veredicto da estagnação."},{"id":189,"name":"O Tecelão da Teia de Abas Infinitas","effect":"Prisão","description":"A aranha cibernética mitológica que teceu a internet moderna para enredar a atenção da humanidade em labirintos de links que nunca levam a lugar nenhum."},{"id":190,"name":"O Senhor do E-mail Não Respondido de 2024","effect":"Pendência","description":"Um arquiduque espectral formado por todas as mensagens importantes que os humanos fingiram não ver até que se tornassem um abismo intransponível de culpa."},{"id":191,"name":"A Sombra do Potencial Infinito Desperdiçado","effect":"Luto","description":"O fantasma definitivo de tudo o que a humanidade poderia ter alcançado em arte, ciência e amor se tivesse vencido o hábito milenar de esperar o momento ideal."},{"id":192,"name":"O Imperador do \"Deixa Pra Lá\"","effect":"Desistir","description":"O soberano da resignação silenciosa, que coroa aqueles que desistem de lutar por seus próprios sonhos com coroas de poeira e cetros de marasmo."},{"id":193,"name":"O Titã da Racionalização Suprema","effect":"Ilusão","description":"A mente mestre que transformou a preguiça humana em uma filosofia sofisticada de ceticismo e economia de energia mental, vestindo o fracasso com capas de sabedoria."},{"id":194,"name":"O Corvo do Presságio Tardio","effect":"Tarde","description":"A ave agourenta cujo grito ecoa apenas quando o portão da vida se fecha para sempre, lembrando aos procrastinadores que o relógio universal não oferece prorrogação."},{"id":195,"name":"O Labirinto Sem Fim da Preparação Infinita","effect":"Sem saída","description":"A estrutura labiríntica definitiva onde o viajante estuda, planeja e se capacita para sempre sem nunca dar o primeiro passo em direção à arena real."},{"id":196,"name":"O Deus-Relógio de Ponteiros Congelados","effect":"Estático","description":"A divindade da ilusão temporal que paralisa os ponteiros do mundo subjetivo do procrastinador, fazendo-o acreditar que tem todo o tempo do universo até o colapso."},{"id":197,"name":"O Espectro da Última Chance Perdida","effect":"Fim","description":"O guardião do portão final que se fecha eternamente para oportunidades únicas, deixando o usuário vagando no deserto do arrependimento irremediável."},{"id":198,"name":"A Entropia da Vontade","effect":"Dissolve","description":"A força física fundamental do universo que corrói a ordem, o foco e a determinação humana, reduzindo qualquer plano ambicioso a pó e inércia entrópica."},{"id":199,"name":"Procrasta, O Senhor das Mil Desculpas","effect":"Submissão","description":"O arqui-inimigo clássico, a própria encarnação encorpada de todos os pretextos, atalhos e adiamentos que já mantiveram a humanidade acorrentada à mediocridade."},{"id":200,"name":"O Abismo do Presente Eternamente Adiado","effect":"Não-ser","description":"O chefe supremo e absoluto do jogo: a entidade que consome o 'agora', fazendo com que o jogador perceba que a única batalha real de toda a sua jornada era contra o próprio hábito de esperar o momento perfeito para viver a própria vida."}];
+const ELIXIR_PHRASES=[{"id":1,"phrase":"Cinco minutos a mais na cama não curam o cansaço de uma vida adiada. Levante e conquiste sua manhã."},{"id":2,"phrase":"O mundo pode esperar cinco minutos; seu propósito, não. Silencie o ruído e assuma o comando da sua mente."},{"id":3,"phrase":"Uma aba fechada é uma vitória conquistada. Escolha uma única frente de batalha e vença-a agora."},{"id":4,"phrase":"O próximo vídeo não tem o que você procura. O seu próximo passo real tem. Dê o play na sua própria vida."},{"id":5,"phrase":"A fome de distração nunca se sacia na geladeira. Alimente sua mente com a realização de uma tarefa concluída."},{"id":6,"phrase":"O 'depois' é o cemitério dos sonhos. O único momento em que você tem poder real é exatamente agora."},{"id":7,"phrase":"Organizar a mesa não escreve a sua história. Suje as mãos no trabalho que realmente importa."},{"id":8,"phrase":"Um rascunho imperfeito finalizado vale mil vezes mais do que uma obra-prima presa na sua cabeça."},{"id":9,"phrase":"Pare de assistir à vida dos outros passarem na tela. Comece a construir a sua fora dela."},{"id":10,"phrase":"Você não precisa de mais cafeína para acordar; precisa de decisão para começar."},{"id":11,"phrase":"Sua atenção é o seu ouro mais valioso. Não a entregue de graça para cada vibração no bolso."},{"id":12,"phrase":"Deixe a gaveta para depois. O caos externo se organiza naturalmente quando você domina o seu foco interno."},{"id":13,"phrase":"O 'eu de amanhã' é exatamente igual ao 'eu de hoje', só que com mais culpa. Comece agora."},{"id":14,"phrase":"Fazer rápido o que não importa continua sendo perda de tempo. Ataque o gigante, não as formigas."},{"id":15,"phrase":"Informação acumulada sem ação é apenas peso morto. Escolha um único conhecimento e aplique hoje."},{"id":16,"phrase":"Sua caixa de entrada não é sua lista de prioridades. Defina você mesmo o destino do seu dia."},{"id":17,"phrase":"Olhar pela janela não traz respostas. Olhar para a tarefa e agir transforma a sua realidade."},{"id":18,"phrase":"Tempo sobrando é uma ilusão perigosa. Trate cada hora de hoje como se fosse a última."},{"id":19,"phrase":"Pequenos desleixos drenam sua energia. Arrume o básico, erga a postura e parta para a ação."},{"id":20,"phrase":"A resposta que você procura não está na décima página de busca, mas na execução prática."},{"id":21,"phrase":"Desperte do transe digital. Você nasceu para criar e agir, não para ser espectador passivo de algoritmos."},{"id":22,"phrase":"O riso fácil anestesia a dor do tempo perdido. Encare o desafio e sinta a alegria real da conquista."},{"id":23,"phrase":"A madrugada foi feita para restaurar sua força, não para alimentar telas. Descanse para vencer amanhã."},{"id":24,"phrase":"Nenhuma pasta colorida substitui o trabalho feito. Menos burocracia mental, mais execução."},{"id":25,"phrase":"O silêncio também tem ritmo. Aperte o play no seu esforço antes que a inspiração esfrie."},{"id":26,"phrase":"Curtidas evaporam em segundos; o orgulho de uma obra concluída permanece para sempre."},{"id":27,"phrase":"Você já sabe o suficiente para dar o primeiro passo. Troque a teoria infinita pela prática corajosa."},{"id":28,"phrase":"A casa brilhando não apaga a tarefa pendente. Limpe primeiro a sua lista de pendências reais."},{"id":29,"phrase":"Segunda-feira é um mito inventado por quem teme o presente. Faça de hoje o seu dia um."},{"id":30,"phrase":"Nenhum nível vencido no celular supera o progresso na sua vida real. Saia do jogo e entre na arena."},{"id":31,"phrase":"Tire os fones do isolamento e ouça o chamado do seu potencial. O mundo precisa do que você sabe fazer."},{"id":32,"phrase":"Nem tudo que pisca na tela é urgente. Proteja sua paz e mantenha o foco no essencial."},{"id":33,"phrase":"Feche as portas das distrações. A verdadeira liberdade nasce quando você controla quem entra na sua mente."},{"id":34,"phrase":"O passado já cumpriu seu papel. Use suas memórias como combustível, não como âncora."},{"id":35,"phrase":"Feito é infinitamente superior a perfeito. Escolha uma opção e siga em frente sem olhar para trás."},{"id":36,"phrase":"Nenhum produto comprado online trará a disciplina que você precisa cultivar dentro de si."},{"id":37,"phrase":"Uma espiada rápida custa trinta minutos de foco profundo. Mantenha a porta fechada."},{"id":38,"phrase":"Não importa o clima lá fora; faça tempestade de produtividade dentro do seu espaço de trabalho."},{"id":39,"phrase":"Não alimente sua mente com a raiva de estranhos na internet. Canalize sua energia para construir."},{"id":40,"phrase":"Tome seu café ainda quente e termine sua tarefa antes que o dia esfrie."},{"id":41,"phrase":"A página em branco não é um abismo; é um convite. Escreva a primeira palavra imperfeita agora."},{"id":42,"phrase":"Pare de apagar o começo. Avance até o fim e depois lapide o que você construiu."},{"id":43,"phrase":"Ferramentas falham, a vontade prevalece. Adapte-se com o que tem em mãos e continue."},{"id":44,"phrase":"Retome o fio da meada com calma. Um pensamento interrompido pode ser reconstruído com paciência."},{"id":45,"phrase":"A única comparação justa é entre quem você foi ontem e quem você decide ser hoje."},{"id":46,"phrase":"Não trave na palavra exata. Expresse a ideia bruta primeiro; o refinamento vem depois."},{"id":47,"phrase":"Você não está mais na escola sendo julgado. Crie com liberdade e coragem adulta."},{"id":48,"phrase":"A manhã é a joia mais preciosa do seu dia. Proteja suas primeiras horas com unhas e dentes."},{"id":49,"phrase":"Tire seus projetos da gaveta dos rascunhos. O mundo merece ver o seu trabalho concluído."},{"id":50,"phrase":"Exija excelência na revisão, mas permita-se a imperfeição na criação inicial."},{"id":51,"phrase":"Um livro lido e aplicado vale por uma biblioteca inteira acumulada por vaidade."},{"id":52,"phrase":"Quebre o monstro gigante em pedaços minúsculos. Qual é a menor ação possível pelos próximos 5 minutos?"},{"id":53,"phrase":"Suas desculpas são inteligentes, mas seus resultados não mentem. Assuma o controle."},{"id":54,"phrase":"Grandes obras foram feitas com ferramentas simples. Não espere o equipamento ideal para começar."},{"id":55,"phrase":"Chega de acumular munição. Entre no campo de batalha e dispare o primeiro tiro."},{"id":56,"phrase":"Vença a letargia da tarde com movimento físico. Respire fundo, levante-se e retome o ritmo."},{"id":57,"phrase":"O cansaço da inércia é mental; o cansaço do dever cumprido é revigorante. Mova-se."},{"id":58,"phrase":"Não tente enxergar a escada inteira. Dê apenas o primeiro degrau agora."},{"id":59,"phrase":"Descanso verdadeiro não tem culpa. Trabalhe com intensidade para repousar com paz."},{"id":60,"phrase":"Pare de fugir do esforço. O alívio real só vem depois que você atravessa a tarefa."},{"id":61,"phrase":"O relógio não para para esperar sua vontade. Sincronize suas ações com o agora."},{"id":62,"phrase":"Recupere o domínio das suas manhãs e você recuperará o domínio do seu destino."},{"id":63,"phrase":"O meio-dia não é o fim do dia; é a chance de virar o jogo na segunda metade."},{"id":64,"phrase":"Quebre a monotonia dos dias iguais fazendo algo extraordinário hoje mesmo."},{"id":65,"phrase":"O tempo perdido não volta, mas o tempo presente está intacto nas suas mãos."},{"id":66,"phrase":"Derrote a avalanche de prazos eliminando uma única pendência de cada vez."},{"id":67,"phrase":"Transforme o tédio da tarde em silêncio fértil para a sua concentração."},{"id":68,"phrase":"Faça deste crepúsculo um momento de orgulho pelo dever cumprido, não de lamento."},{"id":69,"phrase":"Não sacrifique seu fim de semana pela preguiça da semana. Resolva hoje."},{"id":70,"phrase":"Faça desta segunda-feira o marco zero da sua nova disciplina."},{"id":71,"phrase":"Encare a data real no calendário de frente. A clareza cura o pânico."},{"id":72,"phrase":"Trabalhe bem durante o dia para merecer o sono sagrado da noite."},{"id":73,"phrase":"Não fuja da realidade sonhando com férias. Construa uma rotina da qual você não precise fugir."},{"id":74,"phrase":"Chegue antes do prazo. A tranquilidade da entrega antecipada não tem preço."},{"id":75,"phrase":"Feche os dedos e segure o seu tempo com firmeza. Cada minuto conta."},{"id":76,"phrase":"Preencha sua agenda com intenções claras antes que o acaso a preencha por você."},{"id":77,"phrase":"Faça deste ano o capítulo mais produtivo e realizador da sua história."},{"id":78,"phrase":"Os anos voam para quem dorme; para quem constrói, cada ano deixa um legado sólido."},{"id":79,"phrase":"Saia da correnteza da rotina automática. Tome o leme e escolha a direção."},{"id":80,"phrase":"Não meça seu valor pelas horas sentado na cadeira, mas pelo impacto real do que você entrega."},{"id":81,"phrase":"Não use sua inteligência para defender suas limitações. Use-a para superá-las."},{"id":82,"phrase":"Quando você assume total responsabilidade, ganha também o poder total de mudar."},{"id":83,"phrase":"Encare a verdade sem filtros: o espelho reflete o que fazemos todos os dias."},{"id":84,"phrase":"Resista ao canto da sereia dos projetos fáceis. A glória está na missão principal."},{"id":85,"phrase":"Defina metas realistas e constantes. Pequenos passos diários vencem saltos impossíveis."},{"id":86,"phrase":"Simplifique o processo. O gênio está em tornar o complexo simples e executável."},{"id":87,"phrase":"Abandone o jargão técnico e fale a língua universal da entrega concluída."},{"id":88,"phrase":"Você não é preguiçoso; você apenas treinou o hábito errado. Treine o foco hoje."},{"id":89,"phrase":"O momento ideal nunca existiu. O momento perfeito é aquele em que você decide agir."},{"id":90,"phrase":"A inspiração encontra quem já está trabalhando. Comece sem ela."},{"id":91,"phrase":"A prática é a melhor professora. Aprenda fazendo, errando e corrigindo na arena."},{"id":92,"phrase":"Quebre o ciclo vicioso hoje. Uma única vitória rompe anos de estagnação."},{"id":93,"phrase":"Menos mapas desenhados, mais passos dados na estrada real."},{"id":94,"phrase":"Tire o selo de 'em construção' e entregue sua obra ao mundo."},{"id":95,"phrase":"Não olhe para o topo da montanha de tarefas. Olhe apenas para a pedra à sua frente."},{"id":96,"phrase":"Substitua a pressa ansiosa pela cadência calma e implacável de quem sabe o que faz."},{"id":97,"phrase":"Honre a palavra que você dá a si mesmo. Sua autoconfiança nasce das promessas cumpridas."},{"id":98,"phrase":"Consumir conteúdo não é produzir valor. Feche o player e abra o editor."},{"id":99,"phrase":"Concentre toda a sua força em um único ponto até que a barreira ceda."},{"id":100,"phrase":"Os últimos vinte porcento separam os sonhadores dos realizadores. Vá até o fim."},{"id":101,"phrase":"A culpa noturna dissolve-se diante de uma única ação corajosa durante o dia."},{"id":102,"phrase":"Perdoe o ontem e use a luz desta manhã para escrever uma página limpa."},{"id":103,"phrase":"O medo do desempenho diminui assim que você inicia o movimento."},{"id":104,"phrase":"Errar em público é o preço natural de quem tem coragem de entrar na arena."},{"id":105,"phrase":"Liberte-se do peso das expectativas alheias. Construa algo que orgulhe a sua própria alma."},{"id":106,"phrase":"Respire fundo, acalme o peito e dê um passo de cada vez. Você está seguro."},{"id":107,"phrase":"Você não é uma fraude; você é um aprendiz em constante evolução. Continue avançando."},{"id":108,"phrase":"Acalme o corpo, solte os ombros e transforme a tensão em foco direcionado."},{"id":109,"phrase":"O aperto no peito é apenas energia acumulada pedindo para ser transformada em ação."},{"id":110,"phrase":"Noventa porcento dos cenários catastróficos nunca acontecem. Volte para o presente."},{"id":111,"phrase":"Deixe as cobranças fora do quarto. O descanso é parte sagrada da vitória."},{"id":112,"phrase":"As oportunidades perdidas ficaram no passado; novas portas se abrem para quem age hoje."},{"id":113,"phrase":"Troque o suspiro de desânimo pelo fôlego profundo de quem vai vencer."},{"id":114,"phrase":"Não tema o peso do sucesso; você desenvolverá força suficiente para carregá-lo."},{"id":115,"phrase":"Escolha uma única rota e comprometa-se com ela até o fim."},{"id":116,"phrase":"Seja seu maior aliado, não seu carrasco mais cruel. Incentive seu próprio progresso."},{"id":117,"phrase":"Acalme o coração com ação focada. O movimento dissipa a ansiedade."},{"id":118,"phrase":"Enxugue o rosto, erga a cabeça e dê um pequeno passo hoje. Você vai conseguir."},{"id":119,"phrase":"A desesperança é apenas uma nuvem passageira. O sol da disciplina continua brilhando."},{"id":120,"phrase":"Você está exatamente no ponto de partida certo para a sua melhor jornada."},{"id":121,"phrase":"Quebre a corrente do algoritmo. Sua mente pertence a você, não às máquinas."},{"id":122,"phrase":"Reeduque seu cérebro para apreciar a satisfação profunda do esforço bem feito."},{"id":123,"phrase":"Feche as abas extras e abra espaço mental para a clareza."},{"id":124,"phrase":"Desligue os alertas e reencontre o silêncio produtivo da sua própria mente."},{"id":125,"phrase":"Menos ruído externo, mais profundidade interna. Proteja sua capacidade cognitiva."},{"id":126,"phrase":"Não carregue o peso do mundo nas costas. Cuide bem do seu pedaço de realidade hoje."},{"id":127,"phrase":"Esteja inteiro onde você estiver. Presença total gera resultados extraordinários."},{"id":128,"phrase":"Use a tecnologia como ferramenta de criação, nunca como jaula de distração."},{"id":129,"phrase":"Busque conexões reais e realizações tangíveis fora das telas."},{"id":130,"phrase":"Limpe o caos digital aos poucos. Dez e-mails resolvidos hoje já trazem paz."},{"id":131,"phrase":"Filtre o lixo eletrônico e alimente sua mente apenas com o que edifica."},{"id":132,"phrase":"Retome o controle dos seus números e projetos com serenidade."},{"id":133,"phrase":"Pare de atualizar a tela esperando milagres. Seja você a novidade do dia."},{"id":134,"phrase":"Uma coisa de cada vez, feita com maestria e atenção plena."},{"id":135,"phrase":"Escolha um único livro da sua lista e absorva suas lições com calma."},{"id":136,"phrase":"Recarregue suas energias longe das tomadas e perto dos seus objetivos."},{"id":137,"phrase":"Limpe o cache mental com uma caminhada ao ar livre e respiração profunda."},{"id":138,"phrase":"Desapegue dos links antigos. O que importa de verdade está bem diante de você."},{"id":139,"phrase":"Mergulhe fundo em um único tema em vez de boiar na superfície de mil."},{"id":140,"phrase":"Descanse os olhos das telas e contemple o horizonte real por alguns minutos."},{"id":141,"phrase":"Quebre a paralisia com um movimento minúsculo. Mexa um dedo, escreva uma palavra."},{"id":142,"phrase":"A pedra mais pesada começa a rolar com um pequeno empurrão constante."},{"id":143,"phrase":"Levante-se do sofá agora. A gravidade perde a força assim que você fica de pé."},{"id":144,"phrase":"Vista-se para a batalha do dia. A postura externa transforma o estado interno."},{"id":145,"phrase":"Sacuda o peso dos membros e dê o primeiro passo. A energia vem com o movimento."},{"id":146,"phrase":"Abra as cortinas e deixe a luz entrar. O mundo espera pela sua contribuição."},{"id":147,"phrase":"Reacenda a chama do propósito. Seus sonhos ainda merecem o seu esforço."},{"id":148,"phrase":"Dissipe a névoa mental com água fria no rosto e uma meta clara de 10 minutos."},{"id":149,"phrase":"Vale a pena tentar porque cada esforço molda uma versão mais forte de você."},{"id":150,"phrase":"Sopre a poeira dos seus talentos e volte a tocar a música da sua vida."},{"id":151,"phrase":"Ocupar sua cadeira com propósito é o primeiro ato de coragem do dia."},{"id":152,"phrase":"Nunca é tarde para resgatar seu potencial e honrar seus talentos."},{"id":153,"phrase":"Destranque a porta e permita-se viver e produzir em plenitude."},{"id":154,"phrase":"Torne-se hoje a pessoa que você sempre soube que poderia ser."},{"id":155,"phrase":"Olhe no espelho com compaixão e firmeza: hoje começa a sua virada."},{"id":156,"phrase":"Vença a apatia com ação deliberada. O entusiasmo renasce no meio do caminho."},{"id":157,"phrase":"Sua vontade não morreu; ela apenas aguardava um comando claro para despertar."},{"id":158,"phrase":"Preencha as páginas em branco da sua história com vitórias construídas hoje."},{"id":159,"phrase":"Saia do limbo da indecisão. Escolha agir e recupere o brilho nos olhos."},{"id":160,"phrase":"O fim de uma rotina morta é o nascimento de uma vida vibrante e intencional."},{"id":161,"phrase":"Prazos expirados ensinam lições valiosas. Aprenda com o erro e recomece mais forte."},{"id":162,"phrase":"Canalize a adrenalina da última hora com foco cirúrgico e calma."},{"id":163,"phrase":"Atravesse a noite se preciso, mas prometa a si mesmo nunca mais deixar acumular."},{"id":164,"phrase":"Entregue o melhor possível dentro do tempo que resta, sem desespero."},{"id":165,"phrase":"Encare a avaliação de cabeça erguida. Você deu o seu melhor nas circunstâncias atuais."},{"id":166,"phrase":"Respire por dez segundos antes de revisar. A pressa é inimiga da precisão."},{"id":167,"phrase":"Mantenha a calma diante dos imprevistos técnicos. Soluções surgem para mentes serenas."},{"id":168,"phrase":"Salve seu trabalho constantemente e confie na sua capacidade de resolver problemas."},{"id":169,"phrase":"Permita-se sentir a frustração, depois erga a cabeça e finalize a missão."},{"id":170,"phrase":"Modere os estimulantes e confie na força natural da sua determinação."},{"id":171,"phrase":"Corrija o que for possível agora e entregue com dignidade."},{"id":172,"phrase":"Sua saúde e segurança valem mais que qualquer prazo. Cuide-se."},{"id":173,"phrase":"Seja honesto, direto e profissional. Assuma a falha e apresente a solução."},{"id":174,"phrase":"Respire fundo diante das perdas digitais; você é capaz de reconstruir ainda melhor."},{"id":175,"phrase":"Cada minuto conta. Use esta lição para antecipar seus próximos passos."},{"id":176,"phrase":"Revise a primeira e a última linha com atenção plena antes de enviar."},{"id":177,"phrase":"Acalme a tempestade interna. Nenhum prazo define o valor da sua existência."},{"id":178,"phrase":"Transforme a ruína previsível no alicerce sólido da sua nova disciplina."},{"id":179,"phrase":"Encare as consequências com maturidade e coragem. Você sairá mais sábio."},{"id":180,"phrase":"Transforme o juramento emocional em um micro-hábito diário concreto hoje mesmo."},{"id":181,"phrase":"Você venceu o devorador de horas. O seu tempo agora pertence ao seu propósito."},{"id":182,"phrase":"A perfeição não paralisa mais você. Sua ação imperfeita é invencível."},{"id":183,"phrase":"O torpor foi dissipado. Sua mente brilha com clareza, entusiasmo e propósito."},{"id":184,"phrase":"Você se tornou seu maior aliado. Nenhuma sabotagem interna pode detê-lo agora."},{"id":185,"phrase":"O amanhã chegou hoje. Você é o arquiteto soberano do seu presente."},{"id":186,"phrase":"Seus projetos ganharam vida. O arquivo morto deu lugar a obras reais."},{"id":187,"phrase":"A inércia foi derrotada. Você se move com leveza, força e determinação."},{"id":188,"phrase":"Os anos perdidos foram redimidos pela intensidade e propósito do seu presente."},{"id":189,"phrase":"Você rasgou a teia das distrações. Sua atenção é uma espada afiada."},{"id":190,"phrase":"Nenhuma pendência assombra mais sua paz. Você resolve e avança."},{"id":191,"phrase":"Seu potencial infinito agora se manifesta em ações concretas todos os dias."},{"id":192,"phrase":"Você baniu o 'deixa pra lá' e abraçou o compromisso inabalável consigo mesmo."},{"id":193,"phrase":"Sua inteligência agora serve exclusivamente à realização dos seus maiores sonhos."},{"id":194,"phrase":"Você chegou a tempo. O portão da realização está aberto diante de você."},{"id":195,"phrase":"Você saiu do labirinto da preparação e conquistou a arena da vida real."},{"id":196,"phrase":"O tempo voltou a fluir a seu favor. Cada segundo é vivido com plenitude."},{"id":197,"phrase":"Você agarrou sua chance e transformou intenção em legado duradouro."},{"id":198,"phrase":"Sua vontade é inquebrável. Você cria ordem, foco e progresso onde quer que vá."},{"id":199,"phrase":"O Senhor das Mil Desculpas caiu. Você domina a arte da ação imediata."},{"id":200,"phrase":"Parabéns, guerreiro do foco! Você venceu a si mesmo e conquistou o poder supremo de viver o agora."}];
 
-/* KHRONOS 1.0 — MOTOR PRINCIPAL */
-(() => {
-  const KEY = "khronos-v1";
-  const DEGREE_MS = 10000;
+const HABIT_CATALOG=[{"id":1,"name":"Escrever as 3 principais prioridades do dia antes de iniciar o trabalho.","category":"Produtividade"},{"id":2,"name":"Executar um bloco de foco profundo de 25 minutos sem interrupções.","category":"Produtividade"},{"id":3,"name":"Deixar o smartphone em outro cômodo durante 1 hora de estudo.","category":"Produtividade"},{"id":4,"name":"Fechar todas as abas do navegador que não estão em uso imediato.","category":"Produtividade"},{"id":5,"name":"Bloquear 30 minutos na agenda estritamente para tarefas complexas.","category":"Produtividade"},{"id":6,"name":"Aplicar a regra dos 2 minutos (resolver tarefas rápidas imediatamente).","category":"Produtividade"},{"id":7,"name":"Definir a principal meta do dia seguinte antes de fechar o computador.","category":"Produtividade"},{"id":8,"name":"Eliminar uma tarefa inútil ou improdutiva da rotina diária.","category":"Produtividade"},{"id":9,"name":"Esvaziar a caixa de entrada de e-mails até o nível zero.","category":"Digital"},{"id":10,"name":"Limpar a tela física do computador e do celular.","category":"Digital"},{"id":11,"name":"Organizar os ícones, atalhos e favoritos do navegador de internet.","category":"Digital"},{"id":12,"name":"Realizar um backup rápido de arquivos importantes na nuvem.","category":"Digital"},{"id":13,"name":"Excluir arquivos temporários e downloads obsoletos do computador.","category":"Digital"},{"id":14,"name":"Desativar notificações de aplicativos que não são essenciais.","category":"Digital"},{"id":15,"name":"Organizar as pastas de documentos digitais do trabalho ou estudos.","category":"Digital"},{"id":16,"name":"Fazer uma varredura de inscrições e boletins digitais não lidos.","category":"Digital"},{"id":17,"name":"Fazer uma revisão rápida das tarefas e prazos da semana.","category":"Planejamento"},{"id":18,"name":"Organizar a lista de tarefas do dia seguinte na noite anterior.","category":"Planejamento"},{"id":19,"name":"Dedicar 10 minutos para planejar a estrutura das entregas da semana.","category":"Planejamento"},{"id":20,"name":"Conferir a agenda de compromissos antes de encerrar o expediente.","category":"Planejamento"},{"id":21,"name":"Estabelecer blocos de tempo fixos para checar mensagens e canais de chat.","category":"Planejamento"},{"id":22,"name":"Revisar metas de longo prazo por 5 minutos para manter o alinhamento.","category":"Planejamento"},{"id":23,"name":"Anotar pendências soltas em um único local de captura rápida.","category":"Planejamento"},{"id":24,"name":"Avaliar ao final do dia o que funcionou e o que atrasou no cronograma.","category":"Planejamento"},{"id":25,"name":"Ler rigorosamente 10 páginas de um livro técnico ou de não-ficção.","category":"Leitura"},{"id":26,"name":"Ler um artigo longo ou ensaio educativo guardado para depois.","category":"Leitura"},{"id":27,"name":"Estudar um conceito novo da sua área de atuação por 15 minutos.","category":"Leitura"},{"id":28,"name":"Ler um boletim informativo especializado da sua área de interesse.","category":"Leitura"},{"id":29,"name":"Analisar um estudo de caso ou relatório profissional do seu setor.","category":"Leitura"},{"id":30,"name":"Escrever um resumo de uma linha com o principal aprendizado do dia.","category":"Leitura"},{"id":31,"name":"Estudar a biografia ou trajetória de uma referência profissional.","category":"Leitura"},{"id":32,"name":"Ler sobre uma nova tendência tecnológica ou de mercado.","category":"Leitura"},{"id":33,"name":"Praticar um novo idioma por 10 minutos em uma plataforma de ensino.","category":"Idiomas"},{"id":34,"name":"Memorizar e fixar 3 termos ou palavras novas em uma língua estrangeira.","category":"Idiomas"},{"id":35,"name":"Praticar técnicas de digitação rápida no teclado por 5 minutos.","category":"Idiomas"},{"id":36,"name":"Ouvir um trecho de áudio ou diálogo em outro idioma.","category":"Idiomas"},{"id":37,"name":"Praticar a leitura estruturada em uma língua estrangeira.","category":"Idiomas"},{"id":38,"name":"Estudar regras gramaticais ou sintaxe por 10 minutos.","category":"Idiomas"},{"id":39,"name":"Assistir a um minitutorial de uma nova ferramenta de software.","category":"Idiomas"},{"id":40,"name":"Escrever uma frase curta estruturada no idioma que está estudando.","category":"Idiomas"},{"id":41,"name":"Escrever um registro livre de pensamentos e ideias por 5 minutos.","category":"Escrita"},{"id":42,"name":"Escrever um parágrafo de um artigo, documento ou projeto pessoal.","category":"Escrita"},{"id":43,"name":"Anotar uma ideia inovadora ou insight criativo em um caderno.","category":"Escrita"},{"id":44,"name":"Escrever uma reflexão curta sobre um aprendizado de projeto recente.","category":"Escrita"},{"id":45,"name":"Praticar a escrita de um relato rápido baseado em observações cotidianas.","category":"Escrita"},{"id":46,"name":"Escrever uma diretriz ou escopo para um projeto futuro.","category":"Escrita"},{"id":47,"name":"Redigir um micro-ensaio sobre um tema que domine o seu interesse.","category":"Escrita"},{"id":48,"name":"Escrever um objetivo de longo prazo em formato de narrativa detalhada.","category":"Escrita"},{"id":49,"name":"Organizar a mesa de trabalho deixando apenas o essencial à vista.","category":"Organização"},{"id":50,"name":"Arquivar documentos físicos espalhados pela escrivaninha.","category":"Organização"},{"id":51,"name":"Recolher materiais de escritório dispersos e guardá-los nos devidos lugares.","category":"Organização"},{"id":52,"name":"Limpar o pó da superfície da mesa e do teclado.","category":"Organização"},{"id":53,"name":"Organizar os cabos e carregadores utilizando organizadores ou fitas.","category":"Organização"},{"id":54,"name":"Descartar papéis de rascunho antigos e anotações já utilizadas.","category":"Organização"},{"id":55,"name":"Organizar os livros e manuais de consulta nas estantes.","category":"Organização"},{"id":56,"name":"Conferir o estoque de materiais de escritório essenciais.","category":"Organização"},{"id":57,"name":"Anotar e categorizar todos os gastos realizados no dia anterior.","category":"Finanças"},{"id":58,"name":"Fazer um planejamento rápido do orçamento mensal disponível.","category":"Finanças"},{"id":59,"name":"Avaliar custos de assinaturas de softwares e ferramentas de trabalho.","category":"Finanças"},{"id":60,"name":"Verificar o saldo das contas e faturas de cartões corporativos/pessoais.","category":"Finanças"},{"id":61,"name":"Destinar uma porcentagem fixa para investimentos ou reservas.","category":"Finanças"},{"id":62,"name":"Pesquisar fornecedores alternativos para otimizar custos operacionais.","category":"Finanças"},{"id":63,"name":"Analisar o relatório financeiro do mês anterior.","category":"Finanças"},{"id":64,"name":"Auditar tarifas bancárias ou taxas desnecessárias.","category":"Finanças"},{"id":65,"name":"Criar um modelo ou template reutilizável para tarefas repetitivas.","category":"Automação"},{"id":66,"name":"Configurar uma nova regra de automação em e-mails ou planilhas.","category":"Automação"},{"id":67,"name":"Criar teclas de atalho (shortcuts) para comandos frequentes no computador.","category":"Automação"},{"id":68,"name":"Simplificar um processo complexo eliminando etapas burocráticas.","category":"Automação"},{"id":69,"name":"Atualizar scripts ou códigos utilitários de suporte ao trabalho.","category":"Automação"},{"id":70,"name":"Documentar um procedimento padrão (POP) para futuras consultas.","category":"Automação"},{"id":71,"name":"Testar uma nova extensão ou ferramenta que prometa ganho de eficiência.","category":"Automação"},{"id":72,"name":"Limpar macros ou fórmulas corrompidas em planilhas de controle.","category":"Automação"},{"id":73,"name":"Atualizar o status de todos os projetos ativos em um painel Kanban.","category":"Projetos"},{"id":74,"name":"Quebrar uma tarefa grande e complexa em micro-etapas executáveis.","category":"Projetos"},{"id":75,"name":"Revisar os gargalos e impedimentos atuais em seus projetos em andamento.","category":"Projetos"},{"id":76,"name":"Validar se os prazos de entrega estão alinhados com as prioridades.","category":"Projetos"},{"id":77,"name":"Arquivar projetos concluídos e limpar o painel de visualização.","category":"Projetos"},{"id":78,"name":"Definir claramente o 'próximo passo físico' de uma tarefa travada.","category":"Projetos"},{"id":79,"name":"Realizar uma reunião de alinhamento rápido consigo mesmo (Review).","category":"Projetos"},{"id":80,"name":"Reatribuir ou renegociar prazos de tarefas sobrepostas.","category":"Projetos"},{"id":81,"name":"Listar 10 ideias de melhoria para um processo atual em 5 minutos.","category":"Inovação"},{"id":82,"name":"Desenhar um mapa mental rápido para estruturar um novo projeto.","category":"Inovação"},{"id":83,"name":"Combinar duas ideias de áreas diferentes para criar um conceito inédito.","category":"Inovação"},{"id":84,"name":"Fazer um rascunho visual ou fluxograma de uma solução inovadora.","category":"Inovação"},{"id":85,"name":"Escrever perguntas provocativas sobre um problema para mudar o ângulo de visão.","category":"Inovação"},{"id":86,"name":"Pesquisar referências visuais ou conceituais fora da sua zona de conforto.","category":"Inovação"},{"id":87,"name":"Criar protótipos em rascunho de uma interface ou documento.","category":"Inovação"},{"id":88,"name":"Listar falhas potenciais de um plano atual para antecipar correções.","category":"Inovação"},{"id":89,"name":"Revisar um texto redigido aplicando técnicas de clareza e concisão.","category":"Comunicação"},{"id":90,"name":"Praticar a estruturação de e-mails diretos e focados em ação.","category":"Comunicação"},{"id":91,"name":"Responder pendências de comunicação em lote em horários determinados.","category":"Comunicação"},{"id":92,"name":"Reescrever um parágrafo complexo para torná-lo de fácil compreensão.","category":"Comunicação"},{"id":93,"name":"Eliminar clichês e jargões corporativos excessivos de uma mensagem.","category":"Comunicação"},{"id":94,"name":"Estruturar uma pauta clara antes de iniciar uma reunião.","category":"Comunicação"},{"id":95,"name":"Praticar a síntese de documentos longos em tópicos executivos.","category":"Comunicação"},{"id":96,"name":"Conferir a formatação e o tom de documentos oficiais antes do envio.","category":"Comunicação"},{"id":97,"name":"Investigar uma nova tendência de mercado por 15 minutos.","category":"Pesquisa"},{"id":98,"name":"Analisar os pontos fortes e fracos de um concorrente ou projeto similar.","category":"Pesquisa"},{"id":99,"name":"Ler o sumário executivo de uma pesquisa de setor relevante.","category":"Pesquisa"},{"id":100,"name":"Mapear novas fontes de informação confiáveis para sua área de atuação.","category":"Pesquisa"},{"id":101,"name":"Coletar dados estatísticos úteis para fundamentar argumentos futuros.","category":"Pesquisa"},{"id":102,"name":"Acompanhar atualizações de portais especializados do seu nicho.","category":"Pesquisa"},{"id":103,"name":"Arquivar dados de referência em um banco de conhecimento pessoal.","category":"Pesquisa"},{"id":104,"name":"Cruzar dados de diferentes relatórios para gerar um insight original.","category":"Pesquisa"},{"id":105,"name":"Atualizar notas em um sistema de base de conhecimento (ex: Obsidian/Notion).","category":"Conhecimento"},{"id":106,"name":"Conectar conceitos de anotações antigas com ideias recentes.","category":"Conhecimento"},{"id":107,"name":"Criar uma ficha de resumo de um livro ou curso concluído.","category":"Conhecimento"},{"id":108,"name":"Organizar tags e categorias no seu repositório de notas pessoais.","category":"Conhecimento"},{"id":109,"name":"Revisar anotações feitas há 30 dias para fixar o aprendizado.","category":"Conhecimento"},{"id":110,"name":"Consolidar links úteis em um diretório de referências estruturado.","category":"Conhecimento"},{"id":111,"name":"Escrever uma explicação simples para um conceito técnico complexo.","category":"Conhecimento"},{"id":112,"name":"Fazer o backup local da sua base de dados de conhecimento.","category":"Conhecimento"},{"id":113,"name":"Atualizar senhas de acesso utilizando um gerenciador seguro.","category":"Segurança"},{"id":114,"name":"Verificar se o sistema operacional e softwares principais estão atualizados.","category":"Segurança"},{"id":115,"name":"Realizar verificação de segurança em contas ativas (dupla autenticação).","category":"Segurança"},{"id":116,"name":"Limpar o histórico de navegação e caches de aplicativos de terceiros.","category":"Segurança"},{"id":117,"name":"Revisar permissões de acesso concedidas a aplicativos externos.","category":"Segurança"},{"id":118,"name":"Desconectar sessões ativas em dispositivos que não utiliza mais.","category":"Segurança"},{"id":119,"name":"Verificar a integridade de arquivos executáveis antes de abri-los.","category":"Segurança"},{"id":120,"name":"Organizar cópias de segurança offline de chaves e acessos críticos.","category":"Segurança"},{"id":121,"name":"Testar um novo comando ou recurso em um software que já utiliza.","category":"Tecnologia"},{"id":122,"name":"Explorar uma nova inteligência artificial aplicada ao seu fluxo de trabalho.","category":"Tecnologia"},{"id":123,"name":"Automatizar uma tarefa repetitiva utilizando scripts simples.","category":"Tecnologia"},{"id":124,"name":"Ler as notas de atualização (changelog) de uma ferramenta essencial.","category":"Tecnologia"},{"id":125,"name":"Configurar um novo ambiente de desenvolvimento ou produtividade.","category":"Tecnologia"},{"id":126,"name":"Otimizar os atalhos de teclado de um editor de texto ou IDE.","category":"Tecnologia"},{"id":127,"name":"Estudar uma nova linguagem de consulta ou formatação de dados.","category":"Tecnologia"},{"id":128,"name":"Testar a compatibilidade de um arquivo em diferentes plataformas.","category":"Tecnologia"},{"id":129,"name":"Analisar o gráfico de horas produtivas da semana anterior.","category":"Métricas"},{"id":130,"name":"Medir o tempo gasto em tarefas específicas utilizando cronômetros.","category":"Métricas"},{"id":131,"name":"Cruzar dados de conclusão de metas com os dias de maior foco.","category":"Métricas"},{"id":132,"name":"Identificar o horário de pico de energia cognitiva no seu dia.","category":"Métricas"},{"id":133,"name":"Calcular métricas de eficiência em projetos concluídos.","category":"Métricas"},{"id":134,"name":"Limpar registros de dados obsoletos em planilhas de controle.","category":"Métricas"},{"id":135,"name":"Criar um gráfico visual simples para acompanhar um indicador pessoal.","category":"Métricas"},{"id":136,"name":"Avaliar a taxa de conversão de tarefas planejadas versus executadas.","category":"Métricas"},{"id":137,"name":"Esboçar o roteiro de um post, artigo ou material de divulgação.","category":"Estratégia"},{"id":138,"name":"Planejar o calendário de publicações para a próxima semana.","category":"Estratégia"},{"id":139,"name":"Analisar o engajamento ou retorno de conteúdos publicados anteriormente.","category":"Estratégia"},{"id":140,"name":"Atualizar as informações de perfil em redes profissionais.","category":"Estratégia"},{"id":141,"name":"Realizar a curadoria de imagens ou gráficos de apoio para projetos.","category":"Estratégia"},{"id":142,"name":"Responder interações pendentes em perfis profissionais.","category":"Estratégia"},{"id":143,"name":"Pesquisar palavras-chave relevantes para otimização de buscas (SEO).","category":"Estratégia"},{"id":144,"name":"Revisar a identidade visual de apresentações ou portfólios.","category":"Estratégia"},{"id":145,"name":"Isolar um erro ou falha em um processo para encontrar a causa raiz.","category":"Resolução"},{"id":146,"name":"Testar uma hipótese alternativa para resolver um bloqueio técnico.","category":"Resolução"},{"id":147,"name":"Consultar documentações oficiais para solucionar um entrave de projeto.","category":"Resolução"},{"id":148,"name":"Escrever um relatório de incidente detalhando a falha e a correção.","category":"Resolução"},{"id":149,"name":"Criar cenários de teste para validar a estabilidade de uma entrega.","category":"Resolução"},{"id":150,"name":"Reverter uma alteração recente para testar a integridade do sistema.","category":"Resolução"},{"id":151,"name":"Solicitar feedback estruturado sobre um problema para colegas especializados.","category":"Resolução"},{"id":152,"name":"Desenvolver um plano de contingência para falhas imprevistas.","category":"Resolução"},{"id":153,"name":"Desenhar o fluxo de navegação de um novo projeto ou documento.","category":"Arquitetura"},{"id":154,"name":"Estruturar a hierarquia de títulos e subtítulos de um relatório longo.","category":"Arquitetura"},{"id":155,"name":"Simplificar a interface visual de uma planilha ou formulário.","category":"Arquitetura"},{"id":156,"name":"Padronizar a nomenclatura de arquivos e pastas em um projeto.","category":"Arquitetura"},{"id":157,"name":"Criar um guia de estilo visual ou textual para manutenções futuras.","category":"Arquitetura"},{"id":158,"name":"Organizar elementos gráficos em grids alinhados e limpos.","category":"Arquitetura"},{"id":159,"name":"Remover excessos visuais que poluam a leitura de um documento.","category":"Arquitetura"},{"id":160,"name":"Testar a legibilidade de fontes e contrastes em materiais visuais.","category":"Arquitetura"},{"id":161,"name":"Revisar termos, políticas ou diretrizes de um contrato ou acordo.","category":"Governança"},{"id":162,"name":"Verificar se os prazos legais de entrega de documentos estão corretos.","category":"Governança"},{"id":163,"name":"Organizar comprovantes e registros fiscais em pastas específicas.","category":"Governança"},{"id":164,"name":"Atualizar cadastros e informações de faturamento em sistemas.","category":"Governança"},{"id":165,"name":"Conferir checklists de conformidade antes de finalizar um projeto.","category":"Governança"},{"id":166,"name":"Arquivar termos de encerramento de etapas contratuais.","category":"Governança"},{"id":167,"name":"Auditar se os padrões de qualidade exigidos foram cumpridos.","category":"Governança"},{"id":168,"name":"Listar pendências de regularização documental.","category":"Governança"},{"id":169,"name":"Esboçar feedbacks construtivos baseados em fatos para uma equipe.","category":"Liderança"},{"id":170,"name":"Delegar uma tarefa de menor complexidade documentando as instruções.","category":"Liderança"},{"id":171,"name":"Estudar um princípio de gestão de equipes ou metodologias ágeis.","category":"Liderança"},{"id":172,"name":"Mapear competências técnicas necessárias para novos desafios.","category":"Liderança"},{"id":173,"name":"Preparar a estrutura de uma reunião de alinhamento com colaboradores.","category":"Liderança"},{"id":174,"name":"Reconhecer publicamente a entrega de qualidade de um colega.","category":"Liderança"},{"id":175,"name":"Analisar relatórios de desempenho para identificar pontos de melhoria.","category":"Liderança"},{"id":176,"name":"Estabelecer marcos claros de entrega para um grupo de trabalho.","category":"Liderança"},{"id":177,"name":"Testar uma nova metodologia de organização (ex: Bullet Journal, GTD).","category":"Dinâmica"},{"id":178,"name":"Reconfigurar o layout de aplicativos no painel principal do computador.","category":"Dinâmica"},{"id":179,"name":"Experimentar um bloco de trabalho totalmente offline por 2 horas.","category":"Dinâmica"},{"id":180,"name":"Mudar a ordem de execução das tarefas matinais para testar eficiência.","category":"Dinâmica"},{"id":181,"name":"Criar um atalho de teclado complexo para otimizar um fluxo diário.","category":"Dinâmica"},{"id":182,"name":"Substituir uma ferramenta pesada por uma alternativa mais leve e rápida.","category":"Dinâmica"},{"id":183,"name":"Experimentar trabalhar em pé (standing desk) por um período determinado.","category":"Dinâmica"},{"id":184,"name":"Reduzir o número de passos de um processo operacional em 20%.","category":"Dinâmica"},{"id":185,"name":"Escrever o passo a passo de como configurar uma ferramenta utilizada.","category":"Documentação"},{"id":186,"name":"Registrar as decisões tomadas em uma reunião em ata resumida.","category":"Documentação"},{"id":187,"name":"Atualizar o arquivo de histórico de versões de um projeto (changelog).","category":"Documentação"},{"id":188,"name":"Criar um diagrama explicativo de um processo interno complexo.","category":"Documentação"},{"id":189,"name":"Documentar os aprendizados obtidos após a conclusão de um projeto.","category":"Documentação"},{"id":190,"name":"Organizar um glossário de termos técnicos específicos da sua área.","category":"Documentação"},{"id":191,"name":"Fotografar ou escanear notas importantes para armazenamento digital.","category":"Documentação"},{"id":192,"name":"Indexar relatórios antigos para facilitar buscas futuras.","category":"Documentação"},{"id":193,"name":"Fazer uma varredura mental para esvaziar a mente de pendências (Brain Dump).","category":"Energia"},{"id":194,"name":"Realizar uma transição consciente entre o fim do expediente e o descanso.","category":"Energia"},{"id":195,"name":"Identificar qual distração externa mais roubou seu foco hoje e bloqueá-la.","category":"Energia"},{"id":196,"name":"Fazer uma respiração focada para resetar o foco antes de iniciar uma nova tarefa.","category":"Energia"},{"id":197,"name":"Fazer uma pausa rápida de 5 minutos sem telas para descansar a visão.","category":"Energia"},{"id":198,"name":"Reorganizar as prioridades do dia quando houver excesso de demandas.","category":"Energia"},{"id":199,"name":"Fechar aplicativos de mensagens para recuperar a concentração profunda.","category":"Energia"},{"id":200,"name":"Fazer um balanço mental rápido das vitórias e entregas concluídas no dia.","category":"Energia"}];
+const HABIT_CATEGORIES=["Produtividade", "Digital", "Planejamento", "Leitura", "Idiomas", "Escrita", "Organização", "Finanças", "Automação", "Projetos", "Inovação", "Comunicação", "Pesquisa", "Conhecimento", "Segurança", "Tecnologia", "Métricas", "Estratégia", "Resolução", "Arquitetura", "Governança", "Liderança", "Dinâmica", "Documentação", "Energia"];
+const MAX_EQUIPPED=6;let habitCategory='Todas',habitSearch='';
+function equippedCount(p){return p.habits.filter(h=>h.equipped!==false).length}
+function catalogSearch(query,category){const q=query.toLocaleLowerCase('pt-BR').normalize('NFD').replace(/[\u0300-\u036f]/g,'');return HABIT_CATALOG.filter(h=>(q||category==='Todas'||h.category===category)&&(!q||(h.name+' '+h.category).toLocaleLowerCase('pt-BR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(q)))}
+function equipCatalog(id){const p=project(),item=HABIT_CATALOG.find(h=>h.id===id);if(!p||!item)return;const existing=p.habits.find(h=>h.catalogId===id);if(existing){if(existing.timer){toast('Conclua ou reinicie o Pomodoro antes de desequipar.');return}existing.equipped=existing.equipped===false; if(existing.equipped&&equippedCount(p)>MAX_EQUIPPED){existing.equipped=false;toast('Limite de 6 Elixires ativos.');return}}else{if(equippedCount(p)>=MAX_EQUIPPED){toast('Limite de 6 Elixires ativos.');return}p.habits.push({id:uid(),catalogId:id,name:item.name,category:item.category,minutes:25,equipped:true})}save();render()}
+function toggleCustomHabit(id){const p=project(),h=p?.habits.find(x=>x.id===id);if(!h)return;if(h.timer){toast('Finalize ou reinicie o Pomodoro primeiro.');return}const next=h.equipped===false;if(next&&equippedCount(p)>=MAX_EQUIPPED){toast('Limite de 6 Elixires ativos.');return}h.equipped=!next?false:true;save();render()}
 
-  const UNITS = [
-    ["Pulso", 180],
-    ["Giro", 360],
-    ["Turno", 2880],
-    ["Fase", 86400],
-    ["Propulsão", 3628800]
-  ];
+const names=BOSSES.map(b=>b.name);
+const emojis=['🛡️','🐺','🗿','🕷️','🪨','🐉','⚔️','🐍','👹','🐦‍⬛','🦎','🦁','👻','🗿','🦅','🐲','🗿','🐲','🐋','🐂','🔥','👁️','🪨','👑','🧙','⚔️','💎','🌀','🐲','❄️'];
+const uid=()=>crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random()}`;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0'),dateKey=t=>{const d=new Date(t);return `${pad(d.getDate())}-${pad(d.getMonth()+1)}-${d.getFullYear()}`},clock=t=>new Date(t).toLocaleTimeString('pt-BR',{hour12:false}),stamp=t=>`${dateKey(t)} · ${clock(t)}`,mins=ms=>`${Math.floor(ms/3600000)}h ${pad(Math.floor(ms%3600000/60000))}min`,hours=ms=>(ms/3600000).toLocaleString('pt-BR',{maximumFractionDigits:2}),now=()=>Date.now();
+let state;try{state=JSON.parse(localStorage.getItem(KEY)||'null')}catch{}if(!state||!Array.isArray(state.projects))state={version:1,projects:[],active:null};let page='inicio',order='asc';
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){alert('Não foi possível salvar. Verifique o armazenamento do navegador e exporte um backup.');return false}}
+function project(){return state.projects.find(p=>p.id===state.active)||null}function normalize(p){p.records??=[];p.habits??=[];p.elixirs??=[];p.created??=now();return p}
+state.projects.forEach(normalize);if(!project())state.active=state.projects[0]?.id||null;
+function toast(s){const t=$('#toast');t.textContent=s;t.style.display='block';clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.style.display='none',3000)}
+function ask(s){return confirm(s)}let pendingMilestone=null;function close(){if(modal.open)modal.close();modal.classList.remove('ceremony-dialog');if(pendingMilestone){const next=pendingMilestone;pendingMilestone=null;setTimeout(next,100)}}function show(html){modal.innerHTML=html;modal.showModal();modal.querySelector('form')?.addEventListener('submit',e=>e.preventDefault());modal.querySelector('textarea')?.focus()}
+function sorted(p){return [...p.records].sort((a,b)=>a.start-b.start||(a.type==='start'?-1:1))}
+function intervals(p,includeLive=false){let open=null,segments=[];for(const r of sorted(p)){if(r.type==='start'){if(open===null)open=r.start}else if(r.type==='end'){if(open!==null&&r.start>open){segments.push([open,r.start]);open=null}}else if((r.type==='habit'||r.type==='activity')&&r.end>r.start){if(Array.isArray(r.segments))segments.push(...r.segments.filter(x=>Array.isArray(x)&&x.length===2&&x[1]>x[0]));else segments.push([r.start,r.end])}}if(includeLive&&open!==null&&open<now())segments.push([open,now()]);if(includeLive&&p.focusSession){const f=p.focusSession;if(f.runningSince&&f.runningSince<now())segments.push([f.runningSince,now()]);if(Array.isArray(f.segments))segments.push(...f.segments.filter(x=>Array.isArray(x)&&x[1]>x[0]));}if(includeLive&&p.pointSession?.status==='running'&&p.pointSession.start<now())segments.push([p.pointSession.start,now()]);return merge(segments)}
+function merge(parts){parts.sort((a,b)=>a[0]-b[0]);const out=[];for(const [a,b] of parts){if(!out.length||a>out[out.length-1][1])out.push([a,b]);else out[out.length-1][1]=Math.max(b,out[out.length-1][1])}return out}
+function total(p,live=false){return intervals(p,live).reduce((s,[a,b])=>s+b-a,0)}
+function running(p){const seq=sorted(p).filter(r=>r.type==='start'||r.type==='end');return p.pointSession?.status==='running'||seq.at(-1)?.type==='start'}
+function duration(ms){const seconds=Math.floor(Math.max(0,ms)/1000);return `${Math.floor(seconds/3600)}h ${pad(Math.floor(seconds%3600/60))}min ${pad(seconds%60)}s`}
+function dayTotal(p,day){let sum=0;for(const [a,b] of intervals(p)){let t=a;while(t<b){const d=new Date(t),mid=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1).getTime(),end=Math.min(b,mid);if(dateKey(t)===day)sum+=end-t;t=end}}return sum}
+// A Arena acompanha exatamente as 10.000 horas (600.000 minutos), sem bônus
+// que antecipem a conclusão. A resistência cresce a cada chefão.
+const BOSS_COUNT=names.length, BOSS_GOAL_MIN=600000;
+const bossWeights=Array.from({length:BOSS_COUNT},(_,i)=>60+40*i+1.2*i*i);
+const bossWeightSum=bossWeights.reduce((a,b)=>a+b,0);
+const bossThresholds=bossWeights.map((_,i)=>Math.round(BOSS_GOAL_MIN*bossWeights.slice(0,i+1).reduce((a,b)=>a+b,0)/bossWeightSum));
+function bossHP(i){return bossThresholds[i]-(i?bossThresholds[i-1]:0)}
+function damage(p){return Math.min(BOSS_GOAL_MIN,Math.floor(total(p)/60000))}
+function bossStatus(p){const dmg=damage(p);let level=0;while(level<BOSS_COUNT&&dmg>=bossThresholds[level])level++;if(level===BOSS_COUNT)return {level,hp:0,left:0,done:level};const hp=bossHP(level),previous=level?bossThresholds[level-1]:0;return {level,hp,left:hp-(dmg-previous),done:level}}
+// Elixir: cada execução de hábito abre no máximo um cofre já derrotado.
+// As recompensas são ligadas ao ID do registro; excluir o hábito revoga o elixir.
+function elixirClaims(p){
+ const valid=new Set(p.records.filter(r=>r.type==='habit').map(r=>r.id));
+ const done=bossStatus(p).done,seen=new Set();
+ return (p.elixirs||[]).filter(c=>c&&Number.isInteger(c.bossId)&&c.bossId>=1&&c.bossId<=done&&valid.has(c.recordId)&&!seen.has(c.bossId)&&seen.add(c.bossId));
+}
+function awardElixir(p,record,defeatedBefore){
+ if(record.type!=='habit')return null;
+ const claims=elixirClaims(p),claimed=new Set(claims.map(c=>c.bossId));
+ let bossId=null;
+ for(let id=1;id<=defeatedBefore;id++){if(!claimed.has(id)){bossId=id;break}}
+ if(bossId){p.elixirs??=[];p.elixirs.push({bossId,recordId:record.id,unlockedAt:record.end});}
+ return bossId;
+}
+function elixirShareText(id){const m=CODEX_MONSTERS[id-1],e=ELIXIR_PHRASES[id-1];return `Derrotei ${m.name} e conquistei o Elixir do Foco! “${e.phrase}” — Impulso: https://magpe-stack.github.io/Impulso/`}
+function openElixir(id){
+ const p=project(),claims=elixirClaims(p),unlocked=claims.some(c=>c.bossId===id),m=CODEX_MONSTERS[id-1],e=ELIXIR_PHRASES[id-1];
+ if(!p||!unlocked||!m||!e)return;
+ close();show(`<div class="elixir-reveal"><div class="elixir-stamp">✦ ELIXIR CONQUISTADO ✦</div><p class="muted">Chefão ${String(id).padStart(3,'0')} · ${esc(BOSS_TIERS[Math.floor((id-1)/20)].title)}</p><h2>${esc(m.name)}</h2><p><strong>Dano superado:</strong> ${esc(m.effect)}</p><blockquote class="elixir-quote">“${esc(e.phrase)}”</blockquote><div class="actions"><button class="btn" data-elixir-copy="${id}">Copiar</button><button class="btn primary" data-elixir-share="${id}">Compartilhar</button><button class="btn" data-cancel>Fechar</button></div></div>`);
+}
+async function copyElixir(id){try{await navigator.clipboard.writeText(elixirShareText(id));toast('Elixir copiado')}catch{toast('Não foi possível copiar neste navegador')}}
+async function shareElixir(id){const text=elixirShareText(id);if(navigator.share){try{await navigator.share({title:'Elixir do Foco — Impulso',text})}catch(e){if(e.name!=='AbortError')toast('Compartilhamento indisponível')}}else copyElixir(id)}
+function renderAltar(p){
+ const done=bossStatus(p).done,claims=elixirClaims(p),unlocked=new Set(claims.map(c=>c.bossId));
+ const pending=done-unlocked.size;
+ const cards=BOSS_TIERS.map(t=>{
+  const items=CODEX_MONSTERS.slice(t.start-1,t.end).map(m=>{
+   const won=m.id<=done,open=unlocked.has(m.id),label=open?'✦ Elixir conquistado':won?'🔒 Cofre aguardando hábito':'🔐 Chefão não derrotado';
+   return `<article class="elixir-card ${open?'elixir-open':''}"><small>Chefão ${String(m.id).padStart(3,'0')}</small><h3>${won?esc(m.name):'Monstro desconhecido'}</h3><p class="muted">${label}</p>${open?`<button class="btn primary small" data-elixir-id="${m.id}">Ver frase</button>`:won?'<small>Conclua um hábito cadastrado para abrir um cofre.</small>':''}</article>`;
+  }).join('');
+  return `<details class="arena-tier" ${t.start<=done+1&&t.end>=done+1?'open':''}><summary>Fase ${t.id} — ${esc(t.title)}</summary><p class="arena-tier-desc">${esc(t.description)}</p><div class="elixir-grid">${items}</div></details>`;
+ }).join('');
+ main.innerHTML=header('Altar dos Elixires',esc(p.name))+`<section class="panel"><p>Derrote chefões com seu trabalho em <strong>Ponto</strong> ou <strong>Entrada Manual</strong>. Depois, conclua um hábito cadastrado para abrir um cofre e colecionar a frase exclusiva.</p><div class="grid">${metric(`${unlocked.size}/200`,'Elixires conquistados')}${metric(pending,'Cofres aguardando Elixir')}${metric(done,'Chefões derrotados')}</div><div class="actions">${btn('Ir para Hábitos','habitPage','primary')}<button class="btn" data-page="arena">Arena</button><button class="btn" data-page="codex">Codex</button><button class="btn" data-page="visao">🚀 Visão</button></div><p class="help">Cada hábito concluído abre apenas um cofre já vencido, em ordem numérica. O tempo e os HP continuam sendo calculados normalmente. As recompensas são individuais por projeto e dependem do registro do hábito que as liberou.</p></section><section class="panel"><h2>Coleção de Elixires</h2>${cards}</section>`;
+}
+// Visão: cada Elixir válido concede uma escolha de célula. As escolhas são permanentes
+// e independentes da ordem dos Elixires. O saldo usa apenas conquistas válidas.
+const VISION_TILES=200;
+function visionTiles(p){
+ const raw=Array.isArray(p.visionTiles)?p.visionTiles:[];
+ return [...new Set(raw.filter(n=>Number.isInteger(n)&&n>=0&&n<VISION_TILES))].slice(0,VISION_TILES);
+}
+function visionBalance(p){return Math.max(0,elixirClaims(p).length-visionTiles(p).length)}
+// Diário da Visão: eventos novos têm data real e crédito vinculado ao Elixir válido.
+// Quadradinhos antigos permanecem visíveis, sem datas ou vínculos inventados.
+function visionHistory(p){
+ const valid=new Set(visionTiles(p));const seen=new Set();
+ return (Array.isArray(p.visionHistory)?p.visionHistory:[]).filter(e=>e&&Number.isInteger(e.tile)&&valid.has(e.tile)&&!seen.has(e.tile)&&seen.add(e.tile)&&Number.isFinite(e.at)&&e.at>0);
+}
+function visionCreditForNextReveal(p){
+ const claims=elixirClaims(p).slice().sort((a,b)=>(a.unlockedAt||0)-(b.unlockedAt||0)||a.bossId-b.bossId);
+ // Atribuição conservadora: reservas antigas consomem primeiro os créditos mais antigos.
+ return claims[visionTiles(p).length]||null;
+}
+let visionTab='board';
+function visionHistoryPanel(p){
+ const history=visionHistory(p).slice().sort((a,b)=>b.at-a.at),old=visionTiles(p).filter(i=>!history.some(e=>e.tile===i));
+ const rows=history.map(e=>{const claim=elixirClaims(p).find(c=>c.bossId===e.bossId&&c.recordId===e.recordId);
+ const date=new Date(e.at).toLocaleString('pt-BR');
+ return `<li class="vision-history-item"><strong>Quadradinho ${e.tile+1}</strong><span>${esc(date)}</span><span>${claim?`✦ Elixir do chefão ${claim.bossId} — ${esc(CODEX_MONSTERS[claim.bossId-1]?.name||'Conquista')}`:'Elixir associado indisponível (registro alterado)'}</span></li>`;}).join('');
+ return `<section class="panel" id="visionHistoryPanel"><h2>Histórico das Revelações</h2><p>Um diário das partes descobertas da sua Visão. Cada nova revelação registra a data, o quadradinho e o crédito de Elixir associado.</p><div class="grid">${metric(history.length,'Revelações documentadas')}${metric(old.length,'Revelações anteriores')}${metric(`${visionTiles(p).length}/200`,'Total revelado')}</div>${history.length?`<ol class="vision-history-list">${rows}</ol>`:'<p class="help">Nenhuma revelação com data registrada ainda. As próximas aparecerão aqui automaticamente.</p>'}${old.length?`<div class="vision-legacy"><h3>Revelações anteriores à atualização (${old.length})</h3><p class="help">Estes quadradinhos foram preservados. O aplicativo não possuía data nem associação individual com Elixires quando foram revelados.</p><p>${old.map(i=>`<span class="vision-old-tile">${i+1}</span>`).join(' ')}</p></div>`:''}</section>`;
+}
+function revealVisionTile(index){
+ const p=project();if(!p||!Number.isInteger(index)||index<0||index>=VISION_TILES)return;
+ const tiles=visionTiles(p);if(tiles.includes(index)){toast('Este quadradinho já foi revelado.');return}
+ if(!visionBalance(p)){toast('Conquiste um Elixir para receber uma revelação.');return}
+ if(!ask('Revelar este quadradinho da sua Visão? A escolha é permanente.'))return;
+ const credit=visionCreditForNextReveal(p);
+ const previousTiles=p.visionTiles,previousHistory=p.visionHistory;
+ p.visionTiles=[...tiles,index];p.visionHistory=[...(Array.isArray(p.visionHistory)?p.visionHistory:[]),{tile:index,at:Date.now(),bossId:credit?.bossId??null,recordId:credit?.recordId??null}];
+ if(save()){renderVision(p);toast('Uma parte da sua Visão foi revelada!')}
+ else {p.visionTiles=previousTiles;p.visionHistory=previousHistory}
+}
+function renderVision(p){
+ if(!p){main.innerHTML=header('Visão','Abra um projeto para acompanhar sua Visão.')+'<section class="panel">Selecione um projeto em Projetos.</section>';return}
+ const tiles=visionTiles(p),revealed=new Set(tiles),credits=visionBalance(p),claims=elixirClaims(p).length;
+ const cells=Array.from({length:VISION_TILES},(_,i)=>`<button type="button" class="vision-tile ${revealed.has(i)?'revealed':''}" data-vision-tile="${i}" ${revealed.has(i)||!credits?'disabled':''} aria-label="Quadradinho ${i+1} de 200: ${revealed.has(i)?'revelado':credits?'oculto; selecionar para revelar':'oculto; sem revelações disponíveis'}" title="Quadradinho ${i+1} — ${revealed.has(i)?'revelado':'oculto'}">${revealed.has(i)?'<span class="sr-only">Revelado</span>':'<span aria-hidden="true">✦</span>'}</button>`).join('');
+ main.innerHTML=header('Visão',esc(p.name))+`<nav class="vision-tabs" aria-label="Seções da Visão"><button type="button" class="btn ${visionTab==='board'?'primary':''}" data-vision-tab="board" aria-pressed="${visionTab==='board'}">🚀 Visão</button><button type="button" class="btn ${visionTab==='history'?'primary':''}" data-vision-tab="history" aria-pressed="${visionTab==='history'}">◷ Histórico</button></nav>${visionTab==='history'?visionHistoryPanel(p):`<section class="panel"><h2>A visão do seu futuro</h2><p>Conquiste Elixires e escolha quais partes do foguete deseja descobrir. Cada Elixir conquistado concede uma escolha; você pode guardá-la para depois.</p><div class="grid">${metric(`${claims}/200`,'Elixires conquistados')}${metric(credits,'Revelações disponíveis')}${metric(`${tiles.length}/200`,'Quadradinhos revelados')}${metric(`${(tiles.length/2).toLocaleString('pt-BR')}%`,'Imagem descoberta')}</div><p class="help" id="visionHint">${credits?'Selecione um quadradinho oculto para revelar essa parte da imagem.':'Conquiste outro Elixir no Altar para receber uma revelação.'}</p><div class="vision-board" role="group" aria-label="Imagem do foguete dividida em 200 quadradinhos"><img src="ImpulsoVision.svg" alt="Visão do futuro: foguete decolando" class="vision-image" draggable="false"><div class="vision-mask">${cells}</div></div><p class="help">20 colunas × 10 linhas. As escolhas ficam salvas neste projeto e não são apagadas ao sair do aplicativo. Se um registro que concedeu Elixir for excluído, novas revelações dependerão do saldo de Elixires válidos.</p><div class="actions"><button class="btn" data-page="altar">✦ Ver Elixires</button><button class="btn" data-page="habitPage">Ir para Hábitos</button></div></section>`}`;
+}
+// Jornada progressiva: 100 etapas de 1, 3, 5, ... 199 horas; soma exata de 10.000 horas.
+const MILESTONE_HOUR=3600000;
+const MILESTONES=Object.freeze(Array.from({length:100},(_,i)=>(i+1)**2));
+const MILESTONE_COUNT=MILESTONES.length;
+function milestoneCount(ms){const h=Math.max(0,ms)/MILESTONE_HOUR;let lo=0,hi=MILESTONES.length;while(lo<hi){const m=(lo+hi)>>1;if(MILESTONES[m]<=h)lo=m+1;else hi=m}return lo}
+function milestonePanel(p){
+ const ms=total(p,true),h=ms/MILESTONE_HOUR,n=milestoneCount(ms),prev=n?MILESTONES[n-1]:0,next=MILESTONES[n]??10000;
+ const percent=n===MILESTONE_COUNT?100:Math.max(0,Math.min(100,(h-prev)/(next-prev)*100));
+ const nextItems=MILESTONES.slice(n,n+5);
+ return `<section class="panel milestone-panel"><h2>Jornada de 10.000 horas</h2><p class="muted">100 metas progressivas: a primeira exige 1 hora, a segunda 3 horas adicionais, e cada nova etapa exige 2 horas a mais. A 100ª exige 199 horas e conclui exatamente 10.000 horas.</p><div class="grid">${metric(`${n}/${MILESTONE_COUNT}`,'Metas conquistadas')}${metric(n===MILESTONE_COUNT?'Concluída':`${hours(Math.max(0,next*MILESTONE_HOUR-ms))} h`,'Restante para a próxima meta')}${metric(`${Math.min(100,h/100).toLocaleString('pt-BR',{maximumFractionDigits:2})}%`,'Jornada total')}</div><h3>${n===MILESTONE_COUNT?'🏆 Jornada de 10.000 horas concluída!':`Próxima meta: ${n+1}ª — ${next.toLocaleString('pt-BR')} horas acumuladas`}</h3><div class="progress" role="progressbar" aria-label="Progresso para a próxima meta" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent.toFixed(2)}"><span style="width:${percent}%"></span></div><p class="help">${percent.toLocaleString('pt-BR',{maximumFractionDigits:1})}% desta etapa · ${n===MILESTONE_COUNT?'Todas as metas conquistadas':`Etapa de ${next-prev} horas adicionais`}</p>${nextItems.length?`<h3>Próximas metas</h3><div class="milestone-next">${nextItems.map((v,i)=>`<span>${n+i+1}ª · ${v.toLocaleString('pt-BR')} h</span>`).join('')}</div>`:''}<details><summary>Ver as 100 metas</summary><div class="milestone-all">${MILESTONES.map((v,i)=>`<span class="${i<n?'milestone-done':''}">${i<n?'✓ ':'○ '}${i+1}ª · ${v.toLocaleString('pt-BR')} h (${2*i+1} h na etapa)</span>`).join('')}</div></details></section>`
+}
+const MILESTONE_CYCLES=['O Despertar','A Primeira Ascensão','A Forja da Disciplina','A Consolidação','A Metamorfose','O Domínio','A Perseverança','A Transcendência','A Grande Ascensão','A Consagração'];
+// As cerimônias são uma galeria sob demanda. A liberação depende exclusivamente
+// das horas consolidadas do projeto; registros antigos são reconhecidos naturalmente.
+function milestoneCeremony(){/* Sem abertura automática: consulte a página Cerimônias. */}
+const CEREMONY_STORIES=[
+ 'O primeiro passo não é pequeno: é a decisão de transformar intenção em ação.',
+ 'A constância nasce quando você retorna ao trabalho, mesmo depois de uma pausa.',
+ 'Cada hora registrada é uma prova concreta de que o projeto está avançando.',
+ 'Você constrói algo duradouro ao reunir esforços que pareciam isolados.',
+ 'A disciplina não exige perfeição; exige continuar com propósito.',
+ 'Seu progresso deixa marcas reais, mesmo quando os resultados demoram a aparecer.',
+ 'A jornada ganha força quando a prática se torna parte da sua história.',
+ 'O trabalho consistente transforma possibilidades em realizações.',
+ 'Cada etapa vencida amplia a confiança para enfrentar a próxima.',
+ 'O caminho continua: esta conquista pertence à sua história de dedicação.'
+];
+function ceremonyTitle(n){return n===100?'A Consagração':n%10===0?MILESTONE_CYCLES[n/10-1]:`Marco ${String(n).padStart(2,'0')} — ${['A Centelha','O Compromisso','O Caminho','A Persistência','A Conquista'][((n-1)%5)]}`}
+function renderCeremonies(p){
+ if(!p){main.innerHTML=header('Cerimônias','Sua história de conquistas')+'<section class="panel"><p>Abra um projeto para conhecer suas cerimônias.</p><button class="btn primary" data-page="projetos">Abrir Projetos</button></section>';return}
+ const unlocked=milestoneCount(total(p));
+ const cards=MILESTONES.map((h,i)=>{const n=i+1,available=n<=unlocked,special=n%10===0;
+ return `<article class="ceremony-card ${available?'ceremony-unlocked':'ceremony-locked'} ${special?'ceremony-special':''}"><div class="ceremony-card-symbol" aria-hidden="true">${available?(n===100?'🚀':special?'🏅':'🏆'):'🔒'}</div><h3>${available?esc(ceremonyTitle(n)):`${n}ª Cerimônia`}</h3><p>${h.toLocaleString('pt-BR')} horas acumuladas</p><p class="ceremony-status">${available?'✓ Liberada':'🔒 Bloqueada'}</p>${available?`<button class="btn primary" type="button" data-ceremony="${n}" aria-label="Rever cerimônia ${n}: ${esc(ceremonyTitle(n))}">▶ Rever cerimônia</button>`:'<span class="ceremony-lock-note">Conquiste a meta para revelar sua história.</span>'}</article>`}).join('');
+ main.innerHTML=header('Cerimônias',esc(p.name)+' · Sua história de conquistas')+`<section class="panel"><h2>Galeria de Cerimônias</h2><p>As conquistas são liberadas pelo tempo efetivamente registrado neste projeto. Você pode reviver cada celebração liberada quando desejar. Nenhuma cerimônia será aberta automaticamente.</p><div class="grid">${metric(`${unlocked}/100`,'Cerimônias liberadas')}${metric(100-unlocked,'Ainda bloqueadas')}${metric(`${unlocked}%`,'Galeria concluída')}</div><div class="progress" role="progressbar" aria-label="Cerimônias liberadas" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${unlocked}"><span style="width:${unlocked}%"></span></div><p class="help">A cada dez marcos, uma cerimônia especial. A última celebra as 10.000 horas. Se excluir registros, a disponibilidade será recalculada.</p></section><section class="panel"><h2>Suas 100 conquistas</h2><div class="ceremony-gallery">${cards}</div></section>`;
+}
+modal.addEventListener('close',()=>modal.classList.remove('ceremony-dialog'));
+function ceremonyAnimations(stage){return [stage,...stage.querySelectorAll('*')].flatMap(el=>typeof el.getAnimations==='function'?el.getAnimations({subtree:false}):[])}
+// Ajusta a composição ao espaço real da tela sem permitir rolagem interna.
+function fitCeremonyViewport(){
+ const stage=modal.querySelector('.ceremony-cinema'),content=stage?.querySelector('.cinema-content');
+ if(!stage||!content||!modal.open)return;
+ content.style.zoom='1';
+ const cs=getComputedStyle(stage);
+ const available=stage.clientHeight-(parseFloat(cs.paddingTop)||0)-(parseFloat(cs.paddingBottom)||0)-4;
+ if(available<=0)return;
+ // O zoom altera quebras de linha; reavaliar após cada ajuste.
+ for(let i=0;i<5;i++){
+  const actual=content.getBoundingClientRect().height;
+  if(actual<=available+1)break;
+  const current=parseFloat(content.style.zoom)||1;
+  content.style.zoom=String(Math.max(.45,current*Math.min(.98,available/actual)));
+ }
+}
+window.addEventListener('resize',()=>{if(modal.open&&modal.classList.contains('ceremony-dialog'))fitCeremonyViewport()});
+function restartCeremony(){
+ const stage=modal.querySelector('.ceremony-cinema');if(!stage||!modal.open)return;
+ // Replay the existing Web Animations/CSS animations in-place: no dialog rebuild.
+ const animations=ceremonyAnimations(stage);
+ for(const animation of animations){try{animation.cancel();animation.play()}catch(e){}}
+ const status=stage.querySelector('[data-ceremony-motion-status]');
+ if(status)status.textContent=stage.classList.contains('ceremony-motion-opt-in')?'Animação reiniciada.':'Reprodução solicitada.';
+ fitCeremonyViewport();
+}
+function enableCeremonyMotion(){
+ const stage=modal.querySelector('.ceremony-cinema');if(!stage)return;
+ stage.classList.add('ceremony-motion-opt-in');
+ const toggle=stage.querySelector('[data-enable-ceremony-motion]');if(toggle)toggle.hidden=true;
+ restartCeremony();
+ fitCeremonyViewport();
+}
 
-  // Plurais corretos das unidades temporais.
-  const UNIT_PLURALS = {
-    "Pulso": "Pulsos",
-    "Giro": "Giros",
-    "Turno": "Turnos",
-    "Fase": "Fases",
-    "Propulsão": "Propulsões"
+function openCeremony(n){
+ const p=project();if(!p||!Number.isInteger(n)||n<1||n>100||n>milestoneCount(total(p))){toast('Esta cerimônia ainda não foi liberada.');return}
+ const final=n===100,special=n%10===0,cycle=Math.ceil(n/10),hoursNeeded=MILESTONES[n-1],title=ceremonyTitle(n);
+ const story=final?'Você percorreu a jornada inteira. Dez mil horas de dedicação registrada: uma história construída sessão após sessão. A Consagração celebra o caminho e a perseverança que o tornaram possível.':special?`Ciclo ${cycle} de 10 concluído. ${CEREMONY_STORIES[cycle-1]} Uma nova etapa da sua jornada começa agora.`:CEREMONY_STORIES[cycle-1];
+ const emblem=final?'🚀':special?'🏅':'🏆';
+ const reducedMotion=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
+ const particles=Array.from({length:42},(_,i)=>`<i style="--i:${i};--x:${(i*67+11)%100};--delay:${(i*7)%23/10}s;--drift:${((i*37)%180)-90}px;--duration:${2.4+(i%6)*.3}s"></i>`).join('');
+ modal.classList.add('ceremony-dialog');
+ show(`<div class="ceremony-stage ceremony-cinema ${final?'ceremony-finale':special?'ceremony-cycle':'ceremony-standard'}" role="region" aria-label="Cerimônia ${n}: ${esc(title)}"><div class="cinema-sky" aria-hidden="true"><span class="cinema-starfield"></span><span class="cinema-beam"></span><span class="cinema-orbit orbit-one"></span><span class="cinema-orbit orbit-two"></span><span class="cinema-flash"></span><span class="cinema-confetti">${particles}</span></div><div class="cinema-content"><p class="cinema-intro">IMPULSO · JORNADA DAS 10.000 HORAS</p><div class="cinema-emblem" aria-hidden="true">${emblem}</div><p class="ceremony-kicker">${final?'CERIMÔNIA SUPREMA':special?`CERIMÔNIA ESPECIAL · CICLO ${cycle}`:`CONQUISTA ${n} DE 100`}</p><h2>${esc(title)}</h2><p class="ceremony-hours">${hoursNeeded.toLocaleString('pt-BR')} ${hoursNeeded===1?'hora conquistada':'horas conquistadas'}</p><p class="ceremony-story">${esc(story)}</p><p class="ceremony-footnote">${n}ª meta · ${2*n-1} ${(2*n-1)===1?'hora':'horas'} nesta etapa</p><p class="ceremony-motion-note" data-ceremony-motion-status aria-live="polite">${reducedMotion?'Seu sistema solicita movimento reduzido. Você pode ativar os efeitos voluntariamente.':'A cerimônia inicia automaticamente. Você pode reproduzi-la novamente.'}</p>${reducedMotion?'<button class="btn ceremony-motion-enable" type="button" data-enable-ceremony-motion>✦ Ativar animação nesta cerimônia</button>':''}<div class="ceremony-controls"><button class="btn" type="button" data-replay-ceremony="${n}">↻ Reproduzir novamente</button><button class="btn primary" type="button" data-cancel>Fechar cerimônia</button></div></div></div>`);
+ fitCeremonyViewport();
+ requestAnimationFrame(fitCeremonyViewport);
+
+}
+function addRecord(p,r){const previousTotal=total(p),before=bossStatus(p).done,record={id:uid(),...r};p.records.push(record);const reward=awardElixir(p,record,before);if(save()){render();toast(reward?`Elixir ${reward} conquistado!`:'Registro salvo');if(reward)openElixir(reward);/* Cerimônias disponíveis na galeria */} }
+function delRecord(id){const p=project();const r=p?.records.find(x=>x.id===id);if(!r||!ask('Excluir permanentemente este registro? O tempo e o progresso serão recalculados.'))return;p.records=p.records.filter(x=>x.id!==id);p.elixirs=(p.elixirs||[]).filter(c=>c.recordId!==id);save();render()}
+function fmtNumber(n){return n.toLocaleString('pt-BR')}
+function btn(text,action,cls=''){return `<button class="btn ${cls}" data-action="${action}">${text}</button>`}
+function header(title,subtitle=''){return `<div class="hero"><h1>${title}</h1>${subtitle?`<p>${subtitle}</p>`:''}</div>`}
+function metric(v,label){return `<div class="metric"><strong>${v}</strong><small>${label}</small></div>`}
+function actions(){return `<div class="actions">${btn('⏵ Ponto','point','primary')}${btn('✍ Entrada manual','manual')}${btn('⬇ Exportar','export')}${btn('⬆ Importar','importProject')}${btn('▣ Imprimir','print')}</div>`}
+function renderRetroactiveEntries(p){
+ main.innerHTML=header('Entradas retroativas',p?esc(p.name):'Selecione um projeto para registrar atividades anteriores.')+`<section class="panel"><h2>O que deseja registrar?</h2><p class="muted">Escolha o tipo de entrada. Os registros serão adicionados ao Histórico e ao Meu Dia do projeto, sem iniciar cronômetros.</p><div class="actions"><button class="btn primary" type="button" data-action="manualPoint" ${p?'':'disabled'}>Entrada de Ponto</button><button class="btn" type="button" data-action="manualHabit" ${p?'':'disabled'}>Entrada de Hábito</button></div>${p?'<p class="help">Informe o início e o término reais. Evite registrar novamente uma atividade já concluída.</p>':'<p>Abra um projeto em Projetos para habilitar as entradas.</p>'}</section>`;
+}
+function manualHabit(){
+ const p=project();if(!p){page='entradas';render();return}
+ if(!p.habits.length){show('<h2>Entrada de Hábito</h2><p>Cadastre primeiro um hábito na página Hábitos para associar a execução retroativa.</p><div class="modal-actions"><button class="btn" data-action="cancel">Fechar</button></div>');return}
+ const d=new Date(),months=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+ const opts=(max,selected)=>Array.from({length:max},(_,i)=>`<option value="${i}" ${i===selected?'selected':''}>${pad(i)}</option>`).join('');
+ const fields=(prefix,title)=>`<fieldset><legend>${title}</legend><div class="form-grid"><label class="field">Dia<input name="${prefix}Day" type="number" min="1" max="31" value="${d.getDate()}" required></label><label class="field">Mês<select name="${prefix}Month">${months.map((m,i)=>`<option value="${i}" ${i===d.getMonth()?'selected':''}>${m}</option>`).join('')}</select></label><label class="field">Ano<input name="${prefix}Year" type="number" min="1970" max="9999" value="${d.getFullYear()}" required></label></div><div class="form-grid two"><label class="field">Hora (24h)<select name="${prefix}Hour">${opts(24,d.getHours())}</select></label><label class="field">Minuto<select name="${prefix}Minute">${opts(60,prefix==='start'?Math.max(0,d.getMinutes()-1):d.getMinutes())}</select></label></div></fieldset>`;
+ show(`<h2>Entrada de Hábito (retroativa)</h2><form id="manualHabitForm"><label class="field">Hábito realizado<select name="habitId" required>${p.habits.map(h=>`<option value="${esc(h.id)}">${esc(h.name)}${h.category?' · '+esc(h.category):''}</option>`).join('')}</select></label>${fields('start','Data e horário de início')}${fields('end','Data e horário de término')}<p class="help">Registre uma execução que realmente ocorreu. O tempo será considerado nas estatísticas e no Histórico, inclusive quando atravessar a meia-noite.</p><div class="modal-actions">${btn('Cancelar','cancel')}<button class="btn primary" type="submit">Lançar hábito</button></div></form>`);
+ const f=$('#manualHabitForm');f.onsubmit=e=>{
+  e.preventDefault();const x=f.elements,h=p.habits.find(h=>h.id===x.habitId.value);if(!h){alert('Selecione um hábito válido.');return}
+  const parse=prefix=>{const year=+x[prefix+'Year'].value,month=+x[prefix+'Month'].value,day=+x[prefix+'Day'].value,hour=+x[prefix+'Hour'].value,minute=+x[prefix+'Minute'].value;
+   if(!Number.isInteger(year)||year<1970||year>9999||!Number.isInteger(month)||month<0||month>11||!Number.isInteger(day)||day<1||day>31||!Number.isInteger(hour)||hour<0||hour>23||!Number.isInteger(minute)||minute<0||minute>59)return null;
+   const dt=new Date(0);dt.setFullYear(year,month,day);dt.setHours(hour,minute,0,0);return dt.getFullYear()===year&&dt.getMonth()===month&&dt.getDate()===day&&dt.getHours()===hour&&dt.getMinutes()===minute?dt.getTime():null};
+  const start=parse('start'),end=parse('end');if(start===null||end===null||end<=start||end>now()){alert('Confira as datas e os horários. O término deve ser posterior ao início e não pode estar no futuro.');return}
+  close();addRecord(p,{type:'habit',habitId:h.id,name:h.name,start,end,note:'',source:'habit-retroactive'});
+ };
+}
+let calendarMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1),calendarSelectedDay=null;
+let expandedMenuGroup=null;
+function renderMenu(){
+ const groups=[
+  ['inicio','Início',[['new','Novo'],['projetos','Projetos'],['backup','Guardar'],['import','Restaurar'],['print','Imprimir']]],
+  ['acoes','Ações',[['point','Ponto'],['foco','Foco'],['habitPage','Hábitos'],['manual','Entradas']]],
+  ['vitorias','Vitórias',[['arena','Arena'],['codex','Codex'],['altar','Elixires'],['cerimonias','Cerimônias'],['visao','Visão']]],
+  ['dados','Dados',[['dia','Meu Dia'],['calendario','Calendário'],['radar','Radar'],['estatisticas','Estatísticas'],['armazenamento','Armazenamento']]]
+ ];
+ const actions=new Set(['new','backup','import','print','point','habitPage','manual']);
+ const isActive=items=>items.some(([id])=>id===page || (id==='point'&&page==='ponto') || (id==='habitPage'&&page==='habitos') || (id==='manual'&&page==='entradas'));
+ nav.innerHTML=groups.map(([id,label,items])=>{
+  const open=expandedMenuGroup===id;
+  return `<div class="menu-section menu-accordion"><button type="button" class="menu-parent${open?' expanded':''}${isActive(items)?' current-group':''}" data-menu-group="${id}" aria-expanded="${open}" aria-controls="menu-sub-${id}"><span>${label}</span><span class="menu-chevron" aria-hidden="true">${open?'▾':'▸'}</span></button><div class="menu-sub" id="menu-sub-${id}" ${open?'':'hidden'}>${items.map(([key,text])=>`<button type="button" ${actions.has(key)?`data-action="${key}"`:`data-page="${key}"`} ${key==='backup'?'title="Guardar backup de todos os projetos"':''} ${key==='import'?'title="Restaurar backup de todos os projetos"':''} class="${(key===page || (key==='point'&&page==='ponto') || (key==='habitPage'&&page==='habitos') || (key==='manual'&&page==='entradas'))?'active':''}">${text}</button>`).join('')}</div></div>`;
+ }).join('')+`<div class="menu-section menu-standalone"><button type="button" data-page="configuracao" class="${page==='configuracao'?'active':''}">Configurações</button></div><div class="menu-section menu-standalone"><button type="button" data-action="exit" class="menu-exit">Sair</button></div>`;
+}
+function render(){const p=project();renderMenu();if(!p&& !['inicio','projetos','alertas','armazenamento','configuracao','estatisticas','entradas','visao','cerimonias','calendario','foco'].includes(page))page='inicio';if(page==='entradas')renderRetroactiveEntries(p);if(page==='inicio')renderHome(p);if(page==='ponto')renderPoint(p);if(page==='foco')renderFocus(p);if(page==='projetos')renderProjects();if(page==='dia')renderDay(p);if(page==='calendario')renderCalendar(p);if(page==='habitos')renderHabits(p);if(page==='arena')renderArena(p);if(page==='codex')renderCodex(p);if(page==='altar')renderAltar(p);if(page==='visao')renderVision(p);if(page==='radar')renderRadar(p);if(page==='cerimonias')renderCeremonies(p);if(page==='alertas')renderConfiguracao();if(page==='armazenamento')renderStorage();if(page==='configuracao')renderConfiguracao();if(page==='estatisticas')renderEstatisticas();}
+// Alertas locais: preferências globais, independentes dos dados dos projetos.
+const ALERTS_KEY='impulso-alertas-v1', BACKUP_INTERVAL=15*60*1000;
+let alertSettings={backup:false,nextBackup:0,habits:false,nextHabits:0};
+try{const stored=JSON.parse(localStorage.getItem(ALERTS_KEY)||'null');if(stored&&typeof stored==='object'){alertSettings.backup=stored.backup===true;alertSettings.nextBackup=Number(stored.nextBackup)||0;alertSettings.habits=stored.habits===true;alertSettings.nextHabits=Number(stored.nextHabits)||0}}catch{}
+if(alertSettings.backup&&!alertSettings.nextBackup)alertSettings.nextBackup=Date.now()+BACKUP_INTERVAL;
+if(alertSettings.habits&&!alertSettings.nextHabits)alertSettings.nextHabits=Date.now()+BACKUP_INTERVAL;
+function saveAlertSettings(){try{localStorage.setItem(ALERTS_KEY,JSON.stringify(alertSettings))}catch{toast('Não foi possível salvar as preferências de alertas')}}
+function hideBackupAlert(){const box=$('#backupAlertBox');if(box)box.hidden=true}
+function hideHabitsAlert(){const box=$('#habitsAlertBox');if(box)box.hidden=true}
+function checkBackupAlert(){if(!alertSettings.backup||document.visibilityState==='hidden'||!$('#habitsAlertBox')?.hidden)return;if(Date.now()<alertSettings.nextBackup)return;alertSettings.nextBackup=Date.now()+BACKUP_INTERVAL;saveAlertSettings();const box=$('#backupAlertBox');if(box)box.hidden=false}
+function checkHabitsAlert(){
+ if(!alertSettings.habits||document.visibilityState==='hidden'||!$('#backupAlertBox')?.hidden)return;
+ if(Date.now()<alertSettings.nextHabits)return;
+ alertSettings.nextHabits=Date.now()+BACKUP_INTERVAL;
+ saveAlertSettings();
+ const box=$('#habitsAlertBox');if(box)box.hidden=false;
+}
+
+// v41 — Monitor de Armazenamento Local. Valores estimados; nenhuma limpeza automática.
+const STORAGE_BACKUP_DATE='impulso-last-backup-request-v1';
+const storageFormat=n=>!Number.isFinite(n)||n<0?'Não disponível':n<1024?`${n} B`:n<1048576?`${(n/1024).toLocaleString('pt-BR',{maximumFractionDigits:1})} KB`:`${(n/1048576).toLocaleString('pt-BR',{maximumFractionDigits:2})} MB`;
+const storageBytes=s=>new Blob([s]).size;
+function storageCard(label,value,detail=''){return `<article class="storage-card"><h3>${esc(label)}</h3><strong>${esc(value)}</strong>${detail?`<p>${esc(detail)}</p>`:''}</article>`}
+async function storageSnapshot(){
+ const result={keys:[],localBytes:null,appBytes:null,projects:[],backupBytes:null,cacheBytes:null,usage:null,quota:null,persisted:null,errors:[]};
+ try{let bytes=0;for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i),value=localStorage.getItem(key)||'';const size=storageBytes(key)+storageBytes(value);bytes+=size;result.keys.push({key,size});if(key===KEY)result.appBytes=size}result.localBytes=bytes}catch(e){result.errors.push('Não foi possível inspecionar o armazenamento local.')}
+ try{result.projects=state.projects.map(x=>({name:x.name,size:storageBytes(JSON.stringify(x))})).sort((x,y)=>y.size-x.size);result.backupBytes=storageBytes(JSON.stringify({app:'Impulso',version:1,exportedAt:new Date().toISOString(),data:state},null,2))}catch(e){result.errors.push('Não foi possível calcular o tamanho do backup.')}
+ if(navigator.storage?.estimate){try{const est=await navigator.storage.estimate();result.usage=Number.isFinite(est.usage)?est.usage:null;result.quota=Number.isFinite(est.quota)?est.quota:null}catch(e){result.errors.push('Estimativa de cota indisponível.')}}
+ if(navigator.storage?.persisted){try{result.persisted=await navigator.storage.persisted()}catch(e){result.errors.push('Estado de persistência indisponível.')}}
+ if('caches' in window){try{let total=0;for(const name of await caches.keys()){const cache=await caches.open(name);for(const req of await cache.keys()){const response=await cache.match(req);if(response){const blob=await response.blob();total+=blob.size}}}result.cacheBytes=total}catch(e){result.errors.push('Não foi possível medir o cache offline.')}}
+ return result;
+}
+let storageRequestId=0;
+async function renderStorage(){const id=++storageRequestId;main.innerHTML=header('Armazenamento','Monitor de Armazenamento Local — informações aproximadas sobre os dados do Impulso.')+'<section class="panel"><p role="status">Calculando medições locais…</p></section>';const d=await storageSnapshot();if(id!==storageRequestId||page!=='armazenamento')return;
+ const ratio=d.quota>0&&d.usage!==null?Math.min(100,100*d.usage/d.quota):null;
+ const last=localStorage.getItem(STORAGE_BACKUP_DATE);let lastText='Nenhuma solicitação registrada neste navegador';if(last){const dt=new Date(last);if(Number.isFinite(dt.getTime()))lastText=dt.toLocaleString('pt-BR')+' (download solicitado; não confirma arquivo salvo)'}
+ main.innerHTML=header('Armazenamento','Monitor de Armazenamento Local — estimativas do navegador, não da memória RAM.')+`<section class="panel"><div class="row between storage-toolbar"><div><h2>Saúde dos dados</h2><p class="muted">Medição em ${esc(new Date().toLocaleString('pt-BR'))}</p></div><button class="btn primary" id="storageRefresh" type="button">↻ Atualizar medições</button></div><div class="storage-grid">${storageCard('Uso estimado da origem',storageFormat(d.usage),'Inclui dados e caches desta origem, conforme estimativa do navegador.')}${storageCard('Cota estimada da origem',storageFormat(d.quota),'Não representa o espaço livre real do dispositivo.')}${storageCard('Dados do Impulso (localStorage)',storageFormat(d.appBytes),'Chave principal dos projetos e registros.')}${storageCard('Todo o localStorage da origem',storageFormat(d.localBytes),'Inclui preferências e outras chaves locais.')}${storageCard('Cache offline acessível',storageFormat(d.cacheBytes),'Soma aproximada dos corpos das respostas no Cache Storage.')}${storageCard('Backup Geral estimado',storageFormat(d.backupBytes),'Tamanho previsto do JSON antes de baixar.')}</div><div class="storage-usage"><div class="row between"><strong>Uso estimado da cota</strong><span>${ratio===null?'Não disponível':ratio.toLocaleString('pt-BR',{maximumFractionDigits:2})+'%'}</span></div><div class="storage-track" role="progressbar" aria-label="Uso estimado da cota" aria-valuemin="0" aria-valuemax="100" ${ratio===null?'':`aria-valuenow="${ratio}"`}><span style="width:${ratio??0}%"></span></div><p class="help">O navegador pode incluir IndexedDB, Cache Storage e outros dados na estimativa. Os valores não são necessariamente somáveis.</p></div></section><section class="panel"><h2>Persistência do armazenamento</h2><p><strong>${d.persisted===true?'Concedida':d.persisted===false?'Não concedida':'Não disponível'}</strong></p><p class="muted">A persistência reduz o risco de remoção automática por pressão de armazenamento, mas não impede limpeza manual, desinstalação ou troca de aparelho.</p><button class="btn" type="button" id="storagePersist" ${d.persisted===true?'disabled':''}>Solicitar persistência</button><p class="help">A decisão é do navegador; o pedido pode ser negado sem apresentar uma janela.</p></section><section class="panel"><h2>Espaço por projeto</h2>${d.projects.length?`<div class="storage-projects">${d.projects.map(x=>`<div class="storage-project"><span>${esc(x.name)}</span><strong>${storageFormat(x.size)}</strong></div>`).join('')}</div>`:'<p class="muted">Nenhum projeto cadastrado.</p>'}<p class="help">Tamanhos calculados pelo JSON serializado dos projetos; são aproximações, não uma partição da cota total.</p></section><section class="panel"><h2>Último Backup Geral</h2><p>${esc(lastText)}</p><p class="help">O registro marca apenas a solicitação de download pelo aplicativo. Confira se o arquivo realmente foi salvo e mantenha uma cópia externa.</p><div class="actions"><button class="btn primary" data-action="backup">Guardar Backup Geral</button></div></section><section class="panel"><h2>Limitações e segurança</h2><p>Estes medidores não medem RAM nem espaço livre do aparelho. As cotas são estimadas pelo navegador e podem mudar. Nenhum dado será apagado automaticamente por esta página.</p>${d.errors.length?`<p class="help">${esc(d.errors.join(' '))}</p>`:''}</section>`;
+}
+async function requestStoragePersistence(){if(!navigator.storage?.persist){toast('Persistência não disponível neste navegador.');return}try{const granted=await navigator.storage.persist();toast(granted?'Persistência concedida.':'O navegador não concedeu persistência.');renderStorage()}catch(e){toast('Não foi possível solicitar persistência.')}}
+
+function renderAlerts(){main.innerHTML=header('Alertas!','Configure lembretes locais durante o uso do Impulso.')+`<section class="panel"><div class="alert-setting"><div><h2>Alerta de backup</h2><p>Quando ativado, apresenta um lembrete a cada 15 minutos para guardar um backup dos projetos e evitar a perda de dados armazenados no navegador.</p></div><label class="alert-switch"><input id="backupAlertToggle" type="checkbox" role="switch" ${alertSettings.backup?'checked':''} aria-label="Ativar alerta de backup"><span class="alert-switch-label">${alertSettings.backup?'Ligado':'Desligado'}</span></label></div><div class="alert-setting"><div><h2>Alerta de hábitos e Elixires</h2><p>Quando ativado, lembra a cada 15 minutos que é preciso criar e concluir hábitos para liberar os Elixires dos chefões derrotados.</p></div><label class="alert-switch"><input id="habitsAlertToggle" type="checkbox" role="switch" ${alertSettings.habits?'checked':''} aria-label="Ativar alerta de hábitos e Elixires"><span class="alert-switch-label">${alertSettings.habits?'Ligado':'Desligado'}</span></label></div><p class="help">O aviso aparece enquanto o aplicativo está aberto e visível. Não é uma notificação do sistema e não funciona com o aplicativo fechado. Os alertas não fazem backup automaticamente.</p></section>`}
+function renderHome(p){main.innerHTML=header('Seu próximo impulso começa agora','Projetos independentes. Progresso real. Maestria construída minuto a minuto.')+`<div class="actions">${btn('+ Novo Projeto','new','primary')}${btn('Meus Projetos','projects')}${btn('⬇ Exportar','export')}${btn('⬆ Importar','importProject')}</div>`+(p?`<section class="panel"><div class="row between"><h2>${esc(p.name)}</h2>${btn('Trocar projeto','projects')}</div><p class="muted">Iniciado em ${stamp(p.created)}</p><div class="grid">${metric(`<span id="homeLiveTotal">${duration(total(p,true))}</span>`,'Tempo acumulado')}${metric(p.records.filter(r=>r.type==='habit').length,'Hábitos executados')}${metric(`${bossStatus(p).done}/${BOSS_COUNT}`,'Chefões derrotados')}${metric(`${(total(p)/36000000000).toFixed(3)}%`,'Meta de 10.000 horas')}</div><div class="actions">${btn('⏵ Registrar ponto','point','primary')}${btn('Meu Dia','day')}${btn('Radar','radar')}</div></section>${milestonePanel(p)}`:`<section class="panel"><h2>Nenhum projeto ainda</h2><p>Crie seu primeiro projeto para começar a registrar seu tempo.</p>${btn('+ Novo Projeto','new','primary')}</section>`)}
+function renderProjects(){main.innerHTML=header('Meus Projetos','Cada projeto possui seus próprios registros, hábitos e Arena.')+`<div class="actions">${btn('+ Novo Projeto','new','primary')}${btn('▣ Imprimir lista','printProjects')}</div>`+(state.projects.length?state.projects.map(p=>`<article class="list-card"><div class="row between"><div><h3>${esc(p.name)} ${p.id===state.active?'· Ativo':''}</h3><div class="muted">Criado em ${stamp(p.created)} · ${mins(total(p))}</div></div><div class="row"><button class="btn small" data-open="${p.id}">Abrir</button><button class="btn small" data-rename="${p.id}">Renomear</button><button class="trash" title="Excluir projeto" aria-label="Excluir projeto" data-delete-project="${p.id}">🗑</button></div></div></article>`).join(''):'<p>Nenhum projeto cadastrado.</p>')}
+function recordKind(r){if(r.source==='focus')return 'Foco';return r.type==='habit'?'Hábito':r.type==='activity'?(r.source==='point'?'Ponto':'Entrada Manual'):'Ponto'}
+function recordName(r){return String(r.name||r.note||'—').slice(0,50)}
+function recordTable(rows,day=null){return `<div class="table-wrap"><table><thead><tr><th>Atividade</th><th>Nome</th><th>Início</th><th>Término</th><th aria-label="Excluir"></th></tr></thead><tbody>${rows.map(r=>`<tr><td>${recordKind(r)}</td><td>${esc(recordName(r))}${day&&r.end>r.start&&dateKey(r.start)!==dateKey(r.end)?`<div class="muted" style="font-size:.82rem">Neste dia: ${mins(dayPart(r,day))} · Atividade completa: ${duration(r.end-r.start)}</div>`:""}</td><td>${r.type==='legacyEnd'?'—':stamp(r.start)}</td><td>${r.end?stamp(r.end):r.type==='legacyEnd'?stamp(r.start):'—'}</td><td><button class="trash" ${r.pairId?`data-delete-pair="${r.id}|${r.pairId}"`:`data-delete-record="${r.id}"`} title="Excluir registro" aria-label="Excluir registro">🗑</button></td></tr>`).join('')}</tbody></table></div>`}
+function dayGroups(p){
+ const groups=new Map();
+ for(const r of historyRows(p)){
+  const start=Number(r.start),end=Number(r.end);
+  if(!Number.isFinite(start))continue;
+  const add=day=>{if(!groups.has(day))groups.set(day,[]);groups.get(day).push(r)};
+  if(!Number.isFinite(end)||end<=start){add(dateKey(start));continue}
+  let cursor=start;
+  while(cursor<end){
+   add(dateKey(cursor));
+   const d=new Date(cursor),next=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1).getTime();
+   if(next<=cursor)break;
+   cursor=Math.min(end,next);
+  }
+ }
+ return groups;
+}
+function dayPart(r,day){
+ const start=Number(r.start),end=Number(r.end);
+ if(!Number.isFinite(start)||!Number.isFinite(end)||end<=start)return 0;
+ let cursor=start,ms=0;
+ const segments=Array.isArray(r.segments)?r.segments:[[start,end]];
+ for(const segment of segments){
+  if(!Array.isArray(segment)||segment.length!==2)continue;
+  let a=Number(segment[0]),b=Number(segment[1]);
+  while(Number.isFinite(a)&&Number.isFinite(b)&&a<b){
+   const d=new Date(a),next=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1).getTime();
+   const stop=Math.min(b,next);
+   if(dateKey(a)===day)ms+=stop-a;
+   if(stop<=a)break;
+   a=stop;
+  }
+ }
+ return ms;
+}
+// Calendário: usa os mesmos intervalos consolidados de Meu Dia, evitando contar sobreposições duas vezes.
+function calendarTotals(p,year,month){
+ const totals=new Map(),first=new Date(year,month,1).getTime(),last=new Date(year,month+1,1).getTime();
+ for(const [start,end] of intervals(p)){
+  let cursor=Math.max(start,first),limit=Math.min(end,last);
+  while(cursor<limit){
+   const d=new Date(cursor),next=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1).getTime(),stop=Math.min(limit,next);
+   const key=dateKey(cursor);totals.set(key,(totals.get(key)||0)+stop-cursor);cursor=stop;
+  }
+ }
+ return totals;
+}
+// Sequências: derivadas dos intervalos reais, sem estado duplicado ou metas artificiais.
+// O dia corrente só encerra uma sequência quando termina; ontem permanece válido hoje.
+function productivityStreaks(p,reference=new Date()){
+ const active=new Set(),today=new Date(reference.getFullYear(),reference.getMonth(),reference.getDate());
+ const tomorrow=new Date(today.getFullYear(),today.getMonth(),today.getDate()+1).getTime();
+ if(p)for(const [start,end] of intervals(p)){
+  let cursor=start,limit=Math.min(end,tomorrow);
+  while(Number.isFinite(cursor)&&Number.isFinite(limit)&&cursor<limit){
+   const d=new Date(cursor),next=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1).getTime();
+   const stop=Math.min(limit,next);
+   if(stop>cursor)active.add(dateKey(cursor));
+   cursor=stop;
+  }
+ }
+ const dates=[...active].map(key=>{const [day,month,year]=key.split('-').map(Number);return Math.round(Date.UTC(year,month-1,day)/86400000)}).sort((a,b)=>a-b);
+ const runs=[];
+ for(const day of dates){const last=runs.at(-1);if(last&&day===last.end+1){last.end=day;last.days++}else runs.push({start:day,end:day,days:1})}
+ const todayOrdinal=Math.round(Date.UTC(today.getFullYear(),today.getMonth(),today.getDate())/86400000);
+ const latest=runs.at(-1);
+ const current=latest&&(latest.end===todayOrdinal||latest.end===todayOrdinal-1)?latest.days:0;
+ const best=runs.reduce((max,run)=>Math.max(max,run.days),0);
+ const lastEnded=[...runs].reverse().find(run=>run!==latest||current===0);
+ return {current,best,lastEnded:lastEnded?.days||0,active};
+}
+function renderCalendar(p){
+ const year=calendarMonth.getFullYear(),month=calendarMonth.getMonth();
+ const monthName=calendarMonth.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+ const today=new Date(),todayMonth=today.getFullYear()===year&&today.getMonth()===month;
+ const totals=p?calendarTotals(p,year,month):new Map(),groups=p?dayGroups(p):new Map();
+ const count=new Date(year,month+1,0).getDate(),offset=new Date(year,month,1).getDay();
+ const worked=[...totals.values()].filter(ms=>ms>0),sum=worked.reduce((a,b)=>a+b,0),streaks=productivityStreaks(p);
+ const cells=Array.from({length:Math.ceil((offset+count)/7)*7},(_,i)=>{
+  const day=i-offset+1;if(day<1||day>count)return '<span class="calendar-empty" aria-hidden="true"></span>';
+  const key=`${pad(day)}-${pad(month+1)}-${year}`,ms=totals.get(key)||0;
+  const selected=calendarSelectedDay===key,isToday=todayMonth&&today.getDate()===day;
+  return `<button type="button" class="calendar-date${ms?' has-work':''}${selected?' selected':''}${isToday?' today':''}" data-calendar-day="${key}" aria-pressed="${selected}" aria-label="${key}: ${ms?mins(ms)+' trabalhados':'sem atividade registrada'}"><span class="calendar-number">${day}</span><span class="calendar-time">${ms?mins(ms):'—'}</span></button>`;
+ }).join('');
+ const selected=calendarSelectedDay&&calendarSelectedDay.endsWith(`-${pad(month+1)}-${year}`)?calendarSelectedDay:null;
+ const rows=selected?(groups.get(selected)||[]).slice().sort((a,b)=>a.start-b.start):[];
+ main.innerHTML=header('Calendário de produtividade',p?esc(p.name):'Abra um projeto para consultar os registros mensais.')+`<section class="panel"><div class="calendar-toolbar"><button class="btn" type="button" data-calendar-move="-1" aria-label="Mês anterior">‹ Anterior</button><h2 id="calendarMonthTitle">${esc(monthName)}</h2><button class="btn" type="button" data-calendar-move="1" aria-label="Próximo mês">Próximo ›</button></div><div class="calendar-stats">${metric(worked.length,'Dias trabalhados')}${metric(mins(sum),'Tempo no mês')}${metric(count,'Dias do mês')}</div><div class="calendar-streaks" aria-label="Sequências de produtividade">${metric(streaks.current+' '+(streaks.current===1?'dia':'dias'),'🔥 Sequência atual')}${metric(streaks.best+' '+(streaks.best===1?'dia':'dias'),'🏆 Recorde pessoal')}${metric(streaks.lastEnded+' '+(streaks.lastEnded===1?'dia':'dias'),'Última sequência encerrada')}</div><p class="help">Sequências são dias consecutivos com trabalho registrado neste projeto. Hoje não interrompe uma sequência iniciada ontem. Entradas retroativas e exclusões atualizam os resultados automaticamente.</p><p class="help">O tempo é calculado por dia, sem duplicar períodos simultâneos. Atividades que atravessam a meia-noite são distribuídas pelas datas correspondentes.</p><div class="calendar-weekdays" aria-hidden="true">${['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map(x=>`<span>${x}</span>`).join('')}</div><div class="calendar-grid" role="group" aria-label="Dias de ${esc(monthName)}">${cells}</div><p class="calendar-legend"><span aria-hidden="true">●</span> Dias com trabalho registrado · Selecione uma data para consultar os registros.</p></section>`+
+ (selected?`<section class="panel" id="calendarDetails"><div class="row between"><h2>Meu Dia ${selected}</h2><strong>${mins(totals.get(selected)||0)}</strong></div>${rows.length?recordTable(rows,selected):'<p class="muted">Nenhum registro nesta data.</p>'}<div class="actions"><button type="button" class="btn" data-page="dia">Ver Meu Dia completo</button>${rows.length?`<button type="button" class="btn" data-print-day="${selected}">Imprimir este dia</button>`:''}</div></section>`:'<section class="panel"><p class="muted">Selecione um dia do calendário para ver suas atividades e horários.</p></section>');
+}
+function renderDay(p){
+ const groups=dayGroups(p);
+ const days=[...groups.keys()].sort((a,b)=>{const parse=s=>s.split('-').reverse().join('-');return order==='asc'?parse(a).localeCompare(parse(b)):parse(b).localeCompare(parse(a))});
+ main.innerHTML=header('Meu Dia',esc(p.name))+actions()+`<div class="row between"><p class="muted">Atividades que atravessam datas aparecem em cada dia trabalhado. O Histórico mantém um único registro.</p><label>Ordem <select class="filter" id="order"><option value="asc" ${order==='asc'?'selected':''}>Mais antigos primeiro</option><option value="desc" ${order==='desc'?'selected':''}>Mais recentes primeiro</option></select></label></div>`+(days.length?days.map(day=>`<section class="day"><div class="day-head"><h2>Meu Dia ${day}</h2><div class="row"><strong>Total trabalhado: ${mins(dayTotal(p,day))}</strong><button class="btn small" type="button" data-print-day="${day}" aria-label="Imprimir somente Meu Dia ${day}">▣ Imprimir</button></div></div>${recordTable(groups.get(day).sort((a,b)=>order==='asc'?a.start-b.start:b.start-a.start),day)}</section>`).join(''):'<section class="panel">Nenhum registro neste projeto. Utilize Ponto ou Entrada Manual.</section>');
+}
+
+function renderEquippedHabits(p){main.innerHTML=header('Hábitos',esc(p.name))+`<div class="actions">${btn('+ Novo Hábito','newHabit','primary')}${btn('⏵ Ponto','point')}</div>`+(p.habits.some(h=>h.equipped!==false)?p.habits.filter(h=>h.equipped!==false).map(h=>{const t=h.timer,elapsed=t?Math.min(h.minutes*60000,(t.elapsed||0)+(t.runningSince?Math.max(0,now()-t.runningSince):0)):0,remaining=Math.max(0,h.minutes*60000-elapsed);return `<div class="list-card"><div class="row between"><div><h3>${esc(h.name)}</h3><span class="muted">${h.minutes} minutos estipulados · ${p.records.filter(r=>r.habitId===h.id).length} execuções</span></div><button class="btn small" data-toggle-custom="${h.id}">Desequipar</button><button class="trash" title="Excluir hábito" data-delete-habit="${h.id}">🗑</button></div><div class="pomodoro" aria-label="Pomodoro de ${h.minutes} minutos"><strong data-pomodoro="${h.id}">${duration(remaining)}</strong><div class="progress"><span data-pomodoro-progress="${h.id}" style="width:${elapsed/(h.minutes*60000)*100}%"></span></div><div class="row"><button class="btn small" data-habit-control="${h.id}" data-mode="${!t?'start':t.runningSince?'pause':'resume'}">${!t?'▶ Iniciar':t.runningSince?'⏸ Pausar':'▶ Retomar'}</button>${t?`<button class="btn small" data-habit-control="${h.id}" data-mode="finish">✓ Concluir</button><button class="btn small" data-habit-control="${h.id}" data-mode="reset">↺ Reiniciar</button>`:''}</div></div></div>`}).join(''):'<section class="panel">Nenhum hábito criado. Comece adicionando um hábito.</section>')+`<p class="help">O Pomodoro conta o tempo real em execução, com pausa e retomada. Ao concluir, registra somente o tempo efetivamente decorrido (até o limite estipulado), sem duplicar intervalos já contabilizados pelo ponto.</p>`}
+function renderHabits(p){
+ renderEquippedHabits(p);
+ const old=main.innerHTML;
+ const count=equippedCount(p);
+ const categories=['Todas',...HABIT_CATEGORIES];
+ const filters=`<section class="panel inventory-panel"><div class="inventory-head"><div><h2>Inventário de Elixires</h2><p class="muted">Escolha até seis hábitos para sua rotina diária. Conclua um hábito para abrir um cofre após derrotar um chefão.</p></div><strong class="inventory-count" aria-live="polite">${count}/${MAX_EQUIPPED} Equipados</strong></div><label class="field">Buscar no catálogo inteiro<input id="habitCatalogSearch" type="search" autocomplete="off" placeholder="Buscar hábitos ou palavras-chave" value="${esc(habitSearch)}"></label><div class="inventory-categories" role="group" aria-label="Filtrar hábitos por categoria">${categories.map(c=>`<button type="button" class="inventory-pill ${habitCategory===c?'selected':''}" data-habit-category="${esc(c)}" aria-pressed="${habitCategory===c}">${esc(c)}</button>`).join('')}</div><div id="habitCatalogResults" class="inventory-grid"></div></section>`;
+ const pos=old.indexOf('<div class="list-card">');
+ const empty=old.indexOf('<section class="panel">Nenhum hábito');
+ const at=pos>=0?pos:empty>=0?empty:old.length;
+ const activeContent=old.slice(at);
+ const helpAt=activeContent.indexOf('<p class="help">');
+ const activeCards=helpAt>=0?activeContent.slice(0,helpAt):activeContent;
+ const activeHelp=helpAt>=0?activeContent.slice(helpAt):'';
+ const activeSection=`<section class="panel active-elixirs"><div class="active-elixirs-head"><div><h2>Elixires Ativos</h2><p class="muted">Execute seus hábitos com o Pomodoro para liberar recompensas.</p></div><strong class="inventory-count">${count}/${MAX_EQUIPPED} Equipados</strong></div><div class="active-elixirs-grid">${activeCards}</div>${activeHelp}</section>`;
+ main.innerHTML=old.slice(0,at)+activeSection+filters;
+ renderCatalogResults(p);
+ const inactive=p.habits.filter(h=>h.equipped===false&&!h.catalogId);
+ if(inactive.length){const section=document.createElement('section');section.className='panel';section.innerHTML='<h2>Hábitos personalizados desequipados</h2>'+inactive.map(h=>`<div class="inventory-inactive"><span>${esc(h.name)} · ${esc(h.category||'Personalizado')}</span><button class="btn small" data-toggle-custom="${h.id}">Reequipar</button></div>`).join('');main.append(section)}
+}
+function renderCatalogResults(p){const target=$('#habitCatalogResults');if(!target)return;const items=catalogSearch(habitSearch,habitCategory);const custom=p.habits.filter(h=>h.custom&&((habitSearch.trim())||habitCategory==='Todas'||h.category===habitCategory)&&(!habitSearch.trim()||(h.name+' '+(h.category||'Personalizado')).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR').includes(habitSearch.trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR'))));target.innerHTML=(items.length||custom.length)?items.map(h=>{const found=p.habits.find(x=>x.catalogId===h.id),active=found&&found.equipped!==false;return `<article class="inventory-card"><span class="inventory-tag">${esc(h.category)}</span><p>${esc(h.name)}</p><button class="btn small ${active?'':'primary'}" type="button" data-equip-catalog="${h.id}" aria-pressed="${!!active}">${active?'✓ Equipado':found?'Reequipar':'Equipar'}</button></article>`}).join('')+custom.map(h=>`<article class="inventory-card"><span class="inventory-tag">${esc(h.category||'Personalizado')}</span><p>${esc(h.name)}</p><button class="btn small ${h.equipped!==false?'':'primary'}" type="button" data-toggle-custom="${h.id}" aria-pressed="${h.equipped!==false}">${h.equipped!==false?'✓ Equipado':'Equipar'}</button></article>`).join(''):'<p class="muted">Nenhum hábito encontrado para esta pesquisa.</p>'}
+
+function habitControl(id,mode){const p=project(),h=p?.habits.find(x=>x.id===id);if(!h)return;const t=h.timer;const elapsed=t?(t.elapsed||0)+(t.runningSince?Math.max(0,now()-t.runningSince):0):0;if(mode==='start')h.timer={startedAt:now(),elapsed:0,runningSince:now(),segments:[]};else if(mode==='pause'&&t?.runningSince){t.segments??=[];t.segments.push([t.runningSince,now()]);t.elapsed=elapsed;t.runningSince=null}else if(mode==='resume'&&t&&!t.runningSince)t.runningSince=now();else if(mode==='reset'){if(!ask('Reiniciar o Pomodoro e descartar o tempo desta sessão?'))return;delete h.timer}else if(mode==='finish'&&t){if(t.runningSince){t.segments??=[];t.segments.push([t.runningSince,now()])}const seg=(t.segments||[]).filter(([a,b])=>b>a);const measured=seg.reduce((sum,[a,b])=>sum+b-a,0);if(!measured){alert('Inicie o Pomodoro antes de concluir.');return}if(!ask('Concluir este hábito e registrar o tempo efetivamente executado?'))return;const before=bossStatus(p).done,end=now(),record={id:uid(),type:'habit',habitId:h.id,name:h.name,start:seg[0][0],end,segments:seg,note:'',source:'pomodoro'};p.records.push(record);const reward=awardElixir(p,record,before);delete h.timer;if(reward){save();render();openElixir(reward);return}}save();render()}
+function historyRows(p){
+ const result=[],open=[];
+ for(const r of sorted(p)){
+  if(r.type==='start'){open.push(r);continue}
+  if(r.type==='end'){
+   const a=open.shift();
+   if(a)result.push({id:a.id,type:'legacyPoint',name:'Ponto',start:a.start,end:r.start,note:[a.note,r.note].filter(Boolean).join(' / '),pairId:r.id});
+   else result.push({...r,type:'legacyEnd'});
+   continue;
+  }
+  result.push(r);
+ }
+ for(const a of open)result.push({...a,type:'legacyOpen'});
+ return result.sort((a,b)=>b.start-a.start);
+}
+
+
+function renderArena(p){
+ const b=bossStatus(p),pct=b.hp?100*(b.hp-b.left)/b.hp:100;
+ const active=BOSSES[b.level], tier=active?BOSS_TIERS[active.tier-1]:null;
+ const tierSections=BOSS_TIERS.map(t=>{
+  const items=BOSSES.slice(t.start-1,t.end);
+  const defeated=t.end<=b.done;
+  const current=b.level+1>=t.start&&b.level+1<=t.end;
+  return `<details class="arena-tier" ${current?'open':''}>
+    <summary><span>Fase ${t.id} — ${esc(t.title)}</span><small>${defeated?'✓ Concluída':current?'⚔ Em andamento': '🔒 A conquistar'} · Chefões ${t.start}–${t.end}</small></summary>
+    <p class="arena-tier-desc">${esc(t.description)}</p>
+    <div class="arena-list">${items.map(enemy=>{
+     const i=enemy.id-1, status=i<b.done?'✓':i===b.level?'⚔':'🔒';
+     return `<article class="arena-enemy ${i===b.level?'arena-current':''}">
+       <div class="arena-enemy-heading"><strong>${status} ${String(enemy.id).padStart(3,'0')} — ${esc(enemy.name)}</strong><span>${fmtNumber(bossHP(i))} HP</span></div>
+       ${enemy.note?`<p class="arena-note">${esc(enemy.note)}</p>`:''}
+       <small>Conclusão acumulada: ${hours(bossThresholds[i]*60000)} h</small>
+     </article>`;
+    }).join('')}</div>
+   </details>`;
+ }).join('');
+ main.innerHTML=header('Arena de 200 Chefões',esc(p.name))+`<section class="panel">
+ <h2>${active?`Chefão ${active.id}/${BOSS_COUNT} — ${esc(active.name)}`:'Arena conquistada!'}</h2>
+ ${tier?`<p class="arena-phase">Fase ${tier.id}: ${esc(tier.title)}</p><p class="help">${esc(tier.description)}</p>`:''}
+ ${active?.note?`<p class="arena-note">${esc(active.note)}</p>`:''}
+ <div class="boss"><div class="boss-art" aria-hidden="true">${emojis[b.level%emojis.length]||'🏆'}</div><div style="flex:1">
+ <strong>${b.level===BOSS_COUNT?'Todos os 200 chefões derrotados':`${fmtNumber(b.left)} / ${fmtNumber(b.hp)} HP restantes`}</strong>
+ <div class="progress" role="progressbar" aria-label="Progresso do chefão atual" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}"><span style="width:${pct}%"></span></div>
+ <p class="help">1 HP por minuto acumulado. A jornada completa corresponde a 10.000 horas; cada chefão exige mais tempo que o anterior.</p>
+ </div></div><div class="grid">${metric(`${b.done}/${BOSS_COUNT}`,'Chefões derrotados')}${metric(hours(total(p))+' h','Tempo total do projeto')}${metric('10.000 h','Objetivo da Arena')}</div>
+ </section><section class="panel"><div class="actions"><button class="btn primary" type="button" data-page="codex">📖 Abrir Codex de Monstros</button><button class="btn" type="button" data-page="altar">✦ Altar dos Elixires</button></div></section><section class="panel"><h2>As 10 fases da procrastinação</h2><p class="muted">200 adversários em ordem crescente de dificuldade. Abra cada fase para conhecer seus chefões, descrições e resistência.</p>${tierSections}</section>`;
+}
+
+// Codex: XP de Foco é uma leitura do tempo real registrado (1 XP por minuto).
+// Não há moeda paralela nem mutação de progresso: os chefões são liberados
+// pelas mesmas fronteiras de HP da Arena. Os textos são do JSON fornecido.
+function renderCodex(p){
+ const b=bossStatus(p),xp=damage(p),currentTier=Math.min(10,Math.floor(b.done/20)+1);
+ const sections=BOSS_TIERS.map(t=>{
+  const defeatedCount=Math.max(0,Math.min(20,b.done-(t.start-1)));
+  const cards=CODEX_MONSTERS.slice(t.start-1,t.end).map(m=>{
+   const won=m.id<=b.done,active=m.id===b.done+1;
+   return `<button type="button" class="codex-monster ${won?'codex-won':active?'codex-active':'codex-locked'}" ${won?`data-codex-id="${m.id}"`:'disabled'} aria-label="${won?`Abrir ficha de ${esc(m.name)}`:`Chefão ${m.id} bloqueado`}">
+    <span class="codex-symbol" aria-hidden="true">${won?'🏆':active?'⚔️':'🔒'}</span>
+    <span class="codex-number">Nº ${String(m.id).padStart(3,'0')}</span>
+    <strong>${won?esc(m.name):active?'Desafio atual':'Monstro desconhecido'}</strong>
+    <small>${won?'VENCIDO · Ver ficha':active?'Derrote para revelar':'Bloqueado'}</small>
+   </button>`;
+  }).join('');
+  return `<details class="arena-tier codex-tier" ${t.id===currentTier?'open':''}><summary><span>Fase ${t.id} — ${esc(t.title)}</span><small>${defeatedCount}/20 vencidos</small></summary><p class="arena-tier-desc">${esc(t.description)}</p><div class="codex-grid">${cards}</div></details>`;
+ }).join('');
+ main.innerHTML=header('Codex de Monstros Desbloqueáveis',esc(p.name))+
+ `<section class="panel"><div class="actions"><button class="btn" data-page="arena">← Voltar à Arena</button><button class="btn" data-page="altar">✦ Altar dos Elixires</button></div><p>Uma enciclopédia das distrações e dos hábitos superados. Cada chefão vencido revela sua ficha e o dano mental que simboliza.</p><div class="grid">${metric(`${b.done}/200`,'Monstros descobertos')}${metric(`${xp.toLocaleString('pt-BR')} XP`,'XP de Foco')}${metric(`${10-Math.floor(b.done/20) || 0}`,'Fases por concluir')}</div><p class="help">1 minuto registrado = 1 XP de Foco. Os desbloqueios seguem a resistência original da Arena e não alteram as 10.000 horas. Se o tempo registrado diminuir, os desbloqueios serão recalculados.</p></section><section class="panel"><h2>Galeria de monstros</h2><p class="muted">Selecione um chefão vencido para conhecer sua história, seu efeito e receber o carimbo VENCIDO.</p>${sections}</section>`;
+}
+function openCodexMonster(id){
+ const p=project(),m=CODEX_MONSTERS.find(x=>x.id===id);
+ if(!p||!m||m.id>bossStatus(p).done)return;
+ const tier=BOSS_TIERS[Math.floor((m.id-1)/20)];
+ show(`<div class="codex-entry"><div class="codex-stamp" aria-label="Vencido">VENCIDO</div><p class="muted">Fase ${tier.id} — ${esc(tier.title)} · Chefão ${String(m.id).padStart(3,'0')}</p><h2>${esc(m.name)}</h2><p class="codex-effect"><strong>Dano mental:</strong> ${esc(m.effect)}</p><p class="codex-wiki">${esc(m.description)}</p><p class="help">Resistência original: ${fmtNumber(bossHP(m.id-1))} HP · Derrotado com progresso real registrado neste projeto.</p><div class="actions">${elixirClaims(p).some(c=>c.bossId===id)?`<button class="btn primary" data-elixir-id="${id}">✦ Ver Elixir</button>`:`<button class="btn" data-page="altar">🔒 Ver Altar</button>`}<button class="btn" type="button" data-cancel>Fechar ficha</button></div></div>`);
+}
+function radarMarks(){
+  const marks=[];
+  for(let i=0;i<360;i++){
+    const a=(i-90)*Math.PI/180;
+    const major=i%30===0, medium=i%10===0;
+    const r1=major?84:medium?88:91, r2=96;
+    marks.push(`<line x1="${(120+Math.cos(a)*r1).toFixed(3)}" y1="${(120+Math.sin(a)*r1).toFixed(3)}" x2="${(120+Math.cos(a)*r2).toFixed(3)}" y2="${(120+Math.sin(a)*r2).toFixed(3)}" stroke="var(--color-4)" stroke-opacity="${major?'.9':medium?'.6':'.28'}" stroke-width="${major?'1.5':'.65'}"/>`);
+  }
+  for(let i=0;i<60;i++){
+    const a=(i*6-90)*Math.PI/180, major=i%5===0;
+    const r1=major?59:65, r2=70;
+    marks.push(`<line x1="${(120+Math.cos(a)*r1).toFixed(3)}" y1="${(120+Math.sin(a)*r1).toFixed(3)}" x2="${(120+Math.cos(a)*r2).toFixed(3)}" y2="${(120+Math.sin(a)*r2).toFixed(3)}" stroke="var(--color-4)" stroke-opacity="${major?'.85':'.4'}" stroke-width="${major?'1.4':'.7'}"/>`);
+  }
+  return marks.join('');
+}
+// Sistema de Propulsão: conversão determinística dos intervalos efetivos, sem moedas extras.
+const PROPULSION_HOUR=3600000;
+const PROPULSION_TARGET=10080*PROPULSION_HOUR;
+const PROPULSION_UNITS=[['Pulso',1800000],['Giro',PROPULSION_HOUR],['Turno',8*PROPULSION_HOUR],['Fase',240*PROPULSION_HOUR],['Propulsão',PROPULSION_TARGET]];
+function propulsionStats(ms){
+ const t=Math.max(0,ms);
+ return {degrees:Math.floor(t/10000),angle:(t/10000)%360,units:PROPULSION_UNITS.map(([name,unit])=>({name,unit,count:Math.floor(t/unit),fraction:(t%unit)/unit,remaining:unit-(t%unit)}))};
+}
+function propulsionMetrics(ms){const data=propulsionStats(ms);
+ return data.units.map((u,i)=>`<div class="propulsion-unit"><div class="propulsion-unit-head"><strong id="propCount${i}">${fmtNumber(u.count)}</strong><span>${u.name}${u.count===1?'':'s'} completos</span></div><div class="progress propulsion-progress" role="progressbar" aria-label="Progresso até o próximo ${u.name}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.floor(u.fraction*100)}" id="propBar${i}"><span style="width:${u.fraction*100}%"></span></div><small id="propNext${i}">${(u.fraction*100).toFixed(2).replace('.',',')}% do próximo ${u.name.toLowerCase()} · faltam ${duration(u.remaining)}</small></div>`).join('');
+}
+function propulsionActive(p){return running(p)||!!p.focusSession?.runningSince||p.habits.some(h=>h.timer?.runningSince)}
+function renderRadar(p){
+ const ms=total(p,true),data=propulsionStats(ms),active=propulsionActive(p),second=(ms/1000)%60,c=2*Math.PI*94;
+ const rotor=Array.from({length:6},(_,i)=>`<path d="M120 120 Q100 95 113 74 Q137 82 137 104 Z" transform="rotate(${i*60} 120 120)" fill="var(--color-4)" fill-opacity=".76" stroke="var(--color-5)" stroke-width=".8"/>`).join('');
+ main.innerHTML=header('Radar — Motor de Propulsão',esc(p.name))+`<section class="panel"><p class="radar-status" id="radarStatus">${active?'● Motor em atividade':'○ Motor em repouso'}</p><svg class="radar" viewBox="0 0 240 240" role="img" aria-label="Motor de propulsão, 360 graus por giro e 60 marcações de segundos"><circle cx="120" cy="120" r="96" fill="none" stroke="var(--line)" stroke-width="1.5"/><circle cx="120" cy="120" r="70" fill="none" stroke="var(--line)" stroke-width="1.5"/>${radarMarks()}<circle id="radarArc" cx="120" cy="120" r="94" fill="none" stroke="var(--color-4)" stroke-width="3" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-data.angle/360)}" transform="rotate(-90 120 120)"/><g id="propRotor" class="propulsion-rotor ${active?'is-running':''}">${rotor}</g><g id="radarHand" transform="rotate(${second*6} 120 120)"><line x1="120" y1="137" x2="120" y2="52" stroke="var(--color-3)" stroke-width="2" stroke-linecap="round"/></g><circle cx="120" cy="120" r="8" fill="var(--color-5)" stroke="var(--color-4)" stroke-width="2"/><text id="radarAngle" x="120" y="157" text-anchor="middle" font-size="13" font-weight="800">${Math.floor(data.angle)}°</text></svg><p class="muted" style="text-align:center">O rotor representa a propulsão do projeto. 10 segundos = 1 grau; 180 graus = 1 Pulso; 360 graus = 1 Giro (1 hora). A rotação visual é simbólica, não uma simulação física de um foguete.</p><div class="grid">${metric(`<span id="radarTotal">${duration(ms)}</span>`,'Tempo efetivo acumulado')}${metric(`<span id="propDegrees">${fmtNumber(data.degrees)}</span>°`,'Graus acumulados')}${metric('10.080 h','1 Propulsão completa')}</div><h2 style="margin-top:20px">Unidades do motor</h2><div class="propulsion-grid">${propulsionMetrics(ms)}</div><h3 style="margin-top:20px">Propulsão: <span id="propPercent">${(Math.min(100,ms/PROPULSION_TARGET*100)).toFixed(4).replace('.',',')}%</span></h3><div class="progress"><span id="propProgress" style="width:${Math.min(100,ms/PROPULSION_TARGET*100)}%"></span></div><p class="help">${'A primeira Propulsão completa exige 42 Fases = 10.080 horas. Os contadores de cada unidade são acumulativos e não devem ser somados entre si. Depois de 10.080 horas, a contagem continua.'}</p><h3>Jornada original de 10.000 horas</h3><p class="help">As 100 metas, a Arena, as Cerimônias e a Consagração permanecem vinculadas às 10.000 horas. A Propulsão completa ocorre 80 horas depois.</p><div class="grid">${metric('10.000 h','Marco de maestria')}${metric(`<span id="radarRemaining">${hours(Math.max(0,36000000000-ms))} h</span>`,'Restantes para 10.000 h')}</div><h3 style="margin-top:20px">Maestria: <span id="radarMastery">${(ms/36000000000*100).toFixed(4)}%</span></h3><div class="progress"><span id="radarProgress" style="width:${Math.min(100,ms/360000000)}%"></span></div></section>${milestonePanel(p)}`;
+}
+function liveTick(){const p=project();if(!p)return;if(page==='foco'&&p.focusSession?.runningSince){const f=p.focusSession,el=$('#focusElapsed');if(el)el.textContent=duration(focusMs(f));const dev=$('#focusDeviation');if(dev)dev.textContent=focusDeviation(focusMs(f),f.plannedMs)}if(page==='ponto'&&p.pointSession?.status==='running'){const el=$('#pointElapsed');if(el)el.textContent=duration(now()-p.pointSession.start)}const ms=total(p,true);if(page==='habitos'){document.querySelectorAll('[data-pomodoro]').forEach(el=>{const h=p.habits.find(x=>x.id===el.dataset.pomodoro);if(!h?.timer)return;const t=h.timer,elapsed=Math.min(h.minutes*60000,(t.elapsed||0)+(t.runningSince?Math.max(0,now()-t.runningSince):0));el.textContent=duration(Math.max(0,h.minutes*60000-elapsed));const bar=document.querySelector(`[data-pomodoro-progress="${h.id}"]`);if(bar)bar.style.width=`${100*elapsed/(h.minutes*60000)}%`})}if(page==='radar'){
+ const arc=$('#radarArc');if(!arc)return;const data=propulsionStats(ms),c=2*Math.PI*94;
+ arc.setAttribute('stroke-dashoffset',String(c*(1-data.angle/360)));
+ $('#radarHand')?.setAttribute('transform',`rotate(${(ms/1000)%60*6} 120 120)`);
+ $('#radarAngle').textContent=`${Math.floor(data.angle)}°`;
+ $('#radarTotal').textContent=duration(ms);
+ $('#propDegrees').textContent=fmtNumber(data.degrees);
+ data.units.forEach((u,i)=>{const count=$(`#propCount${i}`),bar=$(`#propBar${i}`),next=$(`#propNext${i}`);if(count)count.textContent=fmtNumber(u.count);if(bar){bar.setAttribute('aria-valuenow',String(Math.floor(u.fraction*100)));bar.firstElementChild.style.width=`${u.fraction*100}%`;}if(next)next.textContent=`${(u.fraction*100).toFixed(2).replace('.',',')}% do próximo ${u.name.toLowerCase()} · faltam ${duration(u.remaining)}`;});
+ $('#propPercent').textContent=`${Math.min(100,ms/PROPULSION_TARGET*100).toFixed(4).replace('.',',')}%`;
+ $('#propProgress').style.width=`${Math.min(100,ms/PROPULSION_TARGET*100)}%`;
+ $('#radarRemaining').textContent=`${hours(Math.max(0,36000000000-ms))} h`;
+ $('#radarMastery').textContent=`${(ms/36000000000*100).toFixed(4)}%`;
+ $('#radarProgress').style.width=`${Math.min(100,ms/360000000)}%`;
+ const active=propulsionActive(p);$('#radarStatus').textContent=active?'● Motor em atividade':'○ Motor em repouso';
+ $('#propRotor')?.classList.toggle('is-running',active);
+ }else if(page==='inicio'){
+ const value=$('#homeLiveTotal');if(value)value.textContent=duration(ms);
+ }}
+setInterval(liveTick,250);
+
+function newProject(){show(`<h2>Novo Projeto</h2><form id="projectForm"><label class="field">Nome do projeto (até 50 caracteres)<input name="name" maxlength="50" required autofocus></label><div class="modal-actions">${btn('Cancelar','cancel') }<button class="btn primary" type="submit">Criar projeto</button></div></form>`);$('#projectForm').onsubmit=e=>{e.preventDefault();const name=e.target.elements.name.value.trim();if(!name)return;const p={id:uid(),name:name.slice(0,50),created:now(),records:[],habits:[]};state.projects.push(p);state.active=p.id;if(save()){close();page='inicio';render()}}}
+function rename(id){const p=state.projects.find(p=>p.id===id);if(!p)return;show(`<h2>Renomear projeto</h2><form id="renameForm"><label class="field">Nome<input name="name" maxlength="50" required value="${esc(p.name)}"></label><div class="modal-actions">${btn('Cancelar','cancel')}<button class="btn primary" type="submit">Salvar</button></div></form>`);$('#renameForm').onsubmit=e=>{e.preventDefault();const n=e.target.elements.name.value.trim();if(!n)return;p.name=n.slice(0,50);save();close();render()}}
+function point(){
+ if(!project()){toast('Abra um projeto antes de registrar um ponto.');page='projetos'}
+ else if(project().focusSession){toast('Conclua ou descarte a sessão de Foco antes de iniciar um Ponto.');page='foco'}else page='ponto';
+ close();render();
+}
+function renderPoint(p){
+ const session=p.pointSession;
+ const title=header('Ponto',esc(p.name));
+ if(!session){
+  main.innerHTML=title+`<section class="panel"><h2>Iniciar trabalho</h2><p class="help">Informe o nome da atividade. A data e a hora serão registradas automaticamente ao iniciar.</p><form id="pointForm"><label class="field">Nome do trabalho (até 50 caracteres)<input name="name" maxlength="50" required autocomplete="off" placeholder="Ex.: Desenvolvimento do aplicativo"></label><div class="actions"><button class="btn primary" type="submit">▶ Iniciar</button></div></form></section>`;
+  $('#pointForm').onsubmit=e=>{e.preventDefault();const name=e.currentTarget.elements.name.value.trim().slice(0,50);if(!name)return;if(p.focusSession){toast('Conclua a sessão de Foco antes de iniciar um Ponto.');return}const draft={name,start:now(),status:'running'};p.pointSession=draft;if(!save()){delete p.pointSession;return}render();toast('Ponto iniciado. Você pode navegar pelo aplicativo.')};
+  return;
+ }
+ if(session.status==='running'){
+  main.innerHTML=title+`<section class="panel"><h2>Trabalho em andamento</h2><p><strong>${esc(session.name)}</strong></p><p class="help">Início: ${stamp(session.start)}. O ponto permanece salvo mesmo que você saia desta página ou feche o aplicativo.</p><div class="modal-time" id="pointElapsed" role="timer" aria-label="Tempo decorrido">${duration(now()-session.start)}</div><div class="actions"><button class="btn primary" id="pointStop" type="button">■ Terminar e salvar</button></div><p class="help">Ao terminar, o registro será incluído automaticamente no Meu Dia, inclusive se atravessar a meia-noite.</p></section>`;
+  $('#pointStop').onclick=()=>{const end=now();if(!Number.isFinite(session.start)||end<=session.start){alert('O horário de início do ponto é inválido.');return}if(!ask('Terminar este trabalho e salvar no Meu Dia?'))return;const record={id:uid(),type:'activity',name:session.name.slice(0,50),start:session.start,end,note:'',source:'point'};const previousTotal=total(p);p.records.push(record);delete p.pointSession;if(!save()){p.records=p.records.filter(r=>r.id!==record.id);p.pointSession=session;return}render();toast('Trabalho concluído e salvo no Meu Dia');/* Cerimônias disponíveis na galeria */};
+  return;
+ }
+ // Compatibilidade com pontos interrompidos pela versão anterior.
+ if(session.status==='stopped'){
+  main.innerHTML=title+`<section class="panel"><h2>Trabalho encerrado, aguardando gravação</h2><p><strong>${esc(session.name)}</strong></p><p>Início: ${stamp(session.start)}</p><p>Término: ${stamp(session.end)}</p><div class="modal-time">${duration(session.end-session.start)}</div><div class="actions"><button class="btn primary" id="pointFinish" type="button">✓ Salvar no Meu Dia</button></div></section>`;
+  $('#pointFinish').onclick=()=>{if(!Number.isFinite(session.start)||!Number.isFinite(session.end)||session.end<=session.start){alert('Horários inválidos.');return}const record={id:uid(),type:'activity',name:session.name.slice(0,50),start:session.start,end:session.end,note:'',source:'point'};const previousTotal=total(p);p.records.push(record);delete p.pointSession;if(!save()){p.records=p.records.filter(r=>r.id!==record.id);p.pointSession=session;return}render();toast('Trabalho salvo');/* Cerimônias disponíveis na galeria */};
+ }
+}
+
+// Foco: sessões orientadas à entrega ou à dedicação, com pausas persistidas.
+// Os intervalos efetivos são gravados em segments e reutilizados pelo motor de tempo.
+function focusMs(f,at=now()){
+ return (f.segments||[]).reduce((sum,x)=>sum+Math.max(0,x[1]-x[0]),0)+(f.runningSince?Math.max(0,at-f.runningSince):0);
+}
+function renderFocus(p){
+ if(!p){main.innerHTML=header('Foco','Abra um projeto para registrar sessões.');return}
+ const f=p.focusSession;
+ if(!f){
+  const completed=p.records.filter(r=>r.source==='focus');
+  main.innerHTML=header('Sessões de Foco',esc(p.name))+`<section class="panel"><h2>Planejar sessão</h2><p class="help">Defina o compromisso antes de iniciar. Mais tempo não significa melhor resultado.</p><form id="focusForm"><label class="field">Atividade (até 50 caracteres)<input name="name" maxlength="50" required placeholder="Ex.: Revisar capítulo 3"></label><label class="field">Objetivo (até 200 caracteres)<textarea name="goal" maxlength="200" rows="2" required placeholder="Ex.: Revisar cinco páginas"></textarea></label><label class="field">Tipo de compromisso<select name="mode"><option value="delivery">Entrega — alcançar um resultado no prazo</option><option value="dedication">Dedicação — reservar tempo de concentração</option></select></label><label class="field">Duração planejada (minutos, de 1 a 1440)<input name="minutes" type="number" min="1" max="1440" value="60" required></label><div class="actions"><button class="btn primary" type="submit">▶ Iniciar sessão</button></div></form></section><section class="panel"><h2>Histórico de Foco</h2>${focusHistory(completed)}</section>`;
+  $('#focusForm').onsubmit=e=>{e.preventDefault();const d=new FormData(e.currentTarget),name=String(d.get('name')||'').trim().slice(0,50),goal=String(d.get('goal')||'').trim().slice(0,200),minutes=Number(d.get('minutes')),mode=d.get('mode');if(!name||!goal||!Number.isInteger(minutes)||minutes<1||minutes>1440||!['delivery','dedication'].includes(mode))return;if(p.pointSession||running(p)||p.habits.some(h=>h.timer?.runningSince)){toast('Finalize ou pause o Ponto e os Hábitos ativos antes de iniciar Foco.');return}p.focusSession={name,goal,mode,plannedMs:minutes*60000,start:now(),runningSince:now(),segments:[]};if(!save()){delete p.focusSession;return}render();toast('Sessão iniciada. Você pode navegar pelo aplicativo.')};return;
+ }
+ if(!f.runningSince&&f.assessing){renderFocusAssessment(p);return}const elapsed=focusMs(f),paused=!f.runningSince;
+ main.innerHTML=header('Sessões de Foco',esc(p.name))+`<section class="panel"><h2>${esc(f.name)}</h2><p><strong>Objetivo:</strong> ${esc(f.goal)}</p><p class="help">${f.mode==='delivery'?'Compromisso de entrega':'Compromisso de dedicação'} · Início: ${stamp(f.start)} · Planejado: ${duration(f.plannedMs)}</p><div class="modal-time" id="focusElapsed" role="timer" aria-label="Tempo efetivo">${duration(elapsed)}</div><p id="focusDeviation" class="help">${focusDeviation(elapsed,f.plannedMs)}</p><p class="help">${paused?'Sessão pausada. O tempo de pausa não é contabilizado.':'Sessão em andamento. A contagem continua ao navegar ou reabrir o aplicativo.'}</p><div class="actions"><button class="btn" id="focusToggle" type="button">${paused?'▶ Retomar':'⏸ Pausar'}</button><button class="btn primary" id="focusFinish" type="button">✓ Avaliar e concluir</button><button class="btn" id="focusDiscard" type="button">Descartar</button></div></section>`;
+ $('#focusToggle').onclick=()=>{const at=now();if(f.runningSince){if(at>f.runningSince)f.segments.push([f.runningSince,at]);f.runningSince=null}else{if(p.pointSession||p.habits.some(h=>h.timer?.runningSince)){toast('Pause os outros cronômetros antes de retomar Foco.');return}f.runningSince=at}save();render()};
+ $('#focusDiscard').onclick=()=>{if(!ask('Descartar esta sessão sem registrar tempo?'))return;delete p.focusSession;if(!save()){p.focusSession=f;return}render()};
+ $('#focusFinish').onclick=()=>{const at=now();if(f.runningSince&&at>f.runningSince)f.segments.push([f.runningSince,at]);f.runningSince=null;f.assessing=true;if(!save())return;renderFocusAssessment(p)};
+}
+function focusDeviation(actual,planned){const diff=Math.round((actual-planned)/60000);return Math.abs(diff)<1?'Dentro do tempo planejado.':diff>0?`Tempo previsto excedido em ${diff} minuto(s).`:`${Math.abs(diff)} minuto(s) abaixo do tempo previsto.`}
+function focusHistory(rows){if(!rows.length)return '<p class="muted">Nenhuma sessão concluída.</p>';return `<div class="table-wrap"><table><thead><tr><th>Data</th><th>Atividade</th><th>Planejado</th><th>Efetivo</th><th>Resultado</th></tr></thead><tbody>${[...rows].sort((a,b)=>b.start-a.start).slice(0,50).map(r=>`<tr><td>${stamp(r.start)}</td><td>${esc(r.name)}<div class="muted">${esc(r.focusGoal||'')}</div></td><td>${duration(r.plannedMs||0)}</td><td>${duration((r.segments||[]).reduce((n,x)=>n+x[1]-x[0],0))}</td><td>${r.focusResult==='yes'?'Alcançado':r.focusResult==='partial'?'Parcial':r.focusResult==='no'?'Não alcançado':'—'}</td></tr>`).join('')}</tbody></table></div>`}
+function renderFocusAssessment(p){const f=p.focusSession;if(!f)return;const actual=focusMs(f);main.innerHTML=header('Avaliação do Foco',esc(p.name))+`<section class="panel"><h2>${esc(f.name)}</h2><p><strong>Objetivo:</strong> ${esc(f.goal)}</p><p>Planejado: ${duration(f.plannedMs)} · Efetivo: ${duration(actual)}</p><p>${focusDeviation(actual,f.plannedMs)}</p><p class="help">O tempo excedente não é considerado vitória automática. Avalie o resultado conforme o objetivo estabelecido.</p><form id="focusAssessment"><label class="field">O objetivo foi alcançado?<select name="result" required><option value="yes">Sim, integralmente</option><option value="partial">Parcialmente</option><option value="no">Não</option></select></label><label class="field">Observação (opcional, até 200 caracteres)<textarea name="reflection" maxlength="200" rows="2"></textarea></label><div class="actions"><button class="btn primary" type="submit">Salvar sessão</button><button class="btn" type="button" id="focusResume">Retomar sessão</button></div></form></section>`;
+ $('#focusResume').onclick=()=>{f.assessing=false;f.runningSince=now();save();render()};
+ $('#focusAssessment').onsubmit=e=>{e.preventDefault();const d=new FormData(e.currentTarget),result=d.get('result');if(!['yes','partial','no'].includes(result))return;const record={id:uid(),type:'activity',source:'focus',name:f.name,start:f.start,end:now(),segments:f.segments.map(x=>[...x]),plannedMs:f.plannedMs,focusMode:f.mode,focusGoal:f.goal,focusResult:result,focusReflection:String(d.get('reflection')||'').slice(0,200),note:''};if(!record.segments.length){toast('A sessão não possui tempo efetivo. Retome e trabalhe antes de salvar.');return}p.records.push(record);delete p.focusSession;if(!save()){p.records.pop();p.focusSession=f;return}render();toast('Sessão de Foco registrada no Meu Dia e Calendário.')};
+}
+function manual(){
+ const p=project();
+ if(!p){show('<h2>Entrada manual (retroativa)</h2><p>Selecione um projeto em Meus Projetos antes de lançar uma atividade.</p><div class="modal-actions"><button class="btn" data-action="cancel">Fechar</button></div>');return;}
+ const d=new Date();
+ const months=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+ const timeOptions=(max,selected)=>Array.from({length:max},(_,i)=>`<option value="${i}" ${i===selected?'selected':''}>${pad(i)}</option>`).join('');
+ const dateFields=(prefix,title)=>`<fieldset><legend>${title}</legend><div class="form-grid"><label class="field">Dia<input name="${prefix}Day" type="number" min="1" max="31" value="${d.getDate()}" required></label><label class="field">Mês<select name="${prefix}Month">${months.map((m,i)=>`<option value="${i}" ${i===d.getMonth()?'selected':''}>${m}</option>`).join('')}</select></label><label class="field">Ano<input name="${prefix}Year" type="number" min="1970" max="9999" value="${d.getFullYear()}" required></label></div><div class="form-grid two"><label class="field">Hora (24h)<select name="${prefix}Hour">${timeOptions(24,d.getHours())}</select></label><label class="field">Minuto<select name="${prefix}Minute">${timeOptions(60,prefix==='start'?Math.max(0,d.getMinutes()-1):d.getMinutes())}</select></label></div></fieldset>`;
+ show(`<h2>Entrada manual (retroativa)</h2><form id="manualForm"><label class="field">Título da atividade (máximo 50 caracteres)<input name="name" maxlength="50" required placeholder="O que você realizou?"></label>${dateFields('start','Data e horário de início')}${dateFields('end','Data e horário de término')}<p class="help">O término pode ocorrer no mesmo dia ou em um dia posterior. O tempo será contabilizado em cada dia efetivamente trabalhado.</p><div class="modal-actions">${btn('Cancelar','cancel')}<button class="btn primary" type="submit">Lançar entrada</button></div></form>`);
+ const f=$('#manualForm');
+ f.onsubmit=e=>{
+  e.preventDefault();const x=f.elements,name=x.name.value.trim().slice(0,50);
+  const parseDate=prefix=>{
+   const year=Number(x[prefix+'Year'].value),month=Number(x[prefix+'Month'].value),day=Number(x[prefix+'Day'].value),hour=Number(x[prefix+'Hour'].value),minute=Number(x[prefix+'Minute'].value);
+   if(!Number.isInteger(year)||year<1970||year>9999||!Number.isInteger(month)||month<0||month>11||!Number.isInteger(day)||day<1||day>31||!Number.isInteger(hour)||hour<0||hour>23||!Number.isInteger(minute)||minute<0||minute>59)return null;
+   const date=new Date(0);date.setFullYear(year,month,day);date.setHours(hour,minute,0,0);
+   if(date.getFullYear()!==year||date.getMonth()!==month||date.getDate()!==day||date.getHours()!==hour||date.getMinutes()!==minute)return null;
+   return date.getTime();
   };
-
-  function unitLabel(name, count) {
-    return count === 1
-      ? name
-      : (UNIT_PLURALS[name] || name + "s");
+  const start=parseDate('start'),end=parseDate('end');
+  if(!name||start===null||end===null||end<=start||end>now()){
+   alert('Verifique o título, as datas e os horários. O término deve ser posterior ao início e não pode estar no futuro.');return;
   }
+  addRecord(p,{type:'activity',name,start,end,note:'',source:'manual'});close();
+ };
+}
+function newHabit(){const p=project();show(`<h2>Criar hábito</h2><form id="habitForm"><label class="field">Nome do hábito<input name="name" maxlength="50" required></label><label class="field">Categoria<select name="category">${[...HABIT_CATEGORIES,"Personalizado"].map(c=>`<option value="${esc(c)}" ${c==="Personalizado"?"selected":""}>${esc(c)}</option>`).join("")}</select></label><label class="field">Duração estipulada (minutos)<input name="minutes" type="number" min="1" max="1440" value="30" required></label><div class="modal-actions">${btn('Cancelar','cancel')}<button class="btn primary" type="submit">Criar hábito</button></div></form>`);$('#habitForm').onsubmit=e=>{e.preventDefault();const x=e.target.elements,name=x.name.value.trim(),minutes=+x.minutes.value;if(!name||!Number.isInteger(minutes)||minutes<1||minutes>1440)return;const canEquip=equippedCount(p)<MAX_EQUIPPED;p.habits.push({id:uid(),name:name.slice(0,50),minutes,category:x.category.value,custom:true,equipped:canEquip});if(!canEquip)toast('Hábito criado no inventário. Desequipe outro para ativá-lo.');save();close();render()}}
+function runHabit(id){const p=project(),h=p.habits.find(h=>h.id===id);if(!h)return;show(`<h2>Concluir hábito</h2><p><strong>${esc(h.name)}</strong> · ${h.minutes} minutos</p><p class="help">O intervalo será registrado retroativamente, terminando no momento da confirmação. Confirme apenas se realizou o hábito durante esse período.</p><form id="runForm"><label class="field">Observação (opcional)<textarea name="note" maxlength="50"></textarea><small id="count">0/50</small></label><div class="modal-actions">${btn('Cancelar','cancel')}<button class="btn primary" type="submit">Confirmar conclusão</button></div></form>`);const f=$('#runForm');f.elements.note.oninput=()=>$('#count').textContent=`${f.elements.note.value.length}/50`;f.onsubmit=e=>{e.preventDefault();const end=now();close();addRecord(p,{type:'habit',habitId:h.id,name:h.name,start:end-h.minutes*60000,end,note:f.elements.note.value.slice(0,50),source:'habit'})}}
+function backup(){const payload={app:'Impulso',version:1,exportedAt:new Date().toISOString(),data:state};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`impulso-backup-${dateKey(now())}.json`;a.click();try{localStorage.setItem(STORAGE_BACKUP_DATE,new Date().toISOString())}catch{}setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function exportProject(){
+ const p=project();
+ if(!p){toast('Abra um projeto antes de exportar.');return}
+ const payload={app:'Impulso',version:1,kind:'project',exportedAt:new Date().toISOString(),project:structuredClone(p)};
+ const slug=p.name.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,45)||'projeto';
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;
+ a.download=`impulso-projeto-${slug}-${dateKey(now())}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function importProject(file){
+ if(!file)return;
+ if(file.size>40*1024*1024){alert('Arquivo maior que 40 MB.');return}
+ const reader=new FileReader;
+ reader.onload=()=>{
+  try{
+   const payload=JSON.parse(reader.result);
+   if(!payload||payload.app!=='Impulso'||payload.version!==1||payload.kind!=='project'||!payload.project||typeof payload.project!=='object')throw Error('Selecione um projeto individual exportado pelo Impulso.');
+   // Reutiliza as mesmas verificações estruturais usadas na restauração geral.
+   validate({app:'Impulso',version:1,data:{projects:[payload.project]}});
+   const imported=structuredClone(payload.project);
+   normalize(imported);
+   if(state.projects.length>=10000)throw Error('Limite de projetos atingido.');
+   const collision=state.projects.some(p=>p.id===imported.id);
+   if(!ask(collision?`O projeto "${imported.name}" já possui o mesmo identificador de um projeto existente. Importar uma cópia independente, sem substituir o original?`:`Importar o projeto "${imported.name}" sem apagar os projetos existentes?`))return;
+   // Cada importação cria um projeto independente, mesmo ao importar o mesmo arquivo novamente.
+   imported.id=uid();
+   const previous=state.active;
+   state.projects.push(imported);
+   state.active=imported.id;
+   if(!save()){state.projects.pop();state.active=previous;return}
+   page='inicio';render();toast('Projeto importado com sucesso');
+  }catch(e){alert('Falha ao importar projeto: '+e.message)}
+ };
+ reader.onerror=()=>alert('Não foi possível ler o arquivo.');
+ reader.readAsText(file);
+}
+function validate(o){if(o?.kind==='project')throw Error('Este arquivo contém apenas um projeto. Restaurar Backup aceita somente um Backup Geral.');if(!o||o.app!=='Impulso'||o.version!==1||!o.data||!Array.isArray(o.data.projects)||o.data.projects.length>10000)throw Error('Backup inválido ou incompatível');const ids=new Set;for(const p of o.data.projects){if(typeof p.id!=='string'||ids.has(p.id)||typeof p.name!=='string'||p.name.length>50||!Array.isArray(p.records)||!Array.isArray(p.habits))throw Error('Estrutura de projeto inválida');ids.add(p.id);if(p.records.length>200000||p.habits.length>20000)throw Error('Backup excede os limites');if(p.elixirs!==undefined&&(!Array.isArray(p.elixirs)||p.elixirs.length>200||p.elixirs.some(c=>!c||!Number.isInteger(c.bossId)||c.bossId<1||c.bossId>200||typeof c.recordId!=='string')))throw Error('Coleção de Elixires inválida');if(p.pointSession!==undefined){const q=p.pointSession;if(!q||typeof q.name!=='string'||!q.name.trim()||q.name.length>50||typeof(q.note??'')!=='string'||(q.note||'').length>50||!Number.isFinite(q.start)||q.start<0||!['running','stopped'].includes(q.status)||(q.status==='stopped'&&(!Number.isFinite(q.end)||q.end<=q.start)))throw Error('Ponto em andamento inválido')}if(p.focusSession!==undefined){const f=p.focusSession;if(!f||typeof f.name!=='string'||!f.name.trim()||f.name.length>50||typeof f.goal!=='string'||f.goal.length>200||!['delivery','dedication'].includes(f.mode)||!Number.isFinite(f.start)||!Number.isFinite(f.plannedMs)||f.plannedMs<60000||f.plannedMs>86400000||!Array.isArray(f.segments)||f.segments.length>100000||f.segments.some(x=>!Array.isArray(x)||x.length!==2||!Number.isFinite(x[0])||!Number.isFinite(x[1])||x[1]<=x[0])||(f.runningSince!=null&&!Number.isFinite(f.runningSince)))throw Error('Sessão de Foco inválida')}for(const r of p.records){if(typeof r.id!=='string'||!['start','end','habit','activity'].includes(r.type)||!Number.isFinite(r.start)||r.start<0||r.start>8640000000000000||(r.end!==undefined&&(!Number.isFinite(r.end)||r.end<r.start))||typeof(r.note??'')!=='string'||(r.note||'').length>50)throw Error('Registro inválido')}for(const h of p.habits){if(typeof h.id!=='string'||typeof h.name!=='string'||h.name.length>200||!Number.isInteger(h.minutes)||h.minutes<1||h.minutes>1440)throw Error('Hábito inválido')}}return o.data}
+function importBackup(file){if(!file)return;if(file.size>40*1024*1024){alert('Arquivo maior que 40 MB.');return}const reader=new FileReader;reader.onload=()=>{try{const data=validate(JSON.parse(reader.result));if(!ask('Restaurar este backup substituirá TODOS os projetos atuais. Deseja continuar?'))return;const old=state;state=data;state.projects.forEach(normalize);if(!project())state.active=state.projects[0]?.id||null;if(!save()){state=old;return}page='inicio';render();toast('Backup restaurado')}catch(e){alert('Falha ao importar: '+e.message)}};reader.readAsText(file)}
+function printReport(projectsOnly=false,selectedDay=null){
+ const previous=main.innerHTML,p=project();
+ if(projectsOnly){main.innerHTML=header('Lista de projetos',`Emitido em ${stamp(now())}`)+`<section class="panel">${state.projects.map(x=>`<p><strong>${esc(x.name)}</strong> — ${stamp(x.created)} — ${mins(total(x))}</p>`).join('')}</section>`}
+ else if(p){
+  const groups=dayGroups(p);
+  if(selectedDay&&!/^\d{2}-\d{2}-\d{4}$/.test(selectedDay))return;
+  if(selectedDay&&!groups.has(selectedDay)){toast('Nenhum registro para imprimir nesta data.');return}
+  const days=[...groups.keys()].filter(d=>!selectedDay||d===selectedDay).sort((a,b)=>a.split('-').reverse().join('-').localeCompare(b.split('-').reverse().join('-')));
+  const summary=selectedDay?`<section class="panel"><h2>Resumo do dia</h2><div class="grid">${metric(mins(dayTotal(p,selectedDay)),'Tempo trabalhado no dia')}${metric(groups.get(selectedDay).length,'Registros do dia')}</div></section>`:`<section class="panel"><h2>Resumo do projeto</h2><div class="grid">${metric(mins(total(p)),'Tempo acumulado')}${metric(p.records.filter(r=>r.type==='habit').length,'Hábitos realizados')}${metric(bossStatus(p).done+'/'+BOSS_COUNT,'Chefões derrotados')}${metric((total(p)/36000000000).toFixed(3)+'%','Maestria')}</div></section>`;
+  main.innerHTML=header(selectedDay?`Meu Dia ${selectedDay} — ${esc(p.name)}`:`Relatório — ${esc(p.name)}`,`Emitido em ${stamp(now())}`)+summary+days.map(day=>`<section class="day"><div class="day-head"><h2>Meu Dia ${day}</h2><strong>Total trabalhado: ${mins(dayTotal(p,day))}</strong></div><table><thead><tr><th>Atividade</th><th>Nome</th><th>Início</th><th>Término</th></tr></thead><tbody>${groups.get(day).sort((a,b)=>a.start-b.start).map(r=>`<tr><td>${recordKind(r)}</td><td>${esc(recordName(r))}${r.end>r.start&&dateKey(r.start)!==dateKey(r.end)?`<div class="muted">Neste dia: ${mins(dayPart(r,day))} · Total da atividade: ${duration(r.end-r.start)}</div>`:""}</td><td>${r.type==='legacyEnd'?'—':stamp(r.start)}</td><td>${r.end?stamp(r.end):r.type==='legacyEnd'?stamp(r.start):'—'}</td></tr>`).join('')}</tbody></table></section>`).join('');
+ }else return;
+ const restore=()=>{window.removeEventListener('afterprint',restore);render()};
+ window.addEventListener('afterprint',restore);
+ window.print();
+ setTimeout(()=>{if(main.innerHTML!==previous)restore()},1500);
+}
+function about(){
+ show(`<div class="about-content"><h2>Sobre o Impulso</h2>
+ <p><strong>Impulso — Motor de Produtividade Pessoal</strong></p>
+ <p><strong>Versão:</strong> 58<br><strong>Atualização:</strong> 13 de novembro de 2026</p>
+ <p>PWA pessoal, offline-first e sem conta obrigatória. Organize projetos independentes, registre tempo e hábitos e acompanhe uma jornada simbólica de <strong>10.000 horas</strong>.</p>
+ <h3>Recursos do aplicativo</h3>
+ <ul>
+ <li><strong>Projetos:</strong> espaços independentes, com registros, hábitos e conquistas próprios.</li>
+ <li><strong>Ponto e Entradas retroativas:</strong> registro de trabalhos e hábitos anteriores, inclusive períodos que atravessam a meia-noite.</li>
+ <li><strong>Meu Dia:</strong> registros por data e histórico, com impressão.</li>
+ <li><strong>Hábitos:</strong> Pomodoro, inventário com 200 sugestões em 25 categorias, pesquisa e hábitos personalizados; até seis equipados.</li>
+ <li><strong>Arena e Codex:</strong> campanha de 200 chefões e enciclopédia de adversários.</li>
+ <li><strong>Elixires:</strong> 200 recompensas colecionáveis liberadas por cofres associados a chefões e conclusões de hábitos.</li>
+ <li><strong>Visão:</strong> foguete revelado em 200 quadradinhos escolhidos pelo usuário, com créditos obtidos dos Elixires colecionáveis.</li>
+ <li><strong>Radar e Estatísticas:</strong> progresso temporal, análises por projeto e globais, gráficos e relatórios.</li>
+ <li><strong>Armazenamento e backups:</strong> diagnóstico local, exportação e restauração em JSON.</li>
+ <li><strong>Alertas:</strong> lembretes opcionais enquanto o aplicativo está aberto.</li>
+ <li><strong>Configuração:</strong> sete identidades cromáticas, modos claro/escuro e splash cinematográfico Ignição.</li>
+ </ul>
+ <p><strong>Privacidade:</strong> os registros permanecem neste navegador, sem sincronização automática. Faça backups e guarde cópias externas; limpar os dados do site pode apagar seus projetos.</p>
+ <p><strong>Atenção:</strong> a meta de 10.000 horas é simbólica, não certifica maestria. O Impulso não é um relógio de ponto homologado.</p>
+ <p><a href="https://magpe-stack.github.io/Impulso/" target="_blank" rel="noopener noreferrer">Abrir aplicativo</a> · <a href="https://github.com/magpe-stack/Impulso" target="_blank" rel="noopener noreferrer">Código-fonte</a> · <a href="https://github.com/magpe-stack/Impulso/blob/main/README.md" target="_blank" rel="noopener noreferrer">Manual completo</a></p>
+ <div class="actions"><button class="btn primary" type="button" data-cancel>Fechar</button></div></div>`);
+}
+function requestAppExit(){
+ show(`<h2>Sair do Impulso?</h2><p>Seus projetos e registros salvos permanecerão neste navegador. Uma sessão de Ponto em andamento poderá continuar contabilizando o tempo até ser finalizada.</p><p class="help">O navegador pode impedir que um site feche sua própria janela. Nesse caso, será exibida uma tela de saída.</p><div class="modal-actions"><button type="button" class="btn" data-action="cancel">Cancelar</button><button type="button" class="btn primary" data-action="exit-confirm">Sair do aplicativo</button></div>`);
+}
+function confirmAppExit(){
+ close();setMenu(false);
+ const standalone=window.matchMedia?.('(display-mode: standalone)').matches||window.navigator.standalone===true;
+ document.body.classList.add('impulso-exited');
+ let screen=document.getElementById('impulsoExitScreen');
+ if(!screen){screen=document.createElement('section');screen.id='impulsoExitScreen';screen.setAttribute('role','region');screen.setAttribute('aria-label','Saída do Impulso');screen.innerHTML=`<div class="exit-content"><img src="rocket-192-v11.png" alt="" width="76" height="76"><h1>Impulso</h1><h2>Até a próxima jornada!</h2><p>Você pode fechar esta aba ou janela. Seus dados salvos permanecem no dispositivo.</p><button type="button" class="btn primary" data-action="exit-return">Voltar ao Impulso</button></div>`;document.body.append(screen)}
+ screen.hidden=false;screen.querySelector('button')?.focus();
+ if(standalone){try{window.close()}catch(e){/* O navegador pode impedir o fechamento. */}}
+}
+function returnFromExit(){const screen=document.getElementById('impulsoExitScreen');if(screen)screen.hidden=true;document.body.classList.remove('impulso-exited');page='inicio';render();document.querySelector('#main')?.focus()}
+function action(name){switch(name){case 'exit':requestAppExit();break;case 'exit-confirm':confirmAppExit();break;case 'exit-return':returnFromExit();break;case 'alerts':page='alertas';render();break;case 'storage':page='armazenamento';render();break;case 'statistics':page='estatisticas';render();break;case 'new':newProject();break;case 'projects':page='projetos';render();break;case 'day':page='dia';render();break;case 'radar':page='radar';render();break;case 'point':point();break;case 'manual':page='entradas';render();break;case 'manualPoint':manual();break;case 'manualHabit':manualHabit();break;case 'habitPage':page='habitos';render();break;case 'backup':backup();break;case 'export':exportProject();break;case 'import':$('#importFile').click();break;case 'importProject':$('#importProjectFile').click();break;case 'print':printReport();break;case 'printProjects':printReport(true);break;case 'newHabit':newHabit();break;case 'cancel':close();break}}
+const menuToggle=$('#menuToggle'),menuDrawer=$('#menuDrawer'),menuBackdrop=$('#menuBackdrop'),menuClose=$('#menuClose');
+function setMenu(open){menuDrawer.classList.toggle('open',open);menuDrawer.setAttribute('aria-hidden',String(!open));menuDrawer.inert=!open;menuBackdrop.hidden=!open;menuToggle.setAttribute('aria-expanded',String(open));menuToggle.setAttribute('aria-label',open?'Fechar menu':'Abrir menu');document.body.classList.toggle('menu-open',open);if(open){menuDrawer.querySelector('nav button, .menu-section button')?.focus()}else if(menuDrawer.contains(document.activeElement))menuToggle.focus()}
+menuToggle.addEventListener('click',()=>setMenu(!menuDrawer.classList.contains('open')));menuBackdrop.addEventListener('click',()=>setMenu(false));document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menuDrawer.classList.contains('open')){e.preventDefault();setMenu(false)}if(e.key==='Tab'&&menuDrawer.classList.contains('open')){const focusable=[...menuDrawer.querySelectorAll('button:not([disabled]),a[href]')];const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
+document.querySelector('.brand')?.addEventListener('click',e=>{if(location.origin==='https://magpe-stack.github.io'&&location.pathname.replace(/\/$/,'')==='/Impulso'){e.preventDefault();history.replaceState(null,'','/Impulso/#inicio');setMenu(false);page='inicio';render()}});
+document.addEventListener('click',e=>{const el=e.target.closest('#statsRefresh,#statsExport,#statsPrint,#storageRefresh,#storagePersist,[data-menu-group],[data-habit-category],[data-equip-catalog],[data-toggle-custom],[data-vision-tile],[data-vision-tab],[data-ceremony],[data-replay-ceremony],[data-enable-ceremony-motion],[data-elixir-id],[data-elixir-copy],[data-elixir-share],[data-codex-id],[data-action],[data-page],[data-open],[data-rename],[data-delete-project],[data-delete-record],[data-delete-pair],[data-run-habit],[data-habit-control],[data-delete-habit],[data-print-day],[data-calendar-move],[data-calendar-day]');if(!el)return;if(el.hasAttribute('data-calendar-move')){calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+Number(el.dataset.calendarMove),1);calendarSelectedDay=null;renderCalendar(project());return}if(el.dataset.calendarDay){calendarSelectedDay=el.dataset.calendarDay;renderCalendar(project());return}if(el.dataset.menuGroup){expandedMenuGroup=expandedMenuGroup===el.dataset.menuGroup?null:el.dataset.menuGroup;renderMenu();return}if(menuDrawer.contains(el))setMenu(false);if(el.dataset.habitCategory){habitCategory=el.dataset.habitCategory;document.querySelectorAll('[data-habit-category]').forEach(b=>{b.classList.toggle('selected',b.dataset.habitCategory===habitCategory);b.setAttribute('aria-pressed',String(b.dataset.habitCategory===habitCategory))});renderCatalogResults(project());return}if(el.dataset.equipCatalog){equipCatalog(Number(el.dataset.equipCatalog));return}if(el.dataset.toggleCustom){toggleCustomHabit(el.dataset.toggleCustom);return}if(el.dataset.visionTab){visionTab=el.dataset.visionTab;renderVision(project());return}if(el.hasAttribute('data-vision-tile')){revealVisionTile(Number(el.dataset.visionTile));return}if(el.dataset.ceremony){openCeremony(Number(el.dataset.ceremony));return}if(el.hasAttribute('data-enable-ceremony-motion')){enableCeremonyMotion();return}if(el.dataset.replayCeremony){restartCeremony();return}if(el.dataset.elixirId){openElixir(Number(el.dataset.elixirId));return}if(el.dataset.elixirCopy){copyElixir(Number(el.dataset.elixirCopy));return}if(el.dataset.elixirShare){shareElixir(Number(el.dataset.elixirShare));return}if(el.dataset.codexId){openCodexMonster(Number(el.dataset.codexId));return}if(el.dataset.printDay){printReport(false,el.dataset.printDay);return}if(el.id==='statsRefresh'){renderEstatisticas();return}if(el.id==='statsExport'){exportEstatisticas();return}if(el.id==='statsPrint'){printEstatisticas();return}if(el.id==='storageRefresh'){renderStorage();return}if(el.id==='storagePersist'){requestStoragePersistence();return}if(el.dataset.action){action(el.dataset.action);return}if(el.dataset.page){close();page=el.dataset.page;render();return}if(el.dataset.open){state.active=el.dataset.open;save();page='inicio';render();return}if(el.dataset.rename){rename(el.dataset.rename);return}if(el.dataset.deleteProject){if(!ask('Excluir este projeto e TODOS os seus registros, hábitos e progresso? Esta ação não pode ser desfeita.'))return;state.projects=state.projects.filter(p=>p.id!==el.dataset.deleteProject);if(!project())state.active=state.projects[0]?.id||null;save();render();return}if(el.dataset.deletePair){const ids=el.dataset.deletePair.split('|'),p=project();if(!p||!ask('Excluir este ponto antigo e seus registros de início e término?'))return;p.records=p.records.filter(r=>!ids.includes(r.id));save();render();return}if(el.dataset.deleteRecord){delRecord(el.dataset.deleteRecord);return}if(el.dataset.habitControl){habitControl(el.dataset.habitControl,el.dataset.mode);return}if(el.dataset.runHabit){runHabit(el.dataset.runHabit);return}if(el.dataset.deleteHabit){const p=project(),id=el.dataset.deleteHabit;if(!ask('Excluir este hábito? As execuções já registradas permanecerão no histórico e poderão ser excluídas individualmente.'))return;p.habits=p.habits.filter(h=>h.id!==id);save();render()}});
+document.addEventListener('input',e=>{if(e.target.id==='habitCatalogSearch'){habitSearch=e.target.value;renderCatalogResults(project())}});document.addEventListener('change',e=>{if(e.target.name==='impulsoPalette'){setImpulsoPalette(e.target.value)}if(e.target.name==='impulsoAppearance'){const dark=e.target.value==='dark';document.body.classList.toggle('dark',dark);localStorage.setItem(THEME,dark?'dark':'light');$('#theme').setAttribute('aria-pressed',String(dark))}if(e.target.id==='statsScope'){statsScope=e.target.value;renderEstatisticas()}if(e.target.id==='statsPeriod'){statsPeriod=e.target.value;renderEstatisticas()}if(e.target.id==='order'){order=e.target.value;render()}if(e.target.id==='habitsAlertToggle'){alertSettings.habits=e.target.checked;alertSettings.nextHabits=alertSettings.habits?Date.now()+BACKUP_INTERVAL:0;saveAlertSettings();if(!alertSettings.habits)hideHabitsAlert();renderConfiguracao()}if(e.target.id==='backupAlertToggle'){alertSettings.backup=e.target.checked;alertSettings.nextBackup=alertSettings.backup?Date.now()+BACKUP_INTERVAL:0;saveAlertSettings();if(!alertSettings.backup)hideBackupAlert();renderConfiguracao()}});$('#importFile').addEventListener('change',e=>{importBackup(e.target.files[0]);e.target.value=''});$('#importProjectFile').addEventListener('change',e=>{importProject(e.target.files[0]);e.target.value=''});$('#about').onclick=()=>{setMenu(false);about()};/* Impulso 42: escolha independente da identidade cromática e da luminosidade. */
+const PALETTE_KEY='impulso-palette';
+/* Estatísticas: cálculos locais, sem modificar o estado dos projetos. */
+let statsScope='project',statsPeriod='month';
+const ST_DAY=86400000,stNum=n=>Number(n||0).toLocaleString('pt-BR',{maximumFractionDigits:2}),stHours=ms=>`${stNum(ms/3600000)} h`;
+function stMid(t){const d=new Date(t);return new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime()}
+function stDay(t){const d=new Date(t);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
+function stBounds(){const n=now(),d=new Date(n),start=stMid(n);if(statsPeriod==='today')return [start,n];if(statsPeriod==='week')return [new Date(d.getFullYear(),d.getMonth(),d.getDate()-6).getTime(),n];if(statsPeriod==='month')return [new Date(d.getFullYear(),d.getMonth(),1).getTime(),n];if(statsPeriod==='year')return [new Date(d.getFullYear(),0,1).getTime(),n];return [0,n]}
+function stOverlap(a,b,lo,hi){return Math.max(0,Math.min(b,hi)-Math.max(a,lo))}
+function stParts(segments,lo,hi,cb){for(const [a,b] of segments){let t=Math.max(a,lo),end=Math.min(b,hi);while(t<end){const d=new Date(t),next=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1).getTime(),stop=Math.min(end,next);cb(t,stop);t=stop}}}
+function stRecordSegments(r){if(!['activity','habit'].includes(r.type))return [];if(Array.isArray(r.segments))return r.segments.filter(x=>Array.isArray(x)&&Number.isFinite(x[0])&&Number.isFinite(x[1])&&x[1]>x[0]);return Number.isFinite(r.start)&&Number.isFinite(r.end)&&r.end>r.start?[[r.start,r.end]]:[]}
+function stAdd(map,key,value){map.set(key,(map.get(key)||0)+value)}
+function stData(){const [lo,hi]=stBounds(),ps=statsScope==='all'?state.projects:(project()?[project()]:[]),days=new Map(),weekdays=Array(7).fill(0),hoursOfDay=Array(24).fill(0),types=new Map(),habits=new Map(),perProject=[],allSessions=[],allHabitDays=new Set();let totalMs=0,invalid=0,overlaps=0,habitRuns=0,allRecords=0,elixirs=0,bosses=0,cofres=0,largest=0;
+ for(const p of ps){let projectMs=0,projDays=new Map();const segments=intervals(p,false);for(const [a,b] of segments){const m=stOverlap(a,b,lo,hi);if(!m)continue;projectMs+=m;largest=Math.max(largest,m)}totalMs+=projectMs;
+ stParts(segments,lo,hi,(a,b)=>{const m=b-a,k=stDay(a);stAdd(days,k,m);stAdd(projDays,k,m);weekdays[new Date(a).getDay()]+=m;let t=a;while(t<b){const d=new Date(t),next=new Date(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours()+1).getTime(),e=Math.min(next,b);hoursOfDay[d.getHours()]+=e-t;t=e}});
+ const status=bossStatus(p);bosses+=status.done;const claims=elixirClaims(p);const claimed=claims instanceof Map?claims.size:claims instanceof Set?claims.size:Array.isArray(claims)?claims.length:Object.keys(claims||{}).length;elixirs+=claimed;cofres+=Math.max(0,status.done-claimed);
+ for(const r of p.records){allRecords++;if(!Number.isFinite(r.start)||r.start<0||(['activity','habit'].includes(r.type)&&(!Number.isFinite(r.end)||r.end<=r.start))){invalid++;continue}if(r.type==='start'||r.type==='end')continue;const segs=stRecordSegments(r);let durationMs=0;for(const [a,b] of segs)durationMs+=stOverlap(a,b,lo,hi);if(!durationMs)continue;const type=r.type==='habit'?'Hábito':r.source==='point'?'Ponto':'Entrada Manual';stAdd(types,type,durationMs);allSessions.push({duration:durationMs,start:r.start,end:r.end,type,project:p.name});if(r.type==='habit'){habitRuns++;const h=p.habits.find(x=>x.id===r.habitId),name=h?.name||r.name||'Hábito sem nome',key=p.id+'|'+(r.habitId||name);const item=habits.get(key)||{name,project:p.name,count:0,ms:0,days:new Set()};item.count++;item.ms+=durationMs;const day=stDay(r.end||r.start);item.days.add(day);allHabitDays.add(day);habits.set(key,item)}}
+ perProject.push({name:p.name,id:p.id,ms:projectMs,days:projDays.size,records:p.records.length,habits:p.habits.length,equipped:p.habits.filter(h=>h.equipped!==false).length,bosses:status.done,elixirs:claimed,allMs:total(p)});
+ }
+ const sortedDays=[...days.entries()].sort((a,b)=>a[0].localeCompare(b[0]));const first=sortedDays[0]?.[0],last=sortedDays.at(-1)?.[0];const periodDays=statsPeriod==='all'?(first&&last?Math.round((new Date(last+'T12:00:00')-new Date(first+'T12:00:00'))/ST_DAY)+1:0):Math.max(1,Math.round((stMid(hi)-stMid(lo))/ST_DAY)+1);
+ const hlist=[...habits.values()].sort((a,b)=>b.ms-a.ms),runs=[...allHabitDays].sort();let streak=0,recordStreak=0,prev=null;for(const day of runs){const t=new Date(day+'T12:00:00').getTime();if(prev!==null&&Math.round((t-prev)/ST_DAY)===1)streak++;else streak=1;recordStreak=Math.max(recordStreak,streak);prev=t}let currentStreak=0;if(runs.length){let cursor=stMid(now());const today=stDay(cursor),yesterday=stDay(new Date(cursor).setDate(new Date(cursor).getDate()-1));if(allHabitDays.has(today)||allHabitDays.has(yesterday)){cursor=stMid(new Date((allHabitDays.has(today)?today:yesterday)+'T12:00:00').getTime());while(allHabitDays.has(stDay(cursor))){currentStreak++;const d=new Date(cursor);cursor=new Date(d.getFullYear(),d.getMonth(),d.getDate()-1).getTime()}}}
+ let intersect=0;for(const p of ps){const raw=sorted(p).filter(r=>r.type==='activity'||r.type==='habit');const rawMs=raw.flatMap(stRecordSegments).reduce((sum,[a,b])=>sum+stOverlap(a,b,lo,hi),0);const unique=intervals(p).reduce((sum,[a,b])=>sum+stOverlap(a,b,lo,hi),0);intersect+=Math.max(0,rawMs-unique)}overlaps=intersect;
+ return {lo,hi,ps,days:sortedDays,weekdays,hoursOfDay,types,habits:hlist,perProject,totalMs,allSessions,habitRuns,allRecords,invalid,overlaps,elixirs,bosses,cofres,largest,periodDays,activeDays:days.size,currentStreak,recordStreak,first,last};
+}
+function stCard(label,value,detail=''){return `<article class="stats-card"><small>${esc(label)}</small><strong>${esc(String(value))}</strong>${detail?`<span>${esc(detail)}</span>`:''}</article>`}
+function stBars(items,unit='h',maxRows=14){const rows=items.slice(0,maxRows),max=Math.max(1,...rows.map(x=>x[1]));return rows.length?`<div class="stats-bars">${rows.map(([label,value])=>`<div class="stats-bar-row"><span title="${esc(label)}">${esc(label)}</span><div class="stats-track"><i style="width:${Math.max(0,Math.min(100,value/max*100))}%"></i></div><b>${unit==='h'?stHours(value):stNum(value)}</b></div>`).join('')}</div>`:'<p class="muted">Sem registros suficientes neste período.</p>'}
+function stLine(items){if(!items.length)return '<p class="muted">Ainda não há registros para construir o gráfico.</p>';const vals=items.map(x=>x[1]/3600000),max=Math.max(1,...vals),w=720,h=160,p=24,points=vals.map((v,i)=>`${p+(w-2*p)*i/Math.max(1,vals.length-1)},${h-p-(h-2*p)*v/max}`).join(' ');return `<div class="stats-chart"><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Gráfico de horas produtivas por dia"><line x1="${p}" y1="${h-p}" x2="${w-p}" y2="${h-p}" stroke="currentColor" opacity=".4"/><polyline points="${points}" fill="none" stroke="var(--color-4,#940065)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${vals.length===1?`<circle cx="${p}" cy="${h-p-(h-2*p)*vals[0]/max}" r="4" fill="var(--color-4,#940065)"/>`:''}</svg><div class="stats-chart-label"><span>${esc(items[0][0])}</span><span>Máximo: ${stNum(max)} h/dia</span><span>${esc(items.at(-1)[0])}</span></div></div>`}
+function stSection(title,body,note=''){return `<section class="panel stats-section"><h2>${esc(title)}</h2>${body}${note?`<p class="help">${esc(note)}</p>`:''}</section>`}
+function stStatsReport(){const d=stData(),label=statsScope==='all'?'Todos os projetos':project()?.name||'Projeto não selecionado',period={today:'Hoje',week:'Últimos 7 dias',month:'Mês atual',year:'Ano atual',all:'Todo o histórico'}[statsPeriod];return {app:'Impulso',kind:'estatisticas',generatedAt:new Date().toISOString(),scope:statsScope,scopeLabel:label,period,summary:{projects:d.ps.length,productiveHours:d.totalMs/3600000,activeDays:d.activeDays,periodDays:d.periodDays,recordedSessions:d.allSessions.length,habitCompletions:d.habitRuns,bossesDefeated:d.bosses,elixirs:d.elixirs,invalidRecords:d.invalid},dailyHours:d.days.map(([date,ms])=>({date,hours:ms/3600000})),byProject:d.perProject.map(x=>({name:x.name,hours:x.ms/3600000,bosses:x.bosses,elixirs:x.elixirs})),byActivity:[...d.types].map(([type,ms])=>({type,hours:ms/3600000})),habits:d.habits.map(x=>({name:x.name,project:x.project,completions:x.count,hours:x.ms/3600000}))}}
+function exportEstatisticas(){const data=JSON.stringify(stStatsReport(),null,2),url=URL.createObjectURL(new Blob([data],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download=`impulso-estatisticas-${statsScope}-${stDay(now())}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1200)}
+function printEstatisticas(){const title='Estatísticas — Impulso',body=$('#main').innerHTML,win=window.open('','_blank');if(!win){toast('Permita janelas para imprimir o relatório.');return}win.document.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${title}</title><style>body{font:13px Arial,sans-serif;color:#10141d;margin:25px}h1,h2{color:#42008a}section{break-inside:avoid;border-bottom:1px solid #ccc;padding:10px 0}.stats-card{display:inline-block;padding:9px;border:1px solid #ddd;margin:4px}.stats-card>*{display:block}.stats-bars{display:grid;gap:5px}.stats-bar-row{display:grid;grid-template-columns:170px 1fr 95px;gap:8px}.stats-track{background:#eee;height:12px}.stats-track i{display:block;height:100%;background:#42008a}.stats-chart svg{max-width:100%;height:150px}.stats-chart-label{display:flex;justify-content:space-between}.stats-toolbar,.stats-actions,button,select,.stats-help-control{display:none!important}.stats-cards{display:block}.stats-card strong{font-size:16px}.stats-section{margin-top:10px}.muted,.help{color:#555}a{color:inherit}@media print{body{margin:12mm}}</style></head><body><h1>Impulso — Relatório de Estatísticas</h1><p>Emitido em ${esc(new Date().toLocaleString('pt-BR'))}</p>${body}</body></html>`);win.document.close();win.focus();setTimeout(()=>win.print(),350)}
+function renderEstatisticas(){const d=stData(),global=statsScope==='all',period={today:'Hoje',week:'Últimos 7 dias',month:'Mês atual',year:'Ano atual',all:'Todo o histórico'}[statsPeriod],hours=d.totalMs/3600000,avgActive=d.activeDays?d.totalMs/d.activeDays:0,avgPeriod=d.periodDays?d.totalMs/d.periodDays:0,averageSession=d.allSessions.length?d.allSessions.reduce((a,x)=>a+x.duration,0)/d.allSessions.length:0,projectGoal=global?d.ps.length*36000000000:36000000000,goalPct=projectGoal?Math.min(100,d.ps.reduce((a,p)=>a+Math.min(total(p),36000000000),0)/projectGoal*100):0;
+ const dayMap=new Map(d.days),todayMid=stMid(now()),daily14=Array.from({length:14},(_,i)=>{const date=new Date(todayMid);date.setDate(date.getDate()-13+i);const key=stDay(date.getTime());return [key,dayMap.get(key)||0]}),recent=daily14.slice(-7),previous=daily14.slice(0,7),recentMs=recent.reduce((a,x)=>a+x[1],0),prevMs=previous.reduce((a,x)=>a+x[1],0),trend=statsPeriod==='all'||statsPeriod==='year'||statsPeriod==='month'?prevMs>0?`${recentMs>=prevMs?'+':''}${stNum((recentMs-prevMs)/prevMs*100)}%`:'Dados insuficientes':'Compare no período mensal, anual ou histórico';const projected=recentMs>0&&!global?`${stNum(Math.max(0,36000000000-total(project()))/(recentMs/7)/365)} anos (estimativa)`:'Não disponível';
+ const hoursByWeekday=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].map((x,i)=>[x,d.weekdays[i]]);const bySlot=[0,6,12,18].map(h=>[`${pad(h)}–${pad(h+6)}h`,d.hoursOfDay.slice(h,h+6).reduce((a,b)=>a+b,0)]);
+ const habitCount=d.ps.reduce((a,p)=>a+p.habits.length,0),equipped=d.ps.reduce((a,p)=>a+p.habits.filter(h=>h.equipped!==false).length,0),projTotalBytes=d.ps.reduce((a,p)=>a+storageBytes(JSON.stringify(p)),0);
+ const activityRows=[...d.types.entries()].sort((a,b)=>b[1]-a[1]);const habits=d.habits.map(x=>[`${x.name}${global?' · '+x.project:''}`,x.ms]);
+ main.innerHTML=header('Estatísticas','Central de análise e desempenho — medições reais dos registros locais.')+`<section class="panel"><div class="stats-toolbar"><label>Visão<select id="statsScope"><option value="project" ${!global?'selected':''}>Projeto atual</option><option value="all" ${global?'selected':''}>Todos os projetos</option></select></label><label>Período<select id="statsPeriod">${[['today','Hoje'],['week','Últimos 7 dias'],['month','Mês atual'],['year','Ano atual'],['all','Todo o histórico']].map(([v,t])=>`<option value="${v}" ${statsPeriod===v?'selected':''}>${t}</option>`).join('')}</select></label></div><p class="muted">${esc(global?'Visão global — projetos independentes':project()?.name||'Nenhum projeto aberto')} · ${esc(period)} · Atualizado em ${esc(new Date().toLocaleString('pt-BR'))}</p><div class="actions stats-actions"><button class="btn" id="statsRefresh">↻ Atualizar</button><button class="btn" id="statsExport">⬇ Exportar JSON</button><button class="btn primary" id="statsPrint">▣ Imprimir</button></div><p class="help">Na visão global, horas de projetos simultâneos são somadas por projeto. O cálculo não representa tempo cronológico único.</p></section>`;
+ if(!d.ps.length){main.innerHTML+=stSection('Comece por um projeto','<p>Crie ou abra um projeto para gerar estatísticas. Não há dados para analisar.</p>');return}
+ main.innerHTML+=stSection('1. Produtividade',`<div class="stats-cards">${stCard('Tempo produtivo',stHours(d.totalMs))}${stCard('Dias com atividade',d.activeDays)}${stCard('Média por dia ativo',stHours(avgActive))}${stCard('Média por dia do período',stHours(avgPeriod))}${stCard('Sessões registradas',d.allSessions.length)}${stCard('Maior intervalo contínuo',stHours(d.largest))}${stCard('Média por sessão',stHours(averageSession))}${stCard('Frequência de dias',d.periodDays?`${stNum(d.activeDays/d.periodDays*100)}%`:'Não disponível')}</div>`, 'Sessões são registros individuais de atividade/hábito; pontos antigos em pares início/fim podem não representar uma sessão individual. Intervalos sobrepostos dentro do mesmo projeto não são somados duas vezes no tempo produtivo.');
+ main.innerHTML+=stSection('2. Hábitos',`<div class="stats-cards">${stCard('Hábitos cadastrados',habitCount)}${stCard('Hábitos equipados',equipped)}${stCard('Conclusões no período',d.habitRuns)}${stCard('Dias com conclusão',d.habits.length?d.habits.reduce((a,h)=>{for(const day of h.days)a.add(day);return a},new Set()).size:0)}${stCard('Sequência atual',`${d.currentStreak} dia(s)`)}${stCard('Maior sequência',`${d.recordStreak} dia(s)`)}</div><h3>Ranking por tempo de hábito</h3>${stBars(habits,'h',12)}<h3>Frequência de conclusão</h3>${stBars(d.habits.slice(0,12).map(x=>[x.name+(global?' · '+x.project:''),x.count]),'count')}`,'As sequências consideram dias com conclusão dentro do período selecionado. Não há taxa de sucesso de tentativas sem registrar tentativas e cancelamentos.');
+ main.innerHTML+=stSection('3. Desempenho temporal',`<h3>Tempo por faixa horária</h3>${stBars(bySlot)}<h3>Tempo por dia da semana</h3>${stBars(hoursByWeekday)}<h3>Distribuição por tipo de atividade</h3>${stBars(activityRows)}`,'O tempo é repartido por hora e dia, inclusive quando uma atividade atravessa a meia-noite.');
+ const sortedProjects=[...d.perProject].sort((a,b)=>b.ms-a.ms);main.innerHTML+=stSection('4. Evolução dos projetos',`<div class="stats-cards">${stCard('Projetos analisados',d.ps.length)}${stCard('Meta total',`${stNum(d.ps.length*10000)} h`)}${stCard('Progresso das metas',`${stNum(goalPct)}%`)}${stCard('Horas restantes',stHours(d.ps.reduce((a,p)=>a+Math.max(0,36000000000-total(p)),0)))}${stCard('Projeção da meta',projected)}</div><div class="stats-track-wide" role="progressbar" aria-label="Progresso das metas de 10 mil horas" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${goalPct.toFixed(2)}"><i style="width:${goalPct}%"></i></div><h3>Tempo por projeto no período</h3>${stBars(sortedProjects.map(x=>[x.name,x.ms]),'h',25)}`,'O progresso das metas considera todo o histórico de cada projeto; a projeção é apenas matemática e depende de registros recentes.');
+ main.innerHTML+=stSection('5. Arena e RPG',`<div class="stats-cards">${stCard('Chefões derrotados',d.bosses)}${stCard('Chefões restantes',d.ps.length*BOSS_COUNT-d.bosses)}${stCard('Elixires conquistados',d.elixirs)}${stCard('Cofres aguardando Elixir',d.cofres)}${stCard('Coleção do Codex',`${stNum(d.bosses/(d.ps.length*BOSS_COUNT)*100)}%`)}</div>${global?'<p class="muted">Os chefões e Elixires são contados separadamente para cada projeto.</p>':''}`,'A Arena, o Codex e os Elixires refletem o progresso histórico atual, independentemente do filtro de datas.');
+ main.innerHTML+=stSection('6. Concentração e sessões',`<div class="stats-cards">${stCard('Sessões com duração',d.allSessions.length)}${stCard('Tempo médio de sessão',stHours(averageSession))}${stCard('Maior sessão registrada',stHours(d.allSessions.length?Math.max(...d.allSessions.map(x=>x.duration)):0))}${stCard('Menor sessão registrada',stHours(d.allSessions.length?Math.min(...d.allSessions.map(x=>x.duration)):0))}</div><h3>Duração das sessões</h3>${stBars([['Até 15 min',d.allSessions.filter(x=>x.duration<=900000).length],['15–30 min',d.allSessions.filter(x=>x.duration>900000&&x.duration<=1800000).length],['30–60 min',d.allSessions.filter(x=>x.duration>1800000&&x.duration<=3600000).length],['Mais de 60 min',d.allSessions.filter(x=>x.duration>3600000).length]],'count')}`,'Não é possível medir distrações, foco subjetivo ou pausas não registradas.');
+ const backupDate=localStorage.getItem(STORAGE_BACKUP_DATE),age=backupDate&&Number.isFinite(Date.parse(backupDate))?`${stNum((now()-Date.parse(backupDate))/ST_DAY)} dia(s)`:'Sem registro';main.innerHTML+=stSection('7. Armazenamento e integridade',`<div class="stats-cards">${stCard('Dados dos projetos analisados',storageFormat(projTotalBytes))}${stCard('Registros totais',d.allRecords)}${stCard('Registros inválidos detectados',d.invalid)}${stCard('Última solicitação de backup',age)}</div><p class="muted">Consulte a página Armazenamento para cota, cache offline, persistência e outras medições do navegador.</p>`,'O tamanho é uma estimativa do JSON. A data de backup registra apenas a solicitação de download, não a confirmação de salvamento.');
+ const dayChart=d.days.length>90?d.days.slice(-90):d.days;main.innerHTML+=stSection('8. Tendências e histórico',`<div class="stats-cards">${stCard('Variação recente',trend)}${stCard('Horas nos últimos 7 dias',stHours(recentMs))}${stCard('Primeiro dia com atividade',d.first||'Não disponível')}${stCard('Último dia com atividade',d.last||'Não disponível')}</div><h3>Horas por dia (até 90 dias com registros)</h3>${stLine(dayChart)}<h3>Últimos dias com atividade</h3>${stBars(d.days.slice(-14).map(([date,ms])=>[date,ms]),'h',14)}`,'A variação compara os últimos sete dias corridos com os sete anteriores, incluindo dias sem registros. Quando o filtro não abrange 14 dias, utilize mês, ano ou histórico para comparação.');
+}
 
-  const BOSSES = [
-    ["Procrastinação", "⏳"],
-    ["Preguiça", "🪨"],
-    ["Distração Digital", "📱"],
-    ["Cansaço Mental", "🧠"],
-    ["Paralisia por Análise", "🌀"],
-    ["Desorganização", "🌪️"],
-    ["Impaciência", "⚡"],
-    ["Inconstância", "🌊"],
-    ["Autossabotagem", "🕳️"],
-    ["Desistência", "🏔️"]
-  ];
+function renderConfiguracao(){
+ const selected=['original','vinho','blue-sky','trinity','granfino','ecologico','mistico'].includes(localStorage.getItem(PALETTE_KEY))?localStorage.getItem(PALETTE_KEY):'original';
+ const dark=document.body.classList.contains('dark');
+ main.innerHTML=header('Configurações','Temas e alertas do Impulso.')+`<section class="panel settings-palette"><h2>Identidade visual</h2><p>Escolha a paleta de cores. A seleção é independente do modo claro ou escuro e fica salva neste navegador.</p><fieldset class="palette-options"><legend>Paleta preferida</legend><label class="palette-option"><input type="radio" name="impulsoPalette" value="original" ${selected==='original'?'checked':''}><span><strong>Impulso Original</strong><small>Identidade cromática clássica do aplicativo.</small><span class="palette-swatches original" aria-hidden="true"><i></i><i></i><i></i></span></span></label><label class="palette-option"><input type="radio" name="impulsoPalette" value="vinho" ${selected==='vinho'?'checked':''}><span><strong>Impulso Vinho</strong><small>Magenta, roxo, rosa e cores de RPG inspiradas em Itten.</small><span class="palette-swatches vinho" aria-hidden="true"><i></i><i></i><i></i></span></span></label><label class="palette-option"><input type="radio" name="impulsoPalette" value="blue-sky" ${selected==='blue-sky'?'checked':''}><span><strong>Impulso Blue Sky</strong><small>Turquesa, azul-céu e azul intenso — harmonia análoga de Itten.</small><span class="palette-swatches blue-sky" aria-hidden="true"><i></i><i></i><i></i></span></span></label><label class="palette-option"><input type="radio" name="impulsoPalette" value="trinity" ${selected==='trinity'?'checked':''}><span><strong>Impulso Trinity</strong><small>Laranja Fogo, Verde Elixir e Roxo Magia — harmonia triádica de Itten.</small><span class="palette-swatches trinity" aria-hidden="true"><i></i><i></i><i></i></span></span></label><label class="palette-option"><input type="radio" name="impulsoPalette" value="granfino" ${selected==='granfino'?'checked':''}><span><strong>Impulso Granfino</strong><small>Grafite, prata e acentos refinados inspirados em Itten.</small><span class="palette-swatches granfino" aria-hidden="true"><i></i><i></i><i></i></span></span></label><label class="palette-option"><input type="radio" name="impulsoPalette" value="ecologico" ${selected==='ecologico'?'checked':''}><span><strong>Impulso Ecológico</strong><small>Harmonia análoga verde de Itten, com acentos luminosos.</small><span class="palette-swatches ecologico" aria-hidden="true"><i></i><i></i><i></i></span></span></label><label class="palette-option"><input type="radio" name="impulsoPalette" value="mistico" ${selected==='mistico'?'checked':''}><span><strong>Impulso Místico</strong><small>Harmonia análoga roxo–magenta de Itten, com atmosfera imersiva de RPG.</small><span class="palette-swatches mistico" aria-hidden="true"><i></i><i></i><i></i></span></span></label></fieldset><h2>Modo de aparência</h2><fieldset class="appearance-options"><legend>Escolha a luminosidade</legend><label><input type="radio" name="impulsoAppearance" value="light" ${!dark?'checked':''}> Claro</label><label><input type="radio" name="impulsoAppearance" value="dark" ${dark?'checked':''}> Escuro</label></fieldset><p class="muted">Novas paletas poderão ser adicionadas futuramente. A mudança não altera projetos nem registros.</p></section>`;
+ const themesPanel=main.querySelector('.settings-palette');
+ if(themesPanel){const heading=themesPanel.querySelector('h2');if(heading)heading.textContent='Temas';}
+ const settingsHtml=main.innerHTML;
+ renderAlerts();
+ const alertPanel=main.querySelector('.panel');
+ if(alertPanel){alertPanel.querySelectorAll('h2').forEach(h=>{});alertPanel.insertAdjacentHTML('afterbegin','<h2>Alertas</h2>');}
+ const alertContent=alertPanel?alertPanel.outerHTML:'';
+ main.innerHTML=settingsHtml+alertContent;
+}
+function setImpulsoPalette(value){const chosen=['original','vinho','blue-sky','trinity','granfino','ecologico','mistico'].includes(value)?value:'original';document.body.dataset.palette=chosen;try{localStorage.setItem(PALETTE_KEY,chosen)}catch(e){toast('Não foi possível salvar a preferência de paleta.')}document.querySelectorAll('input[name="impulsoPalette"]').forEach(el=>el.checked=el.value===chosen);}
+setImpulsoPalette(localStorage.getItem(PALETTE_KEY));
 
-  const ACHIEVEMENTS = [
-    ["Primeiro Movimento", 1, "Bronze", "🥉"],
-    ["Primeiro Pulso", 180, "Bronze", "🥉"],
-    ["Primeiro Giro", 360, "Prata", "🥈"],
-    ["Cinco Giros", 1800, "Prata", "🥈"],
-    ["Primeiro Turno", 2880, "Ouro", "🥇"],
-    ["Dez Turnos", 28800, "Ouro", "🥇"],
-    ["Primeira Fase", 86400, "Platina", "🏅"],
-    ["Cinco Fases", 432000, "Platina", "🏅"],
-    ["Dez Fases", 864000, "Diamante", "💎"],
-    ["Vinte Fases", 1728000, "Diamante", "💎"],
-    ["Primeira Propulsão", 3628800, "Lendário", "👑"],
-    ["Duas Propulsões", 7257600, "Lendário", "👑"],
-    ["Cinco Propulsões", 18144000, "Mítico", "🌟"]
-  ];
-
-  const $ = id => document.getElementById(id);
-  const app = $("app");
-
-  const fmt = n => new Intl.NumberFormat("pt-BR", {
-    maximumFractionDigits: 2
-  }).format(n);
-
-  const dateFmt = t => new Date(t).toLocaleString("pt-BR");
-
-  const uid = () => crypto.randomUUID();
-
-  const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[c]);
-
-  const round = n => Math.round(n * 100) / 100;
-
-  const fresh = () => ({
-    version: 1,
-    theme: "light",
-    selected: null,
-    projects: []
-  });
-
-  let state = fresh();
-  let page = "home";
-  let timerId = null;
-  let toastId = null;
-  let dialogCallback = null;
-  let dirty = false;
-
-  function notify(message) {
-    const el = $("toast");
-    el.textContent = message;
-    clearTimeout(toastId);
-    toastId = setTimeout(() => el.textContent = "", 3500);
+$('#theme').onclick=()=>{document.body.classList.toggle('dark');localStorage.setItem(THEME,document.body.classList.contains('dark')?'dark':'light');$('#theme').setAttribute('aria-pressed',String(document.body.classList.contains('dark')));if(page==='configuracao')renderConfiguracao()};$('#fullscreen').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen?.();else document.documentElement.requestFullscreen?.().catch(()=>toast('Tela cheia indisponível neste navegador'))};if(localStorage.getItem(THEME)==='dark')document.body.classList.add('dark');$('#theme').setAttribute('aria-pressed',String(document.body.classList.contains('dark')));document.addEventListener('fullscreenchange',()=>$('#fullscreen').setAttribute('aria-label',document.fullscreenElement?'Sair da tela cheia':'Entrar em tela cheia'));modal.addEventListener('click',e=>{const btn=e.target.closest('button');if(btn?.hasAttribute('data-cancel')){e.preventDefault();e.stopPropagation();close();return}if(btn?.hasAttribute('data-replay-ceremony')){e.preventDefault();e.stopPropagation();restartCeremony();return}if(btn?.hasAttribute('data-enable-ceremony-motion')){e.preventDefault();e.stopPropagation();enableCeremonyMotion();return}if(e.target===modal)close()});$('#habitsAlertDismiss').addEventListener('click',hideHabitsAlert);
+$('#habitsAlertOpen').addEventListener('click',()=>{hideHabitsAlert();page=project()?'habitos':'projetos';render()});
+$('#backupAlertDismiss').addEventListener('click',hideBackupAlert);$('#backupAlertSave').addEventListener('click',()=>{backup();hideBackupAlert()});document.addEventListener('visibilitychange',()=>{checkBackupAlert();checkHabitsAlert()});setInterval(()=>{checkBackupAlert();checkHabitsAlert()},30000);render();
+// Progresso calculado em tempo real: independe do disparo de animações CSS.
+(function startSplash(){
+ const splash=document.getElementById('splash');
+ if(!splash)return;
+ const ring=splash.querySelector('.splash-fill');
+ const word=splash.querySelector('.splash-wordmark');
+ const duration=3700; // Duração mínima uniforme, inclusive com movimento reduzido.
+ const started=performance.now();
+ function frame(time){
+  if(!splash.isConnected)return;
+  const progress=Math.max(0,Math.min(1,(time-started)/duration));
+  if(ring){ring.style.animation='none';ring.style.strokeDasharray='100';ring.style.strokeDashoffset=String(100-100*progress)}
+  // A revelação do nome é controlada pelo CSS para manter a sequência cinematográfica.
+  if(progress<1){requestAnimationFrame(frame)}else{
+   splash.classList.add('hide');
+   setTimeout(()=>splash.remove(),400);
   }
-
-  function validProject(p) {
-    return p && typeof p === "object" &&
-      typeof p.id === "string" &&
-      typeof p.name === "string" &&
-      p.name.trim().length > 0 &&
-      p.name.length <= 120 &&
-      Number.isFinite(p.ms) && p.ms >= 0 &&
-      Array.isArray(p.entries) &&
-      p.entries.length <= 100000 &&
-      p.entries.every(e =>
-        e &&
-        Number.isFinite(e.ms) &&
-        e.ms >= 0 &&
-        Number.isFinite(e.at) &&
-        ["timer", "manual"].includes(e.type)
-      );
-  }
-
-  function validate(data) {
-    if (
-      !data ||
-      data.version !== 1 ||
-      !Array.isArray(data.projects) ||
-      data.projects.length > 10000 ||
-      !data.projects.every(validProject)
-    ) {
-      throw Error("Arquivo Khronos inválido ou incompatível.");
-    }
-
-    const ids = data.projects.map(p => p.id);
-
-    if (new Set(ids).size !== ids.length) {
-      throw Error("IDs duplicados no arquivo.");
-    }
-
-    return true;
-  }
-
-  function normalize(p) {
-    return {
-      id: p.id,
-      name: p.name.trim(),
-      created: Number.isFinite(p.created)
-        ? p.created
-        : Date.now(),
-      ms: p.ms,
-      entries: p.entries.map(e => ({
-        ms: e.ms,
-        at: e.at,
-        type: e.type,
-        note: String(e.note || "").slice(0, 300)
-      })),
-      runningSince: null,
-      startedAt: null
-    };
-  }
-
-  function load() {
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (!raw) return;
-
-      const parsed = JSON.parse(raw);
-      validate(parsed);
-
-      state = {
-        version: 1,
-        theme: parsed.theme === "dark" ? "dark" : "light",
-        selected: parsed.selected,
-        projects: parsed.projects.map(p => ({
-          ...normalize(p),
-          runningSince: Number.isFinite(p.runningSince)
-            ? p.runningSince
-            : null,
-          startedAt: Number.isFinite(p.startedAt)
-            ? p.startedAt
-            : null
-        }))
-      };
-
-      if (!state.projects.some(p => p.id === state.selected)) {
-        state.selected = state.projects[0]?.id || null;
-      }
-    } catch (err) {
-      console.error(err);
-      notify("Dados locais inválidos. Nenhuma alteração foi feita.");
-    }
-  }
-
-  function save() {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(state));
-      dirty = false;
-      return true;
-    } catch (err) {
-      console.error(err);
-      notify("Erro ao salvar. Exporte um backup antes de continuar.");
-      return false;
-    }
-  }
-
-  function selected() {
-    return state.projects.find(p => p.id === state.selected) || null;
-  }
-
-  function elapsed(p) {
-    return p.ms + (
-      p.runningSince === null
-        ? 0
-        : Math.max(0, Date.now() - p.runningSince)
-    );
-  }
-
-  function degrees(p) {
-    return elapsed(p) / DEGREE_MS;
-  }
-
-  function degreeText(ms) {
-    return fmt(round(ms / DEGREE_MS)) + " graus";
-  }
-
-  function duration(ms) {
-    const seconds = Math.floor(ms / 1000);
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor(seconds % 3600 / 60);
-    const s = seconds % 60;
-
-    return [h, m, s]
-      .map(n => String(n).padStart(2, "0"))
-      .join(":");
-  }
-
-  function counts(ms) {
-    const d = ms / DEGREE_MS;
-
-    return UNITS.map(([name, size]) => ({
-      name,
-      size,
-      count: Math.floor(d / size)
-    }));
-  }
-
-  function boss(p) {
-    const d = degrees(p);
-    const index = Math.floor(d / 86400);
-    const current = BOSSES[index % BOSSES.length];
-    const progress = (d % 86400) / 86400;
-
-    return {
-      index,
-      name: current[0],
-      icon: current[1],
-      progress: Math.min(100, progress * 100),
-      defeated: index
-    };
-  }
-
-  function achievementList(p) {
-    const d = degrees(p);
-
-    return ACHIEVEMENTS.map(
-      ([name, target, rarity, icon]) => ({
-        name,
-        target,
-        rarity,
-        icon,
-        unlocked: d >= target
-      })
-    );
-  }
-
-  function aggregate() {
-    return state.projects.reduce(
-      (sum, p) => sum + elapsed(p),
-      0
-    );
-  }
-
-  function heading(title, description = "") {
-    return `<h1>${esc(title)}</h1>
-      ${description
-        ? `<p class="muted">${esc(description)}</p>`
-        : ""}`;
-  }
-
-
-  function stats(ms) {
-    return `<div class="grid stats">
-      <div class="card">
-        <div class="stat-number">${degreeText(ms)}</div>
-        <div class="stat-label">Graus acumulados</div>
-      </div>
-      ${counts(ms).map(u => `
-        <div class="card">
-          <div class="stat-number">${fmt(u.count)}</div>
-          <div class="stat-label">
-            ${unitLabel(u.name, u.count)} completos
-          </div>
-        </div>
-      `).join("")}
-    </div>`;
-  }
-
-
-  function progressBar(value, label) {
-    return `<div class="progress" role="progressbar"
-      aria-label="${esc(label)}" aria-valuemin="0"
-      aria-valuemax="100" aria-valuenow="${Math.round(value)}">
-      <div style="width:${Math.max(0, Math.min(100, value))}%"></div>
-    </div>`;
-  }
-
-  function projectCard(p) {
-    const b = boss(p);
-    const running = p.runningSince !== null;
-
-    return `<article class="card project-card">
-      <div class="project-heading">
-        <h3>${esc(p.name)}</h3>
-        <span class="tag">${running ? "Em andamento" : "Pausado"}</span>
-      </div>
-
-      <strong>${degreeText(elapsed(p))}</strong>
-
-      <div class="small muted">
-        Chefão: ${esc(b.name)} · Fase ${b.index + 1}
-      </div>
-
-      ${progressBar(b.progress, "Progresso contra o chefão")}
-
-      <div class="actions">
-        <button
-          type="button"
-          class="btn primary"
-          data-open="${esc(p.id)}">
-          Abrir projeto
-        </button>
-
-        <button
-          type="button"
-          class="btn danger"
-          data-delete="${esc(p.id)}"
-          aria-label="Excluir projeto ${esc(p.name)}">
-          🗑 Excluir projeto
-        </button>
-      </div>
-    </article>`;
-  }
-
-  /*
-   * EXCLUSÃO INDIVIDUAL DE PROJETOS
-   *
-   * A exclusão exige confirmação.
-   * Somente o projeto identificado pelo ID é removido.
-   * Em caso de falha ao salvar, o estado anterior é restaurado.
-   */
-
-  function deleteProject(projectId) {
-    const p = state.projects.find(item => item.id === projectId);
-
-    if (!p) {
-      notify("Projeto não encontrado.");
-      return;
-    }
-
-    const name = p.name;
-
-    openDialog(
-      "Excluir projeto",
-      `
-      <p>
-        Você está prestes a excluir permanentemente o projeto:
-      </p>
-
-      <p><strong>${esc(name)}</strong></p>
-
-      <p class="muted">
-        Esta operação removerá o projeto, seu tempo acumulado,
-        seu histórico de atividades e suas conquistas.
-      </p>
-
-      <p>
-        <strong>A exclusão não poderá ser desfeita.</strong>
-      </p>
-
-      <p class="small muted">
-        Recomendamos realizar um Backup Geral antes de continuar.
-      </p>
-      `,
-      () => {
-        const currentIndex = state.projects.findIndex(
-          item => item.id === projectId
-        );
-
-        if (currentIndex === -1) {
-          notify("Este projeto já não existe.");
-          return true;
-        }
-
-        const previousProjects = state.projects;
-        const previousSelected = state.selected;
-        const previousDirty = dirty;
-
-        state.projects = state.projects.filter(
-          item => item.id !== projectId
-        );
-
-        if (state.selected === projectId) {
-          state.selected = state.projects[0]?.id || null;
-        }
-
-        if (!save()) {
-          state.projects = previousProjects;
-          state.selected = previousSelected;
-          dirty = previousDirty;
-          return false;
-        }
-
-        navigate("projects");
-        notify(`Projeto "${name}" excluído com sucesso.`);
-
-        return true;
-      }
-    );
-  }
-
-  function renderHome() {
-    const ms = aggregate();
-
-    app.innerHTML = heading(
-      "Seu tempo. Sua evolução.",
-      "Cada grau representa dez segundos dedicados à construção dos seus hábitos."
-    ) +
-      `<section class="card hero">
-        <p class="muted">
-          Energia acumulada em todos os projetos
-        </p>
-
-        <div class="degree">${degreeText(ms)}</div>
-
-        <p>
-          ${fmt(state.projects.length)} projetos ·
-          ${duration(ms)} de dedicação
-        </p>
-      </section>
-
-      <h2 class="section-title">Visão geral</h2>
-
-      ${stats(ms)}
-
-      <h2 class="section-title">Projetos recentes</h2>
-
-      <div class="project-list">
-        ${state.projects.length
-          ? [...state.projects]
-              .sort((a, b) => b.created - a.created)
-              .slice(0, 4)
-              .map(projectCard)
-              .join("")
-          : `<div class="card">
-              <p>Você ainda não possui projetos.</p>
-              <p class="muted">
-                Abra o menu e escolha Novo Projeto para começar.
-              </p>
-            </div>`}
-      </div>`;
-  }
-
-  function renderProjects() {
-    app.innerHTML = heading(
-      "Meus Projetos",
-      "Todos os projetos são armazenados localmente neste navegador."
-    ) +
-      `<div class="project-list">
-        ${state.projects.length
-          ? [...state.projects]
-              .sort((a, b) => b.created - a.created)
-              .map(projectCard)
-              .join("")
-          : '<div class="card">Nenhum projeto cadastrado.</div>'}
-      </div>`;
-  }
-
-  function renderProject() {
-    const p = selected();
-
-    if (!p) {
-      page = "projects";
-      renderProjects();
-      return;
-    }
-
-    const ms = elapsed(p);
-    const b = boss(p);
-    const running = p.runningSince !== null;
-    const units = counts(ms);
-
-    app.innerHTML = `
-      ${heading(p.name, "Criado em " + dateFmt(p.created))}
-
-      <section class="card">
-        <div class="clock-caption">Relógio de Graus</div>
-
-        <div class="clock" id="liveClock">
-          ${duration(ms)}
-        </div>
-
-        <div class="clock-caption" id="liveDegrees">
-          ${degreeText(ms)}
-        </div>
-
-        <p class="clock-caption" id="clockStatus">
-          ${running
-            ? "Contagem em andamento"
-            : "Relógio pausado"}
-        </p>
-
-        <div class="actions" style="justify-content:center">
-          <button
-            class="btn primary"
-            data-action="toggle">
-            ${running ? "⏸ Pausar" : "▶ Continuar"}
-          </button>
-        </div>
-      </section>
-
-      <h2 class="section-title">Progressão temporal</h2>
-
-      <div class="grid stats">
-        ${units.map(u => `
-          <div class="card">
-            <div class="stat-number">
-              ${fmt(u.count)}
-            </div>
-
-            <div class="stat-label">
-              ${unitLabel(u.name, u.count)}
-            </div>
-          </div>
-        `).join("")}
-      </div>
-
-      <h2 class="section-title">Chefão da Fase</h2>
-
-      <section class="card">
-        <div class="boss-icon">${b.icon}</div>
-
-        <h3 class="boss-name">${esc(b.name)}</h3>
-
-        <p>
-          Fase ${b.index + 1} ·
-          ${fmt(b.defeated)} chefões derrotados
-        </p>
-
-        ${progressBar(b.progress, "Vida removida do chefão")}
-
-        <p class="small muted" id="bossProgress">
-          ${fmt(b.progress)}% do desafio concluído
-        </p>
-
-        <p class="small">
-          Cada chefão exige 86.400 graus acumulados.
-          Ao vencê-lo, um novo desafio aparece automaticamente.
-        </p>
-      </section>
-
-      <h2 class="section-title">Conquistas do Projeto</h2>
-
-      <section class="card">
-        <p>
-          ${achievementList(p).filter(a => a.unlocked).length}
-          de ${ACHIEVEMENTS.length} conquistas desbloqueadas.
-        </p>
-
-        <p class="muted">
-          Consulte a Galeria de Conquistas para visualizar
-          medalhas e diplomas.
-        </p>
-      </section>
-
-      <h2 class="section-title">Atividade recente</h2>
-
-      <section class="card">
-        ${entryHtml(p.entries.slice(-8).reverse())}
-      </section>`;
-  }
-
-  function entryHtml(entries) {
-    if (!entries.length) {
-      return '<p class="muted">Nenhum registro finalizado.</p>';
-    }
-
-    return entries.map(e => `
-      <div class="history-item">
-        <strong>
-          ${e.type === "manual"
-            ? "Entrada manual"
-            : "Sessão cronometrada"}
-        </strong>
-
-        <div>
-          ${degreeText(e.ms)} · ${duration(e.ms)}
-        </div>
-
-        <div class="small muted">
-          ${dateFmt(e.at)}
-        </div>
-
-        ${e.note
-          ? `<p class="small">${esc(e.note)}</p>`
-          : ""}
-      </div>
-    `).join("");
-  }
-
-  function renderGallery() {
-    const p = selected();
-
-    if (!p) {
-      app.innerHTML = heading("Galeria de Conquistas") +
-        `<div class="card">
-          Crie ou selecione um projeto para visualizar suas conquistas.
-        </div>`;
-      return;
-    }
-
-    const awards = achievementList(p);
-
-    app.innerHTML = heading(
-      "Galeria de Conquistas",
-      "Projeto: " + p.name
-    ) +
-      `<p>
-        ${awards.filter(a => a.unlocked).length}
-        conquistas desbloqueadas.
-      </p>
-
-      <div class="gallery">
-        ${awards.map(a => `
-          <article class="card medal ${a.unlocked ? "" : "locked"}">
-            <div class="symbol">
-              ${a.unlocked ? a.icon : "🔒"}
-            </div>
-
-            <h3>${esc(a.name)}</h3>
-
-            <p class="small">${esc(a.rarity)}</p>
-            <p class="small">${fmt(a.target)} graus</p>
-
-            <strong>
-              ${a.unlocked ? "Conquistada" : "Bloqueada"}
-            </strong>
-          </article>
-        `).join("")}
-      </div>
-
-      <h2 class="section-title">Diplomas Honoríficos</h2>
-
-      <div class="grid">
-        ${awards
-          .filter(a => a.unlocked && a.target >= 2880)
-          .map(a => `
-            <article class="card diploma">
-              <p>KHRONOS · CERTIFICADO DE MÉRITO</p>
-
-              <h3>${esc(a.name)}</h3>
-
-              <p>
-                Concedido ao projeto
-                <strong>${esc(p.name)}</strong>
-              </p>
-
-              <p>
-                Por alcançar o marco de
-                ${fmt(a.target)} graus.
-              </p>
-
-              <strong>
-                Distinção ${esc(a.rarity)}
-              </strong>
-            </article>
-          `).join("") ||
-          `<div class="card">
-            Os diplomas serão desbloqueados
-            a partir do primeiro Turno.
-          </div>`}
-      </div>`;
-  }
-
-  function renderHistory() {
-    const items = state.projects
-      .flatMap(p =>
-        p.entries.map(e => ({
-          ...e,
-          project: p.name
-        }))
-      )
-      .sort((a, b) => b.at - a.at);
-
-    app.innerHTML = heading(
-      "Histórico de Atividades",
-      "Registros de sessões e entradas manuais de todos os projetos."
-    ) +
-      `<section class="card">
-        ${items.length
-          ? items.map(e => `
-            <div class="history-item">
-              <strong>${esc(e.project)}</strong>
-
-              <p>
-                ${e.type === "manual"
-                  ? "Entrada manual"
-                  : "Sessão cronometrada"}
-                · ${degreeText(e.ms)}
-              </p>
-
-              <p class="small muted">
-                ${dateFmt(e.at)}
-              </p>
-
-              ${e.note
-                ? `<p>${esc(e.note)}</p>`
-                : ""}
-            </div>
-          `).join("")
-          : "<p>Nenhuma atividade registrada.</p>"}
-      </section>`;
-  }
-
-  function renderAbout() {
-    app.innerHTML = heading("Sobre o Khronos") + `
-      <article class="card">
-        <h2>Por que Khronos?</h2>
-        <p>O nome Khronos é inspirado na personificação mitológica do tempo
-        linear e contínuo. Aqui, o tempo não é apenas uma medida:
-        é a força que multiplica os resultados das nossas escolhas.</p>
-        <p>Hábitos construtivos, repetidos continuamente, produzem
-        o efeito composto. Pequenas ações acumuladas podem gerar
-        transformações extraordinárias. Da mesma forma, hábitos
-        prejudiciais podem produzir consequências negativas ao longo do tempo.</p>
-        <p>O Khronos transforma essa ideia em um jogo de progressão.
-        Cada sessão adiciona graus, cada marco revela conquistas
-        e cada Fase apresenta um novo chefão simbólico.</p>
-        <h2>Sistema de unidades</h2>
-        ${UNITS.map(([name,d])=>`<p><strong>${name}:</strong>
-          ${fmt(d)} graus · ${fmt(d/6)} minutos</p>`).join("")}
-        <h2>Privacidade</h2>
-        <p>Os projetos são armazenados neste navegador.
-        Não existe conta, servidor remoto ou sincronização automática.
-        Faça backups regularmente para proteger seus dados.</p>
-        <h2>Links oficiais</h2>
-        <p><a href="https://magpe-stack.github.io/Khronos/">Aplicativo Khronos</a></p>
-        <p><a href="https://github.com/magpe-stack/Khronos">Repositório GitHub</a></p>
-        <p><a href="https://github.com/magpe-stack/Khronos/blob/main/README.md">Manual de Ajuda</a></p>
-      </article>`;
-  }
-
-  function render() {
-    switch(page) {
-      case "projects": renderProjects(); break;
-      case "project": renderProject(); break;
-      case "gallery": renderGallery(); break;
-      case "history": renderHistory(); break;
-      case "about": renderAbout(); break;
-      default: renderHome();
-    }
-  }
-
-  function navigate(to) {
-    page = to;
-    closeMenu();
-    render();
-    window.scrollTo(0,0);
-    app.focus({preventScroll:true});
-  }
-
-  function closeMenu() {
-    $("menu").hidden = true;
-    $("menuBtn").setAttribute("aria-expanded","false");
-  }
-
-  function toggleMenu() {
-    const next = !$("menu").hidden;
-    $("menu").hidden = next;
-    $("menuBtn").setAttribute("aria-expanded",String(!next));
-  }
-
-  function applyTheme() {
-    document.documentElement.dataset.theme = state.theme;
-    $("themeBtn").textContent = state.theme === "light" ? "☾" : "☀";
-    $("themeBtn").setAttribute("aria-label",
-      state.theme === "light" ? "Ativar tema escuro" : "Ativar tema claro");
-    document.querySelector('meta[name="theme-color"]')
-      .setAttribute("content",state.theme === "light"?"#ffffff":"#0f162e");
-  }
-
-  function openDialog(title, fields, callback) {
-    $("dialogTitle").textContent = title;
-    $("dialogFields").innerHTML = fields;
-    dialogCallback = callback;
-    $("dialog").showModal();
-    $("dialogFields").querySelector("input,select,textarea")?.focus();
-  }
-
-  function newProject() {
-    openDialog("Novo Projeto", `
-      <label for="projectName">Nome do projeto</label>
-      <input id="projectName" name="name" maxlength="120" required
-        placeholder="Ex.: Escrever meu romance" autocomplete="off">`,
-      data => {
-        const name = String(data.get("name")||"").trim();
-        if (!name) throw Error("Informe o nome do projeto.");
-        const p = {
-          id:uid(),name,created:Date.now(),
-          ms:0,entries:[],runningSince:null,startedAt:null
-        };
-        state.projects.push(p);
-        state.selected=p.id;
-        if (!save()) {
-          state.projects.pop();
-          return false;
-        }
-        navigate("project");
-        notify("Projeto criado com sucesso.");
-      });
-  }
-
-  function settle(p, restart=false) {
-    if (p.runningSince === null) return;
-    const now=Date.now();
-    const delta=Math.max(0,now-p.runningSince);
-    if (delta>0) {
-      p.ms+=delta;
-      p.entries.push({
-        ms:delta,at:now,type:"timer",note:""
-      });
-    }
-    p.runningSince=restart?now:null;
-    p.startedAt=restart?now:null;
-    dirty=true;
-  }
-
-  function toggleClock() {
-    const p=selected();
-    if (!p) return notify("Selecione um projeto.");
-    if (p.runningSince!==null) {
-      settle(p);
-      if (!save()) return;
-      notify("Relógio pausado.");
-    } else {
-      p.runningSince=Date.now();
-      p.startedAt=p.runningSince;
-      if (!save()) return;
-      notify("Relógio iniciado.");
-    }
-    renderProject();
-  }
-
-  function manualEntry() {
-    const p=selected();
-    if (!p) return notify("Crie ou selecione um projeto primeiro.");
-    openDialog("Entrada Manual", `
-      <label for="manualUnit">Unidade de entrada</label>
-      <select id="manualUnit" name="unit">
-        <option value="minutes">Minutos</option>
-        <option value="degrees">Graus</option>
-      </select>
-      <label for="manualAmount">Quantidade</label>
-      <input id="manualAmount" name="amount" type="number"
-        min="0.01" max="100000000" step="any" required>
-      <label for="manualNote">Observação (opcional)</label>
-      <textarea id="manualNote" name="note" maxlength="300"></textarea>`,
-      data=>{
-        const amount=Number(data.get("amount"));
-        if (!Number.isFinite(amount)||amount<=0||amount>100000000)
-          throw Error("Informe uma quantidade válida.");
-        const ms=data.get("unit")==="degrees"
-          ?amount*DEGREE_MS:amount*60000;
-        if (!Number.isFinite(ms)) throw Error("Valor inválido.");
-        p.ms+=ms;
-        p.entries.push({
-          ms,at:Date.now(),type:"manual",
-          note:String(data.get("note")||"").slice(0,300)
-        });
-        if (!save()) return false;
-        render();
-        notify("Tempo adicionado ao projeto.");
-      });
-  }
-
-  function timestamp() {
-    const d=new Date();
-    const pad=n=>String(n).padStart(2,"0");
-    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}-${pad(d.getHours())}-${pad(d.getMinutes())}`;
-  }
-
-  function download(data,name) {
-    const blob=new Blob([JSON.stringify(data,null,2)],
-      {type:"application/json;charset=utf-8"});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement("a");
-    a.href=url;a.download=name;
-    document.body.appendChild(a);
-    a.click();a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),3000);
-  }
-
-  function snapshot(p) {
-    const copy=structuredClone(p);
-    if (copy.runningSince!==null) {
-      const now=Date.now();
-      const delta=Math.max(0,now-copy.runningSince);
-      copy.ms+=delta;
-      if(delta>0) copy.entries.push({
-        ms:delta,at:now,type:"timer",note:""
-      });
-      copy.runningSince=null;
-      copy.startedAt=null;
-    }
-    return copy;
-  }
-
-  function exportProject() {
-    const p=selected();
-    if (!p) return notify("Selecione um projeto.");
-    download({
-      version:1,kind:"project",
-      exportedAt:new Date().toISOString(),
-      projects:[snapshot(p)]
-    },`export-khronos-${timestamp()}.json`);
-    notify("Projeto exportado.");
-  }
-
-  function backup() {
-    download({
-      version:1,kind:"backup",
-      exportedAt:new Date().toISOString(),
-      theme:state.theme,
-      selected:state.selected,
-      projects:state.projects.map(snapshot)
-    },`backup-khronos-${timestamp()}.json`);
-    notify("Backup geral gerado.");
-  }
-
-  async function importJson(file) {
-    if (!file) return;
-    if(file.size>50*1024*1024)
-      return notify("Arquivo muito grande (máximo de 50 MB).");
-    try {
-      const data=JSON.parse(await file.text());
-      validate(data);
-      if (!["backup","project"].includes(data.kind))
-        throw Error("Tipo de arquivo desconhecido.");
-      const incoming=data.projects.map(normalize);
-      if(data.kind==="backup") {
-        if(!confirm("Restaurar o backup substituirá todos os projetos atuais. Deseja continuar?"))
-          return;
-        const previous=state;
-        state={
-          version:1,
-          theme:data.theme==="dark"?"dark":"light",
-          selected:incoming.some(p=>p.id===data.selected)
-            ?data.selected:incoming[0]?.id||null,
-          projects:incoming
-        };
-        if(!save()) {state=previous;return;}
-      } else {
-        const p=incoming[0];
-        if(!p||incoming.length!==1)
-          throw Error("Exportação de projeto inválida.");
-        p.id=uid();
-        p.name=p.name+" (importado)";
-        state.projects.push(p);
-        state.selected=p.id;
-        if(!save()) {state.projects.pop();return;}
-      }
-      applyTheme();
-      navigate("projects");
-      notify("Importação concluída.");
-    } catch(err) {
-      notify(err.message||"Falha na importação.");
-    } finally {
-      $("importFile").value="";
-    }
-  }
-
-  function printReport() {
-    const p = selected();
-    if (!p) return notify("Selecione um projeto.");
-
-    const ms = elapsed(p);
-    const b = boss(p);
-    const awards = achievementList(p).filter(a => a.unlocked);
-
-    const html = `<!DOCTYPE html>
-      <html lang="pt-BR">
-      <head>
-        <meta charset="utf-8">
-        <title>Relatório Khronos</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            color: #151f41;
-            margin: 35px;
-            line-height: 1.5;
-          }
-          h1 { color: #273877; }
-          h2 {
-            border-bottom: 2px solid #273877;
-            padding-bottom: 7px;
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 12px 0;
-          }
-          th, td {
-            border: 1px solid #aaa;
-            padding: 9px;
-            text-align: left;
-          }
-          th { background: #eaf0f7; }
-          .certificate {
-            border: 3px double #273877;
-            padding: 22px;
-            margin: 15px 0;
-            text-align: center;
-            break-inside: avoid;
-          }
-          .entry {
-            border-bottom: 1px solid #ccc;
-            padding: 9px 0;
-            break-inside: avoid;
-          }
-          footer {
-            margin-top: 35px;
-            font-size: 12px;
-          }
-          @media print {
-            body { margin: 15mm; }
-          }
-        </style>
-      </head>
-      <body>
-        <h1>Khronos</h1>
-        <p>Motor de Hábitos Atômicos</p>
-
-        <h2>Relatório do Projeto</h2>
-        <p><strong>${esc(p.name)}</strong></p>
-        <p>Gerado em ${esc(dateFmt(Date.now()))}</p>
-        <p>Criado em ${esc(dateFmt(p.created))}</p>
-
-        <h2>Resumo Temporal</h2>
-        <p>
-          <strong>${degreeText(ms)}</strong>
-          · ${duration(ms)}
-        </p>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Unidade</th>
-              <th>Graus por unidade</th>
-              <th>Unidades completas</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${counts(ms).map(u => `
-              <tr>
-                <td>${esc(u.name)}</td>
-                <td>${fmt(u.size)}</td>
-                <td>${fmt(u.count)}</td>
-              </tr>
-            `).join("")}
-          </tbody>
-        </table>
-
-        <h2>Chefões</h2>
-        <p>${fmt(b.defeated)} chefões derrotados.</p>
-        <p>
-          Chefão atual: ${esc(b.name)}
-          — Fase ${b.index + 1}
-          (${fmt(b.progress)}%).
-        </p>
-
-        <h2>Conquistas</h2>
-        ${awards.length
-          ? awards.map(a => `
-            <p>
-              ${esc(a.name)} —
-              ${esc(a.rarity)} —
-              ${fmt(a.target)} graus
-            </p>
-          `).join("")
-          : "<p>Nenhuma ainda.</p>"}
-
-        <h2>Diplomas Honoríficos</h2>
-        ${awards.filter(a => a.target >= 2880).map(a => `
-          <div class="certificate">
-            <h3>KHRONOS — DIPLOMA HONORÍFICO</h3>
-            <p>${esc(p.name)}</p>
-            <h2>${esc(a.name)}</h2>
-            <p>Marco de ${fmt(a.target)} graus</p>
-            <p>Distinção ${esc(a.rarity)}</p>
-          </div>
-        `).join("")}
-
-        <h2>Histórico</h2>
-        ${entryHtml(p.entries)}
-
-        <footer>
-          https://magpe-stack.github.io/Khronos/
-        </footer>
-      </body>
-      </html>`;
-
-    const w = window.open("", "_blank");
-
-    if (!w) {
-      return notify("Permita janelas pop-up para imprimir.");
-    }
-
-    w.document.open();
-    w.document.write(html);
-    w.document.close();
-
-    w.addEventListener("load", () => {
-      w.focus();
-      w.print();
-    }, { once: true });
-  }
-
-  function execute(action) {
-    closeMenu();
-
-    switch (action) {
-      case "new":
-        newProject();
-        break;
-
-      case "toggle":
-        toggleClock();
-        break;
-
-      case "manual":
-        manualEntry();
-        break;
-
-      case "export":
-        exportProject();
-        break;
-
-      case "backup":
-        backup();
-        break;
-
-      case "import":
-        $("importFile").click();
-        break;
-
-      case "print":
-        printReport();
-        break;
-    }
-  }
-
-  function tick() {
-    if (page === "project") {
-      const p = selected();
-
-      if (p) {
-        const ms = elapsed(p);
-
-        if ($("liveClock")) {
-          $("liveClock").textContent = duration(ms);
-        }
-
-        if ($("liveDegrees")) {
-          $("liveDegrees").textContent = degreeText(ms);
-        }
-
-        const b = boss(p);
-
-        if ($("bossProgress")) {
-          $("bossProgress").textContent =
-            fmt(b.progress) + "% do desafio concluído";
-        }
-
-        const bar = app.querySelector(
-          '[aria-label="Vida removida do chefão"]'
-        );
-
-        if (bar) {
-          bar.setAttribute(
-            "aria-valuenow",
-            Math.round(b.progress)
-          );
-
-          bar.firstElementChild.style.width =
-            b.progress + "%";
-        }
-      }
-    }
-
-    const running = state.projects.some(
-      p => p.runningSince !== null
-    );
-
-    if (running) {
-      dirty = true;
-    }
-  }
-
-  function bindEvents() {
-    $("menuBtn").addEventListener("click", toggleMenu);
-
-    $("homeBtn").addEventListener("click", () => {
-      navigate("home");
-    });
-
-    $("themeBtn").addEventListener("click", () => {
-      state.theme =
-        state.theme === "light" ? "dark" : "light";
-
-      applyTheme();
-      save();
-    });
-
-    $("menu").addEventListener("click", e => {
-      const btn = e.target.closest(
-        "[data-page],[data-action]"
-      );
-
-      if (!btn) return;
-
-      if (btn.dataset.page) {
-        navigate(btn.dataset.page);
-      } else {
-        execute(btn.dataset.action);
-      }
-    });
-
-    /*
-     * Eventos dos cartões de projetos.
-     * Abrir e excluir são operações independentes.
-     */
-    app.addEventListener("click", e => {
-      const deleteBtn = e.target.closest("[data-delete]");
-
-      if (deleteBtn) {
-        deleteProject(deleteBtn.dataset.delete);
-        return;
-      }
-
-      const openBtn = e.target.closest("[data-open]");
-
-      if (openBtn) {
-        const projectId = openBtn.dataset.open;
-
-        if (!state.projects.some(p => p.id === projectId)) {
-          notify("Projeto não encontrado.");
-          return;
-        }
-
-        state.selected = projectId;
-        save();
-        navigate("project");
-        return;
-      }
-
-      const action = e.target.closest("[data-action]");
-
-      if (action) {
-        execute(action.dataset.action);
-      }
-    });
-
-    $("cancelDialog").addEventListener("click", () => {
-      $("dialog").close();
-    });
-
-    $("dialogForm").addEventListener("submit", e => {
-      e.preventDefault();
-
-      if (!dialogCallback) return;
-
-      try {
-        const result = dialogCallback(
-          new FormData(e.currentTarget)
-        );
-
-        if (result !== false) {
-          $("dialog").close();
-        }
-      } catch (err) {
-        notify(err.message || "Erro ao executar a operação.");
-      }
-    });
-
-    $("importFile").addEventListener("change", e => {
-      importJson(e.target.files[0]);
-    });
-
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape") {
-        closeMenu();
-      }
-    });
-
-    document.addEventListener("click", e => {
-      if (
-        !$("menu").hidden &&
-        !e.target.closest("#menu,#menuBtn")
-      ) {
-        closeMenu();
-      }
-    });
-
-    document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) {
-        tick();
-
-        if (
-          page === "home" ||
-          page === "projects" ||
-          page === "gallery"
-        ) {
-          render();
-        }
-      }
-    });
-
-    window.addEventListener("pagehide", () => {
-      if (dirty) {
-        save();
-      }
-    });
-  }
-
-  function init() {
-    load();
-    bindEvents();
-    applyTheme();
-    render();
-
-    timerId = setInterval(tick, 250);
-
-    setInterval(() => {
-      if (dirty) {
-        save();
-      }
-    }, 15000);
-
-    const splash = $("splash");
-
-    setTimeout(() => {
-      splash.classList.add("hide");
-
-      setTimeout(() => {
-        splash.remove();
-      }, 150);
-    }, 3000);
-
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("./sw.js")
-          .catch(err => {
-            console.warn("Service Worker:", err);
-          });
-      });
-    }
-  }
-
-  init();
+ }
+ requestAnimationFrame(frame);
+ // Evita splash preso caso a aba fique em segundo plano durante a inicialização.
+ setTimeout(()=>{if(splash.isConnected){splash.classList.add('hide');setTimeout(()=>splash.remove(),400)}},5200);
+})();
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 })();

@@ -1,0 +1,16 @@
+/* Impulso 42 — identidade Impulso Vinho; Impulso Original preservado no styles.css. */
+:root{--itten-base-1:#940065;--itten-base-2:#87008A;--itten-base-3:#FF3377;--itten-primary:var(--itten-base-1);--itten-secondary:var(--itten-base-2);--itten-accent:var(--itten-base-3);--itten-color-4:#94001B;--itten-color-5:#8A0048;--itten-color-6:#FF5533;--itten-color-7:#00942F;--itten-color-8:#038A00;--itten-color-9:#33FFBB;--itten-color-10:#790094;--itten-color-11:#42008A;--itten-color-12:#FF33DD;--itten-surface-light:#FFFFFF;--itten-surface-dark:#10141D;--itten-gradient:linear-gradient(135deg,#940065 0%,#87008A 50%,#FF3377 100%)}
+body[data-palette="vinho"]{--base-1:#940065;--base-2:#87008A;--base-3:#FF3377;--primary:#940065;--secondary:#87008A;--accent:#FF3377;--color-1:#940065;--color-2:#87008A;--color-3:#FF3377;--color-4:#94001B;--color-5:#8A0048;--color-6:#FF5533;--color-7:#00942F;--color-8:#038A00;--color-9:#33FFBB;--color-10:#790094;--color-11:#42008A;--color-12:#FF33DD;--gradient-linear:var(--itten-gradient);--gradient-radial:radial-gradient(circle at center,#940065 0%,#87008A 55%,#FF3377 100%);--bg:#FFFFFF;--panel:#FFFFFF;--soft:#F5F2F7;--surface:#F5F2F7;--text:#10141D;--muted:#414858;--line:#B9BEC9;--focus:#42008A;--btn:#940065;--shadow:0 12px 28px #10141d12;--bg-surface:#FFFFFF;--text-primary:#10141D;--text-accent:#940065;--btn-primary-bg:#940065;--btn-primary-text:#FFFFFF;--btn-accent-bg:#FF3377;--btn-accent-text:#10141D;--status-success-bg:#038A00;--status-danger-bg:#94001B;color-scheme:light}
+body[data-palette="vinho"].dark{--bg:#10141D;--panel:#1B2230;--soft:#242E3F;--surface:#242E3F;--text:#F6F7FB;--muted:#C1CCDC;--line:#394559;--focus:#33FFBB;--btn:#33FFBB;--shadow:0 12px 28px #0004;--bg-surface:#1B2230;--text-primary:#F6F7FB;--text-accent:#33FFBB;--btn-primary-bg:#33FFBB;--btn-primary-text:#10141D;color-scheme:dark}
+body[data-palette="vinho"] .btn.primary{background:var(--btn-primary-bg);color:var(--btn-primary-text);border-color:var(--btn-primary-bg)}
+body[data-palette="vinho"].dark .btn.primary{color:#10141D}
+body[data-palette="vinho"] .hero{background:#42008A;color:#FFFFFF;border-left:5px solid #FF3377}
+body[data-palette="vinho"] .brandmark,body[data-palette="vinho"] .splash-mark{background:#87008A;color:#FFFFFF}
+body[data-palette="vinho"] .progress>span{background:var(--itten-gradient)}
+body[data-palette="vinho"] .btn.danger{background:#94001B;color:#FFFFFF;border-color:#94001B}
+body[data-palette="vinho"] .tag.start{background:#42008A;color:#FFFFFF}
+body[data-palette="vinho"] .tag.end{background:#FF5533;color:#10141D}
+body[data-palette="vinho"] .tag.habit{background:#038A00;color:#FFFFFF}
+body[data-palette="vinho"] .storage-track span{background:#87008A}
+body[data-palette="vinho"] :is(button,a,input,select,textarea):focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){body[data-palette="vinho"] *,body[data-palette="vinho"] *::before,body[data-palette="vinho"] *::after{scroll-behavior:auto}}

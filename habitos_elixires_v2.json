@@ -1,0 +1,954 @@
+{
+  "categorias": [
+    {
+      "id": 1,
+      "nome": "Produtividade",
+      "habitos": [
+        {
+          "id": 1,
+          "texto": "Escrever as 3 principais prioridades do dia antes de iniciar o trabalho."
+        },
+        {
+          "id": 2,
+          "texto": "Executar um bloco de foco profundo de 25 minutos sem interrupções."
+        },
+        {
+          "id": 3,
+          "texto": "Deixar o smartphone em outro cômodo durante 1 hora de estudo."
+        },
+        {
+          "id": 4,
+          "texto": "Fechar todas as abas do navegador que não estão em uso imediato."
+        },
+        {
+          "id": 5,
+          "texto": "Bloquear 30 minutos na agenda estritamente para tarefas complexas."
+        },
+        {
+          "id": 6,
+          "texto": "Aplicar a regra dos 2 minutos (resolver tarefas rápidas imediatamente)."
+        },
+        {
+          "id": 7,
+          "texto": "Definir a principal meta do dia seguinte antes de fechar o computador."
+        },
+        {
+          "id": 8,
+          "texto": "Eliminar uma tarefa inútil ou improdutiva da rotina diária."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "nome": "Digital",
+      "habitos": [
+        {
+          "id": 9,
+          "texto": "Esvaziar a caixa de entrada de e-mails até o nível zero."
+        },
+        {
+          "id": 10,
+          "texto": "Limpar a tela física do computador e do celular."
+        },
+        {
+          "id": 11,
+          "texto": "Organizar os ícones, atalhos e favoritos do navegador de internet."
+        },
+        {
+          "id": 12,
+          "texto": "Realizar um backup rápido de arquivos importantes na nuvem."
+        },
+        {
+          "id": 13,
+          "texto": "Excluir arquivos temporários e downloads obsoletos do computador."
+        },
+        {
+          "id": 14,
+          "texto": "Desativar notificações de aplicativos que não são essenciais."
+        },
+        {
+          "id": 15,
+          "texto": "Organizar as pastas de documentos digitais do trabalho ou estudos."
+        },
+        {
+          "id": 16,
+          "texto": "Fazer uma varredura de inscrições e boletins digitais não lidos."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "nome": "Planejamento",
+      "habitos": [
+        {
+          "id": 17,
+          "texto": "Fazer uma revisão rápida das tarefas e prazos da semana."
+        },
+        {
+          "id": 18,
+          "texto": "Organizar a lista de tarefas do dia seguinte na noite anterior."
+        },
+        {
+          "id": 19,
+          "texto": "Dedicar 10 minutos para planejar a estrutura das entregas da semana."
+        },
+        {
+          "id": 20,
+          "texto": "Conferir a agenda de compromissos antes de encerrar o expediente."
+        },
+        {
+          "id": 21,
+          "texto": "Estabelecer blocos de tempo fixos para checar mensagens e canais de chat."
+        },
+        {
+          "id": 22,
+          "texto": "Revisar metas de longo prazo por 5 minutos para manter o alinhamento."
+        },
+        {
+          "id": 23,
+          "texto": "Anotar pendências soltas em um único local de captura rápida."
+        },
+        {
+          "id": 24,
+          "texto": "Avaliar ao final do dia o que funcionou e o que atrasou no cronograma."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "nome": "Leitura",
+      "habitos": [
+        {
+          "id": 25,
+          "texto": "Ler rigorosamente 10 páginas de um livro técnico ou de não-ficção."
+        },
+        {
+          "id": 26,
+          "texto": "Ler um artigo longo ou ensaio educativo guardado para depois."
+        },
+        {
+          "id": 27,
+          "texto": "Estudar um conceito novo da sua área de atuação por 15 minutos."
+        },
+        {
+          "id": 28,
+          "texto": "Ler um boletim informativo especializado da sua área de interesse."
+        },
+        {
+          "id": 29,
+          "texto": "Analisar um estudo de caso ou relatório profissional do seu setor."
+        },
+        {
+          "id": 30,
+          "texto": "Escrever um resumo de uma linha com o principal aprendizado do dia."
+        },
+        {
+          "id": 31,
+          "texto": "Estudar a biografia ou trajetória de uma referência profissional."
+        },
+        {
+          "id": 32,
+          "texto": "Ler sobre uma nova tendência tecnológica ou de mercado."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "nome": "Idiomas",
+      "habitos": [
+        {
+          "id": 33,
+          "texto": "Praticar um novo idioma por 10 minutos em uma plataforma de ensino."
+        },
+        {
+          "id": 34,
+          "texto": "Memorizar e fixar 3 termos ou palavras novas em uma língua estrangeira."
+        },
+        {
+          "id": 35,
+          "texto": "Praticar técnicas de digitação rápida no teclado por 5 minutos."
+        },
+        {
+          "id": 36,
+          "texto": "Ouvir um trecho de áudio ou diálogo em outro idioma."
+        },
+        {
+          "id": 37,
+          "texto": "Praticar a leitura estruturada em uma língua estrangeira."
+        },
+        {
+          "id": 38,
+          "texto": "Estudar regras gramaticais ou sintaxe por 10 minutos."
+        },
+        {
+          "id": 39,
+          "texto": "Assistir a um minitutorial de uma nova ferramenta de software."
+        },
+        {
+          "id": 40,
+          "texto": "Escrever uma frase curta estruturada no idioma que está estudando."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "nome": "Escrita",
+      "habitos": [
+        {
+          "id": 41,
+          "texto": "Escrever um registro livre de pensamentos e ideias por 5 minutos."
+        },
+        {
+          "id": 42,
+          "texto": "Escrever um parágrafo de um artigo, documento ou projeto pessoal."
+        },
+        {
+          "id": 43,
+          "texto": "Anotar uma ideia inovadora ou insight criativo em um caderno."
+        },
+        {
+          "id": 44,
+          "texto": "Escrever uma reflexão curta sobre um aprendizado de projeto recente."
+        },
+        {
+          "id": 45,
+          "texto": "Praticar a escrita de um relato rápido baseado em observações cotidianas."
+        },
+        {
+          "id": 46,
+          "texto": "Escrever uma diretriz ou escopo para um projeto futuro."
+        },
+        {
+          "id": 47,
+          "texto": "Redigir um micro-ensaio sobre um tema que domine o seu interesse."
+        },
+        {
+          "id": 48,
+          "texto": "Escrever um objetivo de longo prazo em formato de narrativa detalhada."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "nome": "Organização",
+      "habitos": [
+        {
+          "id": 49,
+          "texto": "Organizar a mesa de trabalho deixando apenas o essencial à vista."
+        },
+        {
+          "id": 50,
+          "texto": "Arquivar documentos físicos espalhados pela escrivaninha."
+        },
+        {
+          "id": 51,
+          "texto": "Recolher materiais de escritório dispersos e guardá-los nos devidos lugares."
+        },
+        {
+          "id": 52,
+          "texto": "Limpar o pó da superfície da mesa e do teclado."
+        },
+        {
+          "id": 53,
+          "texto": "Organizar os cabos e carregadores utilizando organizadores ou fitas."
+        },
+        {
+          "id": 54,
+          "texto": "Descartar papéis de rascunho antigos e anotações já utilizadas."
+        },
+        {
+          "id": 55,
+          "texto": "Organizar os livros e manuais de consulta nas estantes."
+        },
+        {
+          "id": 56,
+          "texto": "Conferir o estoque de materiais de escritório essenciais."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "nome": "Finanças",
+      "habitos": [
+        {
+          "id": 57,
+          "texto": "Anotar e categorizar todos os gastos realizados no dia anterior."
+        },
+        {
+          "id": 58,
+          "texto": "Fazer um planejamento rápido do orçamento mensal disponível."
+        },
+        {
+          "id": 59,
+          "texto": "Avaliar custos de assinaturas de softwares e ferramentas de trabalho."
+        },
+        {
+          "id": 60,
+          "texto": "Verificar o saldo das contas e faturas de cartões corporativos/pessoais."
+        },
+        {
+          "id": 61,
+          "texto": "Destinar uma porcentagem fixa para investimentos ou reservas."
+        },
+        {
+          "id": 62,
+          "texto": "Pesquisar fornecedores alternativos para otimizar custos operacionais."
+        },
+        {
+          "id": 63,
+          "texto": "Analisar o relatório financeiro do mês anterior."
+        },
+        {
+          "id": 64,
+          "texto": "Auditar tarifas bancárias ou taxas desnecessárias."
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "nome": "Automação",
+      "habitos": [
+        {
+          "id": 65,
+          "texto": "Criar um modelo ou template reutilizável para tarefas repetitivas."
+        },
+        {
+          "id": 66,
+          "texto": "Configurar uma nova regra de automação em e-mails ou planilhas."
+        },
+        {
+          "id": 67,
+          "texto": "Criar teclas de atalho (shortcuts) para comandos frequentes no computador."
+        },
+        {
+          "id": 68,
+          "texto": "Simplificar um processo complexo eliminando etapas burocráticas."
+        },
+        {
+          "id": 69,
+          "texto": "Atualizar scripts ou códigos utilitários de suporte ao trabalho."
+        },
+        {
+          "id": 70,
+          "texto": "Documentar um procedimento padrão (POP) para futuras consultas."
+        },
+        {
+          "id": 71,
+          "texto": "Testar uma nova extensão ou ferramenta que prometa ganho de eficiência."
+        },
+        {
+          "id": 72,
+          "texto": "Limpar macros ou fórmulas corrompidas em planilhas de controle."
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "nome": "Projetos",
+      "habitos": [
+        {
+          "id": 73,
+          "texto": "Atualizar o status de todos os projetos ativos em um painel Kanban."
+        },
+        {
+          "id": 74,
+          "texto": "Quebrar uma tarefa grande e complexa em micro-etapas executáveis."
+        },
+        {
+          "id": 75,
+          "texto": "Revisar os gargalos e impedimentos atuais em seus projetos em andamento."
+        },
+        {
+          "id": 76,
+          "texto": "Validar se os prazos de entrega estão alinhados com as prioridades."
+        },
+        {
+          "id": 77,
+          "texto": "Arquivar projetos concluídos e limpar o painel de visualização."
+        },
+        {
+          "id": 78,
+          "texto": "Definir claramente o 'próximo passo físico' de uma tarefa travada."
+        },
+        {
+          "id": 79,
+          "texto": "Realizar uma reunião de alinhamento rápido consigo mesmo (Review)."
+        },
+        {
+          "id": 80,
+          "texto": "Reatribuir ou renegociar prazos de tarefas sobrepostas."
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "nome": "Inovação",
+      "habitos": [
+        {
+          "id": 81,
+          "texto": "Listar 10 ideias de melhoria para um processo atual em 5 minutos."
+        },
+        {
+          "id": 82,
+          "texto": "Desenhar um mapa mental rápido para estruturar um novo projeto."
+        },
+        {
+          "id": 83,
+          "texto": "Combinar duas ideias de áreas diferentes para criar um conceito inédito."
+        },
+        {
+          "id": 84,
+          "texto": "Fazer um rascunho visual ou fluxograma de uma solução inovadora."
+        },
+        {
+          "id": 85,
+          "texto": "Escrever perguntas provocativas sobre um problema para mudar o ângulo de visão."
+        },
+        {
+          "id": 86,
+          "texto": "Pesquisar referências visuais ou conceituais fora da sua zona de conforto."
+        },
+        {
+          "id": 87,
+          "texto": "Criar protótipos em rascunho de uma interface ou documento."
+        },
+        {
+          "id": 88,
+          "texto": "Listar falhas potenciais de um plano atual para antecipar correções."
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "nome": "Comunicação",
+      "habitos": [
+        {
+          "id": 89,
+          "texto": "Revisar um texto redigido aplicando técnicas de clareza e concisão."
+        },
+        {
+          "id": 90,
+          "texto": "Praticar a estruturação de e-mails diretos e focados em ação."
+        },
+        {
+          "id": 91,
+          "texto": "Responder pendências de comunicação em lote em horários determinados."
+        },
+        {
+          "id": 92,
+          "texto": "Reescrever um parágrafo complexo para torná-lo de fácil compreensão."
+        },
+        {
+          "id": 93,
+          "texto": "Eliminar clichês e jargões corporativos excessivos de uma mensagem."
+        },
+        {
+          "id": 94,
+          "texto": "Estruturar uma pauta clara antes de iniciar uma reunião."
+        },
+        {
+          "id": 95,
+          "texto": "Praticar a síntese de documentos longos em tópicos executivos."
+        },
+        {
+          "id": 96,
+          "texto": "Conferir a formatação e o tom de documentos oficiais antes do envio."
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "nome": "Pesquisa",
+      "habitos": [
+        {
+          "id": 97,
+          "texto": "Investigar uma nova tendência de mercado por 15 minutos."
+        },
+        {
+          "id": 98,
+          "texto": "Analisar os pontos fortes e fracos de um concorrente ou projeto similar."
+        },
+        {
+          "id": 99,
+          "texto": "Ler o sumário executivo de uma pesquisa de setor relevante."
+        },
+        {
+          "id": 100,
+          "texto": "Mapear novas fontes de informação confiáveis para sua área de atuação."
+        },
+        {
+          "id": 101,
+          "texto": "Coletar dados estatísticos úteis para fundamentar argumentos futuros."
+        },
+        {
+          "id": 102,
+          "texto": "Acompanhar atualizações de portais especializados do seu nicho."
+        },
+        {
+          "id": 103,
+          "texto": "Arquivar dados de referência em um banco de conhecimento pessoal."
+        },
+        {
+          "id": 104,
+          "texto": "Cruzar dados de diferentes relatórios para gerar um insight original."
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "nome": "Conhecimento",
+      "habitos": [
+        {
+          "id": 105,
+          "texto": "Atualizar notas em um sistema de base de conhecimento (ex: Obsidian/Notion)."
+        },
+        {
+          "id": 106,
+          "texto": "Conectar conceitos de anotações antigas com ideias recentes."
+        },
+        {
+          "id": 107,
+          "texto": "Criar uma ficha de resumo de um livro ou curso concluído."
+        },
+        {
+          "id": 108,
+          "texto": "Organizar tags e categorias no seu repositório de notas pessoais."
+        },
+        {
+          "id": 109,
+          "texto": "Revisar anotações feitas há 30 dias para fixar o aprendizado."
+        },
+        {
+          "id": 110,
+          "texto": "Consolidar links úteis em um diretório de referências estruturado."
+        },
+        {
+          "id": 111,
+          "texto": "Escrever uma explicação simples para um conceito técnico complexo."
+        },
+        {
+          "id": 112,
+          "texto": "Fazer o backup local da sua base de dados de conhecimento."
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "nome": "Segurança",
+      "habitos": [
+        {
+          "id": 113,
+          "texto": "Atualizar senhas de acesso utilizando um gerenciador seguro."
+        },
+        {
+          "id": 114,
+          "texto": "Verificar se o sistema operacional e softwares principais estão atualizados."
+        },
+        {
+          "id": 115,
+          "texto": "Realizar verificação de segurança em contas ativas (dupla autenticação)."
+        },
+        {
+          "id": 116,
+          "texto": "Limpar o histórico de navegação e caches de aplicativos de terceiros."
+        },
+        {
+          "id": 117,
+          "texto": "Revisar permissões de acesso concedidas a aplicativos externos."
+        },
+        {
+          "id": 118,
+          "texto": "Desconectar sessões ativas em dispositivos que não utiliza mais."
+        },
+        {
+          "id": 119,
+          "texto": "Verificar a integridade de arquivos executáveis antes de abri-los."
+        },
+        {
+          "id": 120,
+          "texto": "Organizar cópias de segurança offline de chaves e acessos críticos."
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "nome": "Tecnologia",
+      "habitos": [
+        {
+          "id": 121,
+          "texto": "Testar um novo comando ou recurso em um software que já utiliza."
+        },
+        {
+          "id": 122,
+          "texto": "Explorar uma nova inteligência artificial aplicada ao seu fluxo de trabalho."
+        },
+        {
+          "id": 123,
+          "texto": "Automatizar uma tarefa repetitiva utilizando scripts simples."
+        },
+        {
+          "id": 124,
+          "texto": "Ler as notas de atualização (changelog) de uma ferramenta essencial."
+        },
+        {
+          "id": 125,
+          "texto": "Configurar um novo ambiente de desenvolvimento ou produtividade."
+        },
+        {
+          "id": 126,
+          "texto": "Otimizar os atalhos de teclado de um editor de texto ou IDE."
+        },
+        {
+          "id": 127,
+          "texto": "Estudar uma nova linguagem de consulta ou formatação de dados."
+        },
+        {
+          "id": 128,
+          "texto": "Testar a compatibilidade de um arquivo em diferentes plataformas."
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "nome": "Métricas",
+      "habitos": [
+        {
+          "id": 129,
+          "texto": "Analisar o gráfico de horas produtivas da semana anterior."
+        },
+        {
+          "id": 130,
+          "texto": "Medir o tempo gasto em tarefas específicas utilizando cronômetros."
+        },
+        {
+          "id": 131,
+          "texto": "Cruzar dados de conclusão de metas com os dias de maior foco."
+        },
+        {
+          "id": 132,
+          "texto": "Identificar o horário de pico de energia cognitiva no seu dia."
+        },
+        {
+          "id": 133,
+          "texto": "Calcular métricas de eficiência em projetos concluídos."
+        },
+        {
+          "id": 134,
+          "texto": "Limpar registros de dados obsoletos em planilhas de controle."
+        },
+        {
+          "id": 135,
+          "texto": "Criar um gráfico visual simples para acompanhar um indicador pessoal."
+        },
+        {
+          "id": 136,
+          "texto": "Avaliar a taxa de conversão de tarefas planejadas versus executadas."
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "nome": "Estratégia",
+      "habitos": [
+        {
+          "id": 137,
+          "texto": "Esboçar o roteiro de um post, artigo ou material de divulgação."
+        },
+        {
+          "id": 138,
+          "texto": "Planejar o calendário de publicações para a próxima semana."
+        },
+        {
+          "id": 139,
+          "texto": "Analisar o engajamento ou retorno de conteúdos publicados anteriormente."
+        },
+        {
+          "id": 140,
+          "texto": "Atualizar as informações de perfil em redes profissionais."
+        },
+        {
+          "id": 141,
+          "texto": "Realizar a curadoria de imagens ou gráficos de apoio para projetos."
+        },
+        {
+          "id": 142,
+          "texto": "Responder interações pendentes em perfis profissionais."
+        },
+        {
+          "id": 143,
+          "texto": "Pesquisar palavras-chave relevantes para otimização de buscas (SEO)."
+        },
+        {
+          "id": 144,
+          "texto": "Revisar a identidade visual de apresentações ou portfólios."
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "nome": "Resolução",
+      "habitos": [
+        {
+          "id": 145,
+          "texto": "Isolar um erro ou falha em um processo para encontrar a causa raiz."
+        },
+        {
+          "id": 146,
+          "texto": "Testar uma hipótese alternativa para resolver um bloqueio técnico."
+        },
+        {
+          "id": 147,
+          "texto": "Consultar documentações oficiais para solucionar um entrave de projeto."
+        },
+        {
+          "id": 148,
+          "texto": "Escrever um relatório de incidente detalhando a falha e a correção."
+        },
+        {
+          "id": 149,
+          "texto": "Criar cenários de teste para validar a estabilidade de uma entrega."
+        },
+        {
+          "id": 150,
+          "texto": "Reverter uma alteração recente para testar a integridade do sistema."
+        },
+        {
+          "id": 151,
+          "texto": "Solicitar feedback estruturado sobre um problema para colegas especializados."
+        },
+        {
+          "id": 152,
+          "texto": "Desenvolver um plano de contingência para falhas imprevistas."
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "nome": "Arquitetura",
+      "habitos": [
+        {
+          "id": 153,
+          "texto": "Desenhar o fluxo de navegação de um novo projeto ou documento."
+        },
+        {
+          "id": 154,
+          "texto": "Estruturar a hierarquia de títulos e subtítulos de um relatório longo."
+        },
+        {
+          "id": 155,
+          "texto": "Simplificar a interface visual de uma planilha ou formulário."
+        },
+        {
+          "id": 156,
+          "texto": "Padronizar a nomenclatura de arquivos e pastas em um projeto."
+        },
+        {
+          "id": 157,
+          "texto": "Criar um guia de estilo visual ou textual para manutenções futuras."
+        },
+        {
+          "id": 158,
+          "texto": "Organizar elementos gráficos em grids alinhados e limpos."
+        },
+        {
+          "id": 159,
+          "texto": "Remover excessos visuais que poluam a leitura de um documento."
+        },
+        {
+          "id": 160,
+          "texto": "Testar a legibilidade de fontes e contrastes em materiais visuais."
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "nome": "Governança",
+      "habitos": [
+        {
+          "id": 161,
+          "texto": "Revisar termos, políticas ou diretrizes de um contrato ou acordo."
+        },
+        {
+          "id": 162,
+          "texto": "Verificar se os prazos legais de entrega de documentos estão corretos."
+        },
+        {
+          "id": 163,
+          "texto": "Organizar comprovantes e registros fiscais em pastas específicas."
+        },
+        {
+          "id": 164,
+          "texto": "Atualizar cadastros e informações de faturamento em sistemas."
+        },
+        {
+          "id": 165,
+          "texto": "Conferir checklists de conformidade antes de finalizar um projeto."
+        },
+        {
+          "id": 166,
+          "texto": "Arquivar termos de encerramento de etapas contratuais."
+        },
+        {
+          "id": 167,
+          "texto": "Auditar se os padrões de qualidade exigidos foram cumpridos."
+        },
+        {
+          "id": 168,
+          "texto": "Listar pendências de regularização documental."
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "nome": "Liderança",
+      "habitos": [
+        {
+          "id": 169,
+          "texto": "Esboçar feedbacks construtivos baseados em fatos para uma equipe."
+        },
+        {
+          "id": 170,
+          "texto": "Delegar uma tarefa de menor complexidade documentando as instruções."
+        },
+        {
+          "id": 171,
+          "texto": "Estudar um princípio de gestão de equipes ou metodologias ágeis."
+        },
+        {
+          "id": 172,
+          "texto": "Mapear competências técnicas necessárias para novos desafios."
+        },
+        {
+          "id": 173,
+          "texto": "Preparar a estrutura de uma reunião de alinhamento com colaboradores."
+        },
+        {
+          "id": 174,
+          "texto": "Reconhecer publicamente a entrega de qualidade de um colega."
+        },
+        {
+          "id": 175,
+          "texto": "Analisar relatórios de desempenho para identificar pontos de melhoria."
+        },
+        {
+          "id": 176,
+          "texto": "Estabelecer marcos claros de entrega para um grupo de trabalho."
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "nome": "Dinâmica",
+      "habitos": [
+        {
+          "id": 177,
+          "texto": "Testar uma nova metodologia de organização (ex: Bullet Journal, GTD)."
+        },
+        {
+          "id": 178,
+          "texto": "Reconfigurar o layout de aplicativos no painel principal do computador."
+        },
+        {
+          "id": 179,
+          "texto": "Experimentar um bloco de trabalho totalmente offline por 2 horas."
+        },
+        {
+          "id": 180,
+          "texto": "Mudar a ordem de execução das tarefas matinais para testar eficiência."
+        },
+        {
+          "id": 181,
+          "texto": "Criar um atalho de teclado complexo para otimizar um fluxo diário."
+        },
+        {
+          "id": 182,
+          "texto": "Substituir uma ferramenta pesada por uma alternativa mais leve e rápida."
+        },
+        {
+          "id": 183,
+          "texto": "Experimentar trabalhar em pé (standing desk) por um período determinado."
+        },
+        {
+          "id": 184,
+          "texto": "Reduzir o número de passos de um processo operacional em 20%."
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "nome": "Documentação",
+      "habitos": [
+        {
+          "id": 185,
+          "texto": "Escrever o passo a passo de como configurar uma ferramenta utilizada."
+        },
+        {
+          "id": 186,
+          "texto": "Registrar as decisões tomadas em uma reunião em ata resumida."
+        },
+        {
+          "id": 187,
+          "texto": "Atualizar o arquivo de histórico de versões de um projeto (changelog)."
+        },
+        {
+          "id": 188,
+          "texto": "Criar um diagrama explicativo de um processo interno complexo."
+        },
+        {
+          "id": 189,
+          "texto": "Documentar os aprendizados obtidos após a conclusão de um projeto."
+        },
+        {
+          "id": 190,
+          "texto": "Organizar um glossário de termos técnicos específicos da sua área."
+        },
+        {
+          "id": 191,
+          "texto": "Fotografar ou escanear notas importantes para armazenamento digital."
+        },
+        {
+          "id": 192,
+          "texto": "Indexar relatórios antigos para facilitar buscas futuras."
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "nome": "Energia",
+      "habitos": [
+        {
+          "id": 193,
+          "texto": "Fazer uma varredura mental para esvaziar a mente de pendências (Brain Dump)."
+        },
+        {
+          "id": 194,
+          "texto": "Realizar uma transição consciente entre o fim do expediente e o descanso."
+        },
+        {
+          "id": 195,
+          "texto": "Identificar qual distração externa mais roubou seu foco hoje e bloqueá-la."
+        },
+        {
+          "id": 196,
+          "texto": "Fazer uma respiração focada para resetar o foco antes de iniciar uma nova tarefa."
+        },
+        {
+          "id": 197,
+          "texto": "Fazer uma pausa rápida de 5 minutos sem telas para descansar a visão."
+        },
+        {
+          "id": 198,
+          "texto": "Reorganizar as prioridades do dia quando houver excesso de demandas."
+        },
+        {
+          "id": 199,
+          "texto": "Fechar aplicativos de mensagens para recuperar a concentração profunda."
+        },
+        {
+          "id": 200,
+          "texto": "Fazer um balanço mental rápido das vitórias e entregas concluídas no dia."
+        }
+      ]
+    }
+  ]
+}

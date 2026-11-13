@@ -1,0 +1,36 @@
+/* IMPULSO MÍSTICO — harmonia análoga roxo/magenta de Itten. */
+:root{
+ --itten-primary:#34187C;--itten-secondary:#66187C;--itten-accent:#7C1860;
+ --itten-color-4:#1B0C40;--itten-color-5:#350C40;--itten-color-6:#400C32;
+ --itten-color-7:#4D24B8;--itten-color-8:#9724B8;--itten-color-9:#B8248E;
+ --itten-color-10:#160A33;--itten-color-11:#2A0A33;--itten-color-12:#330A28;
+}
+/* Paleta imersiva: superfícies escuras e textos claros em ambos os modos. */
+body[data-palette="mistico"]{
+ --accent:#66187C;--accent2:#7C1860;--primary:#34187C;
+ --ignite:#B8248E;--ignite-soft:#f4c7eb;--ignite-rgb:184,36,142;
+ --bg:#f3effa;--surface:#fff;--text:#160A33;--muted:#350C40;
+ --border:#66187C;--line:#977eb5;color-scheme:light;
+}
+body.dark[data-palette="mistico"]{
+ --accent:#9724B8;--accent2:#B8248E;--primary:#34187C;
+ --bg:#160A33;--surface:#1B0C40;--text:#fff;--muted:#e9dcf4;
+ --border:#9724B8;--line:#785a9e;color-scheme:dark;
+}
+body[data-palette="mistico"] :is(.btn.primary,.primary,.inventory-pill.selected){background:#34187C!important;color:#fff!important;border-color:#9724B8!important}
+body[data-palette="mistico"] :is(.inventory-card,.list-card,.panel,.palette-option){border-color:var(--border)}
+body[data-palette="mistico"] .inventory-card{background:#350C40;color:#fff;border:1px solid #9724B8;box-shadow:0 2px 10px #160A3324}
+body[data-palette="mistico"] .inventory-card :is(p,strong,small){color:#fff}
+body[data-palette="mistico"] .inventory-tag{background:#66187C;color:#fff;border:1px solid #B8248E}
+body[data-palette="mistico"] .inventory-card :is(.btn,button){border-color:#B8248E}
+body[data-palette="mistico"] .inventory-card .btn:not(.primary){background:#34187C;color:#fff}
+body[data-palette="mistico"] .progress>span{background:#9724B8}
+body[data-palette="mistico"] :is(button,input,select,textarea):focus-visible{outline:3px solid #9724B8;outline-offset:3px}
+body.dark[data-palette="mistico"] :is(button,input,select,textarea):focus-visible{outline-color:#f4c7eb}
+body[data-palette="mistico"] #splash{background:radial-gradient(circle at 50% 38%,#350C40 0%,#160A33 70%,#0b041b 100%);color:#fff}
+body[data-palette="mistico"] #splash .splash-wordmark strong{color:#fff}
+body[data-palette="mistico"] #splash :is(.splash-caption,.splash-kicker,.splash-wordmark small){color:#f4c7eb}
+body[data-palette="mistico"] #splash .splash-loading-bar{background:linear-gradient(90deg,#66187C,#B8248E,#f4c7eb)}
+.palette-swatches.mistico i:nth-child(1){background:#34187C}
+.palette-swatches.mistico i:nth-child(2){background:#66187C}
+.palette-swatches.mistico i:nth-child(3){background:#B8248E}

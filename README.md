@@ -1,587 +1,763 @@
-# KHRONOS — MOTOR DE HÁBITOS ATÔMICOS
+# IMPULSO — Manual completo do usuário
 
-## Manual completo do software — Versão 1.0
+**Motor de Produtividade Pessoal**  
+**Aplicativo:** https://magpe-stack.github.io/Impulso/  
+**Código-fonte:** https://github.com/magpe-stack/Impulso  
+**Manual online:** https://github.com/magpe-stack/Impulso/blob/main/README.md
 
-**Categoria:** produtividade, hábitos, acompanhamento temporal e gamificação.  
-**Idioma:** português brasileiro.  
-**Tecnologia:** HTML5, CSS3, JavaScript ES6+, Web App Manifest e Service Worker.  
-**Modelo:** PWA offline-first, sem conta, sem servidor e sem sincronização.  
-**Aplicativo:** https://magpe-stack.github.io/Khronos/  
-**Código-fonte:** https://github.com/magpe-stack/Khronos  
-**Ajuda:** https://github.com/magpe-stack/Khronos/blob/main/README.md
+<p align="center"><img src="ImpulsoCover.png" alt="Capa do Impulso — Motor de Produtividade Pessoal" width="100%"></p>
 
-> **Escopo desta edição:** este manual descreve a implementação 1.0 fornecida no projeto. Algumas operações dependem do navegador, e a versão ainda requer testes de integração e acessibilidade antes de ser considerada validada para produção. O manual não substitui esses testes.
+> **Leia antes de começar:** o Impulso é um aplicativo pessoal de registro de tempo, hábitos e progressão gamificada. Não é um relógio de ponto homologado, não oferece sincronização entre dispositivos e não garante que os dados do navegador sejam permanentes. **Faça backups e guarde os arquivos fora do navegador.**
 
----
+## Sumário
 
-# PARTE I — IDENTIDADE, OBJETIVOS E CONCEITOS
-
-## 1. Apresentação
-
-O Khronos é um motor de hábitos atômicos que transforma tempo dedicado a projetos em uma unidade própria de progressão: **graus**. Seu propósito é ajudar o usuário a visualizar o acúmulo de esforço em atividades que exigem repetição, concentração e continuidade. Escrever, estudar, programar, desenhar, praticar um idioma ou organizar um projeto são exemplos de aplicações possíveis.
-
-Em vez de apresentar apenas horas e minutos, o Khronos representa o esforço por meio de Pulsos, Giros, Turnos, Fases e Propulsões. O usuário pode iniciar e pausar sessões, registrar atividades realizadas fora do aplicativo, acompanhar o avanço contra chefões simbólicos e desbloquear conquistas conforme os graus se acumulam.
-
-## Screenshots
-
-### Khronos App
-
-![Khronos App](KhronosCover.png)
-
-A interface do Khronos foi projetada com foco em usabilidade, desempenho e uma experiência visual limpa, facilitando o acompanhamento de tarefas e atividades em tempo real.
-
-O aplicativo não avalia a qualidade do trabalho nem verifica automaticamente se uma tarefa foi realmente executada. Sua medida é o tempo declarado e contabilizado. A interpretação desse tempo como produtividade depende da honestidade do registro e dos critérios pessoais do usuário.
-
-## 2. Por que o nome Khronos?
-
-O nome faz referência a Khronos ou Chronos, figura associada à personificação do tempo na tradição mitológica e filosófica grega. Na identidade deste aplicativo, Khronos representa especialmente o tempo linear: a sequência contínua de instantes que não retorna ao ponto anterior.
-
-A ideia central é o **efeito composto**. Uma pequena ação repetida muitas vezes pode produzir resultados relevantes. Dez minutos isolados parecem modestos; muitas sessões de dez minutos, realizadas ao longo de semanas, podem representar um investimento significativo. O efeito composto também pode operar negativamente: hábitos prejudiciais, repetidos por longos períodos, podem comprometer objetivos.
-
-O Khronos não afirma que tempo investido produz necessariamente sucesso. O tempo é um recurso; qualidade da prática, descanso, planejamento, contexto e escolhas também importam. A metáfora do aplicativo é que o tempo multiplica aquilo que fazemos repetidamente.
-
-## 3. Objetivos e público
-
-O software foi concebido para pessoas que desejam acompanhar esforços de longo prazo em múltiplos projetos, especialmente quando os resultados não são imediatamente visíveis. Pode ser utilizado por escritores, estudantes, desenvolvedores, pesquisadores, artistas, profissionais independentes e qualquer pessoa que queira observar a continuidade de sua prática.
-
-O Khronos é particularmente útil para acompanhar **tempo dedicado**, não para medir desempenho médico, produtividade empresarial certificada, frequência profissional legalmente auditável ou cumprimento de obrigações contratuais. Os dados podem ser alterados por entradas manuais e dependem do dispositivo local.
-
-## 4. Princípios de operação
-
-O funcionamento se apoia em cinco princípios. Primeiro, cada projeto mantém sua própria contagem acumulada. Segundo, o tempo pode ser registrado automaticamente ou por entrada manual. Terceiro, os graus são derivados do tempo, sem necessidade de conversão pelo usuário. Quarto, a progressão desbloqueia marcos simbólicos, sem atribuir valores morais ao usuário. Quinto, os dados permanecem sob controle local, sendo o backup responsabilidade de quem utiliza o aplicativo.
+1. [Apresentação e filosofia](#1-apresentacao-e-filosofia)
+2. [Primeiro acesso, instalação e uso offline](#2-primeiro-acesso-instalacao-e-uso-offline)
+3. [Ignição: a abertura cinematográfica](#3-ignicao-a-abertura-cinematografica)
+4. [Interface, navegação e menu](#4-interface-navegacao-e-menu)
+5. [Projetos independentes](#5-projetos-independentes)
+6. [Início e indicadores](#6-inicio-e-indicadores)
+7. [Ponto: cronometrar trabalho](#7-ponto-cronometrar-trabalho)
+8. [Entradas retroativas](#8-entradas-retroativas)
+9. [Meu Dia, Histórico e cálculo do tempo](#9-meu-dia-historico-e-calculo-do-tempo)
+10. [Estatísticas: central de análise e desempenho](#10-estatisticas-central-de-analise-e-desempenho)
+11. [Hábitos e Inventário de Elixires](#11-habitos-e-inventario-de-elixires)
+12. [Pomodoro e conclusão de hábitos](#12-pomodoro-e-conclusao-de-habitos)
+13. [Radar e meta de 10.000 horas](#13-radar-e-meta-de-10000-horas)
+14. [Arena: 200 chefões](#14-arena-200-chefoes)
+15. [Codex de Monstros](#15-codex-de-monstros)
+16. [Elixires, cofres e recompensas](#16-elixires-cofres-e-recompensas)
+17. [Visão: o foguete revelado por Elixires](#17-visao-o-foguete-revelado-por-elixires)
+18. [Guardar, exportar, importar e restaurar](#18-guardar-exportar-importar-e-restaurar)
+19. [Impressão e relatórios](#19-impressao-e-relatorios)
+20. [Alertas: lembretes opcionais](#20-alertas-lembretes-opcionais)
+21. [Armazenamento: saúde dos dados](#21-armazenamento-saude-dos-dados)
+22. [Configuração: paletas e aparência](#22-configuracao-paletas-e-aparencia)
+23. [Privacidade, integridade e limites técnicos](#23-privacidade-integridade-e-limites-tecnicos)
+24. [Solução de problemas](#24-solucao-de-problemas)
+25. [Perguntas frequentes](#25-perguntas-frequentes)
+26. [Roteiro de testes](#26-roteiro-de-testes)
+27. [Arquivos do projeto](#27-arquivos-do-projeto)
+28. [Glossário](#28-glossario)
 
 ---
 
-# PARTE II — UNIDADES E MATEMÁTICA DO TEMPO
+<a id="1-apresentacao-e-filosofia"></a>
 
-## 5. O que é um grau?
+## 1. Apresentação e filosofia
 
-No Khronos, **1 grau corresponde a 10 segundos**. Portanto, um minuto equivale a 6 graus, e uma hora equivale a 360 graus. A palavra “graus” representa uma unidade convencional de pontuação temporal criada para o sistema, não uma medida angular física do relógio ou de temperatura.
+O **Impulso — Motor de Produtividade Pessoal** reúne quatro dimensões em um mesmo ambiente: **trabalho efetivamente registrado**, **hábitos executados**, **acompanhamento do progresso** e **recompensas narrativas inspiradas em RPG**. O objetivo é tornar visível o esforço contínuo sem transformar a ferramenta em uma competição entre usuários.
 
-A fórmula básica é:
+A jornada simbólica possui **10.000 horas**. É uma referência de longo prazo, **não uma certificação de maestria**, uma medida da qualidade do trabalho ou uma promessa de sucesso. A Arena transforma marcos de tempo em batalhas contra chefões; o Codex documenta adversários derrotados; os Elixires recompensam a combinação de progresso e hábitos concluídos.
 
-`graus = segundos / 10`
+O aplicativo é **PWA, mobile-first, offline-first e executado no próprio navegador**, sem conta obrigatória, servidor de registros ou bibliotecas externas de interface. Projetos diferentes mantêm seus próprios registros e conquistas.
 
-Para converter minutos:
+<a id="2-primeiro-acesso-instalacao-e-uso-offline"></a>
 
-`graus = minutos × 6`
+## 2. Primeiro acesso, instalação e uso offline
 
-Para converter graus em minutos:
+### Abrir e instalar
 
-`minutos = graus / 6`
+1. Acesse **https://magpe-stack.github.io/Impulso/** com conexão à internet.
+2. Aguarde a apresentação cinematográfica **Ignição**, com o foguete e o anel de progresso (aproximadamente 3,7 segundos; consulte o capítulo dedicado).
+3. Crie seu primeiro projeto em **Novo**.
+4. Se o navegador oferecer instalação, escolha **Instalar aplicativo** ou **Adicionar à tela inicial**. No Chrome Android, a opção costuma estar no menu do navegador; em navegadores de desktop, pode aparecer na barra de endereço.
+5. Abra o aplicativo novamente pelo atalho, se criado.
 
-O cronômetro armazena internamente milissegundos. Por isso, pode apresentar frações de grau durante uma sessão, embora as unidades maiores sejam contabilizadas apenas quando seus marcos inteiros são alcançados.
+<p align="center"><img src="logo.svg" alt="Logotipo do Impulso" width="180"></p>
 
-## 6. Hierarquia oficial
+### Trabalhar sem internet
+
+O **service worker** guarda os arquivos essenciais do aplicativo em cache para permitir a abertura posterior sem conexão, desde que a instalação do cache tenha sido concluída. Faça um teste: abra o aplicativo conectado, feche-o, desligue a conexão e tente abri-lo novamente. A disponibilidade offline depende do navegador, das políticas de armazenamento e de o cache não ter sido removido.
+
+**Importante:** instalar o PWA **não** significa que os dados foram copiados para uma nuvem. A instalação e o armazenamento de projetos são coisas distintas.
+
+<a id="3-ignicao-a-abertura-cinematografica"></a>
+
+## 3. Ignição: a abertura cinematográfica
+
+Ao iniciar o Impulso, o usuário encontra **Ignição — O Despertar do Impulso**, uma apresentação visual que antecede a interface principal. Em vez de uma tela branca com logotipo estático, a abertura usa um **fundo escuro**, iluminação radial, o foguete oficial, um **anel energético**, partículas luminosas, a revelação progressiva do nome **IMPULSO** e uma barra de inicialização.
+
+### Como a sequência funciona
+
+1. **Preparação e energia:** a tela escura apresenta a atmosfera de propulsão e o brilho inicial.
+2. **Ignição:** o foguete e os efeitos luminosos ganham destaque, acompanhados pelo anel energético.
+3. **Revelação:** o nome do aplicativo aparece enquanto o anel e a barra avançam.
+4. **Transição:** a apresentação desaparece suavemente e a interface fica disponível.
+
+A apresentação tem **duração programada de aproximadamente 3,7 segundos**, seguida por uma transição de cerca de **0,4 segundo**. A duração não é um teste de velocidade da conexão: **a barra é um elemento visual sincronizado com a animação, não uma medição do carregamento real de arquivos ou dados**.
+
+### Cores e acessibilidade
+
+A iluminação acompanha a identidade visual escolhida em **Configuração**: **Impulso Original**, **Impulso Vinho**, **Impulso Blue Sky**, **Impulso Trinity**, **Impulso Granfino** ou **Impulso Ecológico** e **Impulso Místico**. Isso independe do modo claro ou escuro escolhido para a interface. A abertura utiliza animações CSS nativas, sem vídeos, serviços externos ou bibliotecas de animação.
+
+Se o dispositivo ou navegador solicitar **movimento reduzido** (`prefers-reduced-motion`), os efeitos são simplificados para respeitar essa preferência, **mas a duração programada continua aproximadamente 3,7 segundos**. A apresentação dispõe de um mecanismo de segurança que a encerra se algo impedir a conclusão normal; em condições excepcionais, como a aba ficar em segundo plano, o tempo observado pode variar. O objetivo é impedir que a abertura bloqueie o uso do aplicativo.
+
+### Se a abertura não aparecer corretamente
+
+- Se ela desaparecer rápido demais, atualize o aplicativo com conexão à internet e reabra-o, para que o navegador obtenha os arquivos mais recentes do cache offline.
+- Se ficar presa, feche e reabra o aplicativo; confira se o navegador concluiu a atualização do PWA. **Não apague os dados do site sem antes guardar um backup.**
+- Se os efeitos parecerem estáticos, verifique a configuração de redução de movimento do sistema. Isso não deve impedir o acesso ao aplicativo.
+- Em aparelhos mais lentos, os quadros da animação podem não ser uniformes; isso não afeta a contagem das sessões de trabalho.
+
+<a id="4-interface-navegacao-e-menu"></a>
+
+## 4. Interface, navegação e menu
+
+O menu lateral é aberto pelo botão no cabeçalho. Seus grupos são expansíveis e aparecem nesta ordem:
+
+| Grupo | Opções |
+|---|---|
+| **Início** | Novo · Projetos · Guardar · Restaurar · Imprimir |
+| **Ações** | Ponto · Hábitos · Entradas |
+| **Vitórias** | Arena · Codex · Elixires · Cerimônias · Visão |
+| **Dados** | Meu Dia · **Calendário** · Radar · Estatísticas · Armazenamento |
+| **Configurações** | Página com Temas e Alertas |
+| **Sair** | Encerramento com confirmação |
+
+Selecione o nome de um grupo para expandir ou recolher seu submenu. **Entradas** permite registrar atividades retroativas. O botão **Calendário** abre a visualização mensal da produtividade.
+
+No cabeçalho também há controle de **modo claro/escuro** e, conforme o navegador, um controle de **tela cheia**. A tela cheia pode não estar disponível em todos os dispositivos. O botão **Sobre** apresenta a finalidade do Impulso, um resumo atualizado dos principais recursos e links para o aplicativo, o repositório e o manual completo. Os links externos precisam de conexão para abrir, mas não são necessários para utilizar os recursos locais.
+
+**Navegação não encerra automaticamente um Ponto ativo.** Você pode iniciar um trabalho, consultar outras páginas e voltar para finalizá-lo.
+
+### Sair do aplicativo
+
+O botão **Sair** aparece no final do menu lateral, imediatamente abaixo de **Configuração**. Ao selecioná-lo, o Impulso solicita confirmação. **Cancelar** mantém a navegação normalmente; **Sair do aplicativo** apresenta uma tela de despedida com a opção **Voltar ao Impulso**.
+
+Em aplicativos instalados, o Impulso tenta fechar a janela, quando o navegador permite. Em abas comuns, os navegadores geralmente proíbem o fechamento programático; nesse caso, feche a aba manualmente. A tela de saída não apaga projetos, hábitos ou registros. Se houver um Ponto em andamento, ele não será automaticamente encerrado: volte e finalize-o quando desejar.
+
+
+<a id="5-projetos-independentes"></a>
+
+## 5. Projetos independentes
+
+### Criar
+
+Abra **Novo**, digite um nome com até **50 caracteres** e confirme. O novo projeto passa a ser o ativo.
+
+### Abrir, renomear e excluir
+
+Em **Projetos**, consulte a lista, selecione um projeto para trabalhar nele e utilize as ações de renomear ou excluir quando necessário. A lista também pode ser impressa. Ao mudar de projeto, os registros, hábitos, tempo, chefões e Elixires exibidos passam a ser os do projeto selecionado.
+
+**Atenção à exclusão:** excluir um projeto é uma ação destrutiva. Antes de excluir, faça **Guardar** e verifique que o arquivo JSON foi salvo em local seguro. Um backup individual permite preservar ou transferir um projeto sem substituir toda a coleção.
+
+### Isolamento
+
+Cada projeto mantém seus próprios dados: atividades, sessões, hábitos equipados, progresso, coleções e registros. A preferência visual, por outro lado, é uma configuração do aplicativo **neste navegador**, não uma paleta diferente para cada projeto.
+
+<a id="6-inicio-e-indicadores"></a>
+
+## 6. Início e indicadores
+
+A página **Início** é o ponto de entrada para criar ou abrir projetos e acompanhar a evolução do projeto ativo. Ela apresenta indicadores de tempo e progresso, incluindo o caminho até as 10.000 horas, além de atalhos para ações frequentes.
+
+Os números refletem os dados armazenados. Se você excluir um registro, o tempo e os marcos de progresso poderão diminuir. Indicadores de hábitos e chefões não devem ser confundidos com horas de trabalho: são medidas diferentes.
+
+<a id="7-ponto-cronometrar-trabalho"></a>
+
+## 7. Ponto: cronometrar trabalho
+
+Use **Ponto** para registrar uma atividade enquanto ela acontece.
+
+1. Abra um projeto e entre em **Ponto**.
+2. Informe o **nome do trabalho** (até 50 caracteres).
+3. Clique em **Iniciar** para marcar a data e a hora inicial.
+4. Trabalhe normalmente. Você pode visitar outras telas do Impulso enquanto a sessão permanece ativa.
+5. Retorne a **Ponto** e utilize **Terminar** para marcar o fim da sessão.
+6. Quando o formulário oferecer **Concluir**, confirme o lançamento definitivo no histórico.
+
+O formulário permanece na própria página, sem uma janela modal que impeça a navegação. O Ponto utiliza horários reais de início e término. Uma sessão pode começar antes da meia-noite e terminar no dia seguinte; o cálculo diário é dividido por data.
+
+**Boas práticas:** não abra simultaneamente várias instâncias do aplicativo para controlar a mesma atividade; confira o nome e os horários antes de concluir; não limpe os dados do site com uma sessão aberta. A continuidade após fechamento forçado, reinício ou suspensão do navegador deve ser conferida antes de confiar no resultado.
+
+<a id="8-entradas-retroativas"></a>
+
+## 8. Entradas retroativas
+
+A opção **Entradas**, no menu esquerdo, abre uma página própria chamada **Entradas retroativas**. Nela há duas opções: **Entrada de Ponto** e **Entrada de Hábito**. Ambas registram atividades que já ocorreram, sem iniciar cronômetros, e exigem um projeto aberto.
+
+### Entrada de Ponto
+
+Clique em **Entrada de Ponto** para abrir a ficha de entrada manual de trabalho já existente. Informe o nome da atividade (até 50 caracteres), as datas e os horários de início e término, confira os dados e selecione **Lançar entrada**. O registro aparece no Histórico e no Meu Dia como **Entrada Manual**. É possível informar início e término em dias diferentes.
+
+### Entrada de Hábito
+
+Clique em **Entrada de Hábito** para abrir a ficha específica de hábitos. Selecione um hábito já cadastrado no projeto, informe as datas e os horários reais de início e término e escolha **Lançar hábito**. A execução fica vinculada ao hábito escolhido e aparece como **Hábito** no Histórico e no Meu Dia. Ela também participa das estatísticas e da lógica de recompensas aplicável a registros de hábitos.
+
+Se ainda não houver hábitos cadastrados, abra a página **Hábitos** e crie um primeiro. Não é necessário que o hábito esteja equipado para registrar uma execução anterior.
+
+### Validação e cuidados
+
+As fichas verificam datas de calendário válidas, horário de término posterior ao início e término não situado no futuro. Atividades que atravessam a meia-noite são permitidas. O sistema preserva os registros no armazenamento local do projeto, sujeitos às mesmas condições de backup e restauração dos demais dados.
+
+**Evite duplicidade:** não lance retroativamente o mesmo trabalho ou hábito já registrado por Ponto ou Pomodoro. Use a entrada retroativa somente para atividades efetivamente realizadas.
+
+<a id="9-meu-dia-historico-e-calculo-do-tempo"></a>
+
+## 9. Meu Dia, Histórico e cálculo do tempo
+
+### Calendário de produtividade (versão 69)
+
+Abra **Dados → Calendário** para consultar um mês de cada vez. Os botões **Anterior** e **Próximo** mudam o mês, sem alterar registros. Cada data mostra a duração efetivamente trabalhada; os indicadores resumem dias trabalhados e tempo acumulado no mês. Selecione um dia para consultar as atividades, nomes e horários de início e término, com acesso a **Meu Dia** e à impressão daquele dia. Dias sem registros permanecem disponíveis para consulta e são identificados explicitamente.
+
+A contagem utiliza os mesmos intervalos consolidados de produtividade do aplicativo: atividades simultâneas não duplicam o tempo, e registros que atravessam a meia-noite são distribuídos entre as datas corretas. O calendário é exclusivo do projeto ativo, funciona offline e não precisa de armazenamento adicional.
+
+### Sequências de produtividade (versão 70)
+
+Em **Dados → Calendário**, três indicadores acompanham a regularidade de cada projeto: **Sequência atual**, **Recorde pessoal** e **Última sequência encerrada**. Um dia conta como ativo quando existe ao menos um intervalo de trabalho com duração positiva; várias atividades no mesmo dia contam apenas uma vez. A sequência atual permanece válida se o último dia ativo for hoje ou ontem, pois o dia de hoje ainda pode receber registros. Se um dia inteiro passar sem atividade, a sequência termina.
+
+Os cálculos são derivados dos registros reais do projeto, sem criar pontos, horas ou recompensas extras. Entradas retroativas, exclusões e restaurações são refletidas automaticamente. Atividades que atravessam a meia-noite contam nos dois dias quando houver duração positiva em ambos. O recorde inclui toda a história do projeto, e os indicadores são independentes do mês exibido no calendário. O recurso funciona offline, sem armazenamento adicional e sem modificar os backups existentes.
+
+### Meu Dia
+
+A página **Meu Dia** organiza os registros pela data, com títulos no formato **Meu Dia dd-mm-aaaa**. Cada atividade apresenta **Atividade**, **Nome**, **Início**, **Término** e opção de exclusão. Os tipos mostrados são **Ponto**, **Entrada Manual** e **Hábito**. Hábitos concluídos também aparecem nesse acompanhamento.
+
+### Histórico
+
+O Histórico reúne os registros do projeto ao longo das datas. A visualização diária e os relatórios partem dos mesmos registros; um trabalho que cruza dias não se transforma em dois trabalhos diferentes.
+
+### Exemplo de divisão entre dias
+
+Uma tarefa começa em **11/11, às 23h46**, e termina em **12/11, às 00h59**. Duração total: **1h13min**. O dia 11 recebe **14 minutos**; o dia 12 recebe **59 minutos**. A atividade pode aparecer nas duas datas para fins de consulta, mas permanece um único registro e não deve ser somada duas vezes ao total do projeto.
+
+### Sobreposição de horários
+
+O cálculo de tempo consolidado reúne intervalos coincidentes para evitar dupla contagem. Por isso, duas atividades que aconteceram simultaneamente não significam necessariamente a soma simples das durações de ambas. Isso é particularmente importante quando se combinam Ponto, Entrada Manual e hábitos.
+
+### Exclusão
+
+Use a lixeira da linha correspondente para excluir um registro. A exclusão altera os totais, os marcos da Arena e, quando aplicável, a validade de Elixires relacionados. **Faça backup antes de excluir informações importantes.**
+
+<a id="10-estatisticas-central-de-analise-e-desempenho"></a>
+
+## 10. Estatísticas: central de análise e desempenho
+
+A página **Estatísticas** fica no menu depois de **Radar**. Ela reúne medições calculadas a partir dos dados reais do Impulso, sem enviar informações a servidores.
+
+### Escolher o alcance da análise
+
+- **Projeto atual:** examina exclusivamente o projeto aberto. Use essa opção para avaliar sua rotina, seus hábitos e sua progressão individual.
+- **Todos os projetos:** agrega os indicadores para oferecer uma visão global. A agregação **não mistura, move nem modifica** os registros originais de cada projeto.
+
+### Selecionar o período
+
+Escolha **Hoje**, **Últimos 7 dias**, **Mês atual**, **Ano atual** ou **Todo o histórico**. Os períodos usam datas locais do navegador. O mesmo indicador pode variar de acordo com o intervalo escolhido.
+
+### Oito grupos de medições
+
+| Grupo | O que você encontra |
+|---|---|
+| **Produtividade** | Tempo produtivo, frequência de trabalho, sessões, médias diárias, maior e menor sessão e regularidade observável. |
+| **Hábitos** | Hábitos equipados, conclusões registradas, tempo dedicado, ranking, frequência e sequências de dias com conclusão. |
+| **Desempenho temporal** | Distribuição do trabalho por horário, dia da semana, duração e tipo de atividade. |
+| **Evolução dos projetos** | Progresso da meta de 10.000 horas, horas restantes, evolução histórica, comparação entre projetos e projeções matemáticas. |
+| **Arena e RPG** | Chefões derrotados e pendentes, avanço na campanha, Codex, Elixires resgatados e cofres pendentes. |
+| **Concentração e sessões** | Quantidade, duração e distribuição das sessões registradas; não mede atenção psicológica nem distrações não registradas. |
+| **Armazenamento e integridade** | Tamanho estimado dos dados por projeto, contagens e possíveis inconsistências de registros. |
+| **Tendências** | Evolução diária, comparações entre períodos, médias e tendências derivadas do histórico disponível. |
+
+### Ler os resultados corretamente
+
+**Atividades que atravessam a meia-noite** têm sua duração atribuída aos dias correspondentes. **Intervalos sobrepostos dentro de um mesmo projeto** são unidos para evitar dupla contagem do tempo produtivo. Na visão global, porém, os tempos de **projetos diferentes** são somados, mesmo que tenham ocorrido ao mesmo tempo: o resultado representa horas contabilizadas por projeto, e não necessariamente horas cronológicas exclusivas.
+
+A **taxa de conclusão de tentativas** não pode ser calculada com confiança se o aplicativo só registra hábitos concluídos, sem histórico completo de tentativas canceladas. Da mesma forma, não se deve inferir quantas vezes um Pomodoro foi interrompido se esse evento não foi registrado. Projeções de chegada às 10.000 horas são **estimativas**, não promessas. Indicadores sem base suficiente devem aparecer como indisponíveis ou acompanhados de explicação.
+
+### Atualizar, exportar e imprimir
+
+Use **Atualizar** para recalcular os indicadores. **Exportar JSON** gera um relatório estatístico para consulta externa; **Imprimir** produz uma apresentação para papel ou PDF, conforme o navegador. Esses comandos não alteram os registros. Para medir a cota do navegador, a persistência e o cache offline, consulte a página separada **Armazenamento**.
+
+<a id="11-habitos-e-inventario-de-elixires"></a>
+
+## 11. Hábitos e Inventário de Elixires
+
+A página **Hábitos** possui duas áreas complementares:
+
+**Elixires Ativos:** os hábitos equipados aparecem primeiro, em cartões compactos com o temporizador e controles. É possível manter **até 6 hábitos ativos por projeto**. No desktop, a grade procura organizar os cartões em três colunas; em telas menores, adapta-se ao espaço disponível.
+
+**Inventário de Elixires:** catálogo offline com **200 sugestões de hábitos distribuídas em 25 categorias**, definido no arquivo `habitos_elixires_v2.json`. Use a **pesquisa global em tempo real**, independente da categoria selecionada, e as **25 categorias em abas horizontais roláveis** para encontrar opções. Os cartões exibem nome, categoria e ação textual com indicação explícita de estado. Clique em **Equipar** para incluir um hábito na rotina e em **Desequipar** para liberar uma vaga. Equipar **não** significa concluir.
+
+### Criar hábito personalizado
+
+Clique em **+ Novo Hábito** e informe:
+
+- **Nome** com até 50 caracteres.
+- **Categoria**.
+- **Duração estipulada** em minutos, de **1 a 1.440**.
+
+O formulário de criação apresenta campos de nome, categoria (inclusive **Personalizado**) e duração. O novo hábito é salvo no projeto ativo em armazenamento local, passa a integrar imediatamente o inventário e fica disponível para equipagem. Para criar ou equipar outro quando já existem seis ativos, primeiro desequipe um. Projetos antigos que já contenham mais hábitos podem conservar os dados existentes; o limite impede novas equipagens até haver espaço.
+
+**Dica:** comece com poucos hábitos que realmente possa executar. O catálogo é uma biblioteca de sugestões, não uma lista de obrigações.
+
+<a id="12-pomodoro-e-conclusao-de-habitos"></a>
+
+## 12. Pomodoro e conclusão de hábitos
+
+Cada hábito equipado oferece um temporizador de duração configurada e controles para **iniciar, pausar, retomar, concluir e reiniciar**, conforme o estado exibido.
+
+1. Escolha um hábito equipado.
+2. Inicie o Pomodoro e execute a atividade.
+3. Pause se precisar interromper; retome quando voltar.
+4. Ao finalizar, use o comando de **conclusão** e confira a confirmação apresentada.
+5. Verifique o registro em **Meu Dia** e no histórico do projeto.
+
+A conclusão é uma **ação explícita**: deixar o relógio chegar ao fim, por si só, não deve ser interpretado como registro definitivo sem confirmação. A duração configurada é a referência do temporizador; registre somente hábitos realmente realizados.
+
+O aplicativo também oferece um fluxo de conclusão que solicita confirmação e, opcionalmente, uma observação curta. Quando utilizado, o período é registrado retroativamente, terminando no momento da confirmação; por isso, confirme apenas se de fato executou o hábito nesse intervalo.
+
+**Relação com os Elixires:** uma conclusão de hábito pode abrir **no máximo um cofre** de um chefão já derrotado. Consulte o capítulo 16, que explica as recompensas e a página Visão.
+
+<a id="13-radar-e-meta-de-10000-horas"></a>
+
+## 13. Radar e meta de 10.000 horas
+
+O **Radar — Motor de Propulsão** representa o tempo efetivo de trabalho como rotação simbólica de um motor de foguete. Os graus são uma medida de tempo, **não uma moeda, um indicador de qualidade ou uma simulação física de motor real**. O rotor SVG usa exclusivamente as cores do tema ativo, inclusive no modo escuro; sua animação é desativada quando o sistema solicita redução de movimento.
+
+### Hierarquia oficial do motor
 
 | Unidade | Equivalência | Graus | Minutos | Horas |
-|---|---|---:|---:|---:|
+| --- | --- | ---: | ---: | ---: |
 | Pulso | 30 minutos | 180 | 30 | 0,5 |
 | Giro | 2 Pulsos | 360 | 60 | 1 |
 | Turno | 8 Giros | 2.880 | 480 | 8 |
 | Fase | 30 Turnos | 86.400 | 14.400 | 240 |
 | Propulsão | 42 Fases | 3.628.800 | 604.800 | 10.080 |
 
-A Propulsão corresponde a 420 dias de 24 horas de tempo acumulado, ou a 1.260 Turnos de oito horas. Isso não significa que o usuário precise trabalhar continuamente: os graus são acumulados por sessões independentes ao longo do período que desejar.
+**Conversão:** 10 segundos = 1 grau; 30 minutos = 1 Pulso; 1 hora = 1 Giro. O Radar exibe graus acumulados, ângulo da volta atual, contadores completos de Pulsos, Giros, Turnos, Fases e Propulsões e progresso até a próxima unidade. Os contadores são **totais independentes**, não quantidades a somar entre si. Por exemplo, 8 horas = 16 Pulsos = 8 Giros = 1 Turno.
 
-## 7. Exemplos de conversão
+O tempo deriva dos intervalos de trabalho efetivo do projeto, inclusive atividades antigas e sessões de Foco. Sobreposições não são contadas em duplicidade; pausas do Foco não são trabalho. A rotação decorativa ocorre durante atividades em andamento e para quando não há atividade, respeitando `prefers-reduced-motion`. O anel externo indica o Giro atual, com 360 marcações; o ponteiro interno indica os 60 segundos. Os indicadores são atualizados enquanto a página está aberta e recalculados a partir dos registros ao retornar.
 
-Uma sessão de 15 minutos rende 90 graus. Trinta minutos rendem 180 graus e completam um Pulso. Uma hora rende 360 graus e completa um Giro. Duas horas rendem 720 graus, equivalentes a dois Giros. Oito horas acumuladas rendem 2.880 graus e completam um Turno.
+A primeira Propulsão é concluída com **10.080 horas**. Se houver mais trabalho, a contagem continua em direção à próxima Propulsão. **As 100 metas progressivas, as 200 batalhas, os Elixires e as 100 Cerimônias permanecem vinculados às 10.000 horas**, sem alteração de suas regras. A primeira Propulsão completa é um marco adicional de medição, 80 horas depois da Consagração, sem concessão automática de Elixir ou Cerimônia.
 
-Um projeto com 5.400 graus possui 900 minutos de trabalho, ou 15 horas. Esse total equivale a 30 Pulsos completos, 15 Giros completos e um Turno completo, com saldo de graus além do Turno. Os contadores exibidos não são categorias mutuamente exclusivas: a mesma duração pode ser expressa simultaneamente em Pulsos, Giros e Turnos.
 
-## 8. Precisão e arredondamento
+<a id="14-arena-200-chefoes"></a>
 
-O sistema mantém o tempo em milissegundos e converte o resultado para graus. Na apresentação, a pontuação pode ser arredondada a duas casas decimais. O arredondamento visual não deve ser confundido com a perda do tempo original: o valor interno preserva uma precisão maior.
+### Marcos progressivos e cerimônias
 
-Se o relógio mostrar uma quantidade ligeiramente diferente entre duas atualizações, isso decorre da passagem natural do tempo. A atualização visual periódica não é a fonte da contagem; a contagem é recalculada a partir dos registros temporais. Essa distinção é importante para compreender por que uma aba suspensa pode voltar exibindo um total maior.
+Além da meta simbólica de 10.000 horas, cada projeto acompanha **100 metas progressivas**. A primeira etapa exige **1 hora**, a segunda exige **3 horas adicionais**, a terceira **5 horas adicionais**, e assim por diante, aumentando **2 horas por etapa**. A meta de número *n* exige `2n − 1` horas adicionais, e o total acumulado ao concluí-la é `n²` horas. Portanto, a **99ª meta** termina em **9.801 horas**, e a **100ª**, a mais difícil, exige **199 horas adicionais** para alcançar **exatamente 10.000 horas**.
+
+O painel da jornada, na página **Início**, mostra metas conquistadas, próximo objetivo, tempo restante, barra de progresso e a lista completa de metas. As **100 cerimônias** estão disponíveis na página **Cerimônias**, logo abaixo de **Radar** no menu. Elas são desbloqueadas pelo tempo acumulado efetivamente registrado, inclusive por registros antigos. A galeria permite rever ilimitadamente qualquer cerimônia já liberada. As bloqueadas exibem cadeado e o número de horas necessário, sem revelar a história. As metas **10, 20, 30, ... 100** recebem cerimônias especiais, uma por ciclo de dez metas; a última é **A Consagração**. As cerimônias são reproduzidas somente quando o usuário clica em **Rever cerimônia**: não existem janelas automáticas.
+
+A contagem usa o tempo produtivo efetivo do projeto, evitando somar períodos sobrepostos duas vezes. As metas são recalculadas a partir dos registros, inclusive após exclusões. A disponibilidade das cerimônias é calculada a partir do tempo salvo, sem depender de um histórico separado de apresentações. A galeria é individual por projeto e não altera os registros, não concede Elixires nem modifica as regras dos Chefões. Se os registros forem excluídos e o total cair, cerimônias antes disponíveis podem voltar a ficar bloqueadas. Na versão 61, a reprodução apresenta uma sequência cinematográfica de aproximadamente quatro segundos: estrelas, expansão de luz, ascensão do emblema, partículas e revelação progressiva do título, horas e história. O botão **Reproduzir novamente** reinicia a sequência desde o começo. A experiência usa apenas CSS e JavaScript locais. As animações respeitam a preferência do sistema por movimento reduzido; podem ser fechadas pelo botão **Fechar cerimônia** ou pela tecla Esc.
+
+## 14. Arena: 200 chefões
+
+A **Arena** transforma o progresso em uma campanha contra **200 chefões**, organizados em **10 fases de 20 adversários**, com dificuldade crescente e marcos distribuídos ao longo das 10.000 horas.
+
+Cada chefão possui **nome**, **descrição narrativa**, **efeito temático**, **HP (pontos de resistência)** e um marco de tempo acumulado. O tempo efetivamente contabilizado provoca o avanço da campanha: **cada minuto equivale a um ponto de dano** na progressão.
+
+Os efeitos narrativos — como dispersão, sono, adiamento ou distração — representam obstáculos simbólicos. **Não descontam tempo, não aplicam penalidades reais e não alteram registros.** A derrota é determinada pelo tempo acumulado, não por cliques ou ações repetitivas.
+
+**Se o tempo cair:** excluir registros pode reduzir a progressão e fazer com que um chefão deixe de constar como derrotado. Isso também pode afetar cofres e recompensas vinculados à vitória.
+
+<a id="15-codex-de-monstros"></a>
+
+## 15. Codex de Monstros
+
+O **Codex** funciona como uma enciclopédia da campanha. Nele, você acompanha os adversários e abre as fichas disponíveis dos chefões derrotados, com informações como nome, descrição e efeito narrativo.
+
+As fichas dos chefões vencidos recebem indicação explícita de **VENCIDO**. Os ainda não conquistados permanecem bloqueados. O Codex e a Arena consultam os mesmos marcos de tempo: não são sistemas de pontuação independentes.
+
+<a id="16-elixires-cofres-e-recompensas"></a>
+
+## 16. Elixires, cofres e recompensas
+
+A seção **Elixires** é o espaço de coleção e recompensa. O sistema contém **200 frases exclusivas**, associadas aos 200 chefões. O processo tem duas etapas distintas: **vencer o chefão trabalhando** e **abrir o cofre concluindo um hábito**.
+
+### Passo a passo
+
+1. Registre trabalho pelo **Ponto** ou pela **Entrada Manual**.
+2. Acumule tempo suficiente para derrotar um chefão na **Arena**.
+3. O cofre correspondente passa a aguardar um hábito concluído.
+4. **Conclua um hábito** do projeto depois dessa vitória.
+5. Se houver cofre elegível, a conclusão libera **um único Elixir**, seguindo a ordem dos chefões.
+6. Consulte a frase na coleção e utilize as opções de **copiar** ou **compartilhar**, quando disponíveis.
+
+### Regras da coleção
+
+- **Um hábito concluído libera, no máximo, um Elixir.**
+- **Derrotar um chefão não abre automaticamente seu cofre.**
+- Conclusões anteriores à vitória não são reaproveitadas automaticamente para liberar cofres futuros.
+- O vínculo entre recompensa e registro é mantido no projeto.
+- Excluir o registro que concedeu a recompensa pode **revogá-la**.
+- Se o chefão deixar de estar derrotado após alterações no tempo, a recompensa correspondente poderá deixar de ser válida.
+- Projetos diferentes possuem coleções diferentes.
+
+**Compartilhar:** quando o dispositivo oferecer a API de compartilhamento, o aplicativo pode abrir o menu nativo. Em outros contextos, use a opção de copiar a frase. O suporte depende do navegador.
+
+**Atenção:** os **Elixires Ativos** da página Hábitos são os hábitos equipados; os **Elixires colecionáveis** são as frases obtidas com os cofres. São recursos relacionados, mas não idênticos.
+
+<a id="17-visao-o-foguete-revelado-por-elixires"></a>
+
+## 17. Visão: o foguete revelado por Elixires
+
+A página **Visão**, logo abaixo de **Elixires** no menu, apresenta a imagem `ImpulsoVision.svg` de um foguete decolando. A imagem é dividida em **200 quadradinhos (20 colunas por 10 linhas)**, inicialmente ocultos.
+
+Cada **Elixir colecionável** conquistado e válido no **Altar dos Elixires** concede **uma revelação disponível**. Os 200 Elixires colecionáveis estão vinculados aos cofres dos chefões; não se confundem com os 200 hábitos sugeridos no inventário. O usuário decide quando utilizá-la: basta abrir **Visão**, tocar em um quadradinho ainda oculto e confirmar. A parte correspondente da imagem fica visível permanentemente. É possível acumular revelações sem gastá-las imediatamente.
+
+A aba **Histórico**, dentro de **Visão**, apresenta uma linha do tempo das revelações feitas a partir da versão 67, com data e hora, número do quadradinho e crédito de Elixir associado. Os quadradinhos descobertos em versões anteriores continuam revelados, mas são identificados como **revelações anteriores** sem data ou vínculo inventado. Se um registro que sustentava um Elixir for excluído, o histórico mantém a revelação e sinaliza que o vínculo não está mais válido. O histórico é individual por projeto e faz parte dos backups JSON.
+
+A página mostra o número de Elixires conquistados, o saldo de revelações, os quadradinhos já revelados e a porcentagem descoberta. O progresso pertence exclusivamente ao projeto atual e é salvo em `localStorage`, incluído nos backups e restaurações do projeto. A imagem SVG faz parte do cache offline do PWA. Como os dados são locais, recomenda-se fazer um **Backup Geral** após conquistar ou revelar novas partes da Visão.
+
+**Importante:** a concessão de uma revelação segue a mecânica real dos Elixires do Impulso: é necessário derrotar o chefão correspondente e concluir um hábito para abrir o cofre. Equipar um hábito, por si só, não concede revelação. Se um registro for excluído e seu Elixir deixar de ser válido, as partes já reveladas continuam visíveis, mas o saldo para novas escolhas é recalculado a partir dos Elixires válidos.
+
+<a id="18-guardar-exportar-importar-e-restaurar"></a>
+
+## 18. Guardar, exportar, importar e restaurar
+
+Os arquivos de segurança utilizam o formato **JSON**. O Impulso oferece operações diferentes, que não devem ser confundidas.
+
+| Operação | Abrangência | Efeito |
+|---|---|---|
+| **Guardar / Backup Geral** | Todos os projetos | Solicita download de um JSON com o conjunto de dados do aplicativo. |
+| **Exportar projeto** | Um projeto | Gera um JSON contendo somente o projeto selecionado. |
+| **Importar projeto** | Um projeto | Lê um arquivo de projeto e o incorpora conforme o fluxo de importação. |
+| **Restaurar** | Todos os projetos | **Substitui os projetos atuais** pelos dados do Backup Geral após confirmação. |
+
+### Como fazer um Backup Geral
+
+1. Abra **Guardar** no menu.
+2. Aguarde a solicitação de download.
+3. Confira se o arquivo `impulso-backup-...json` realmente apareceu na pasta de downloads.
+4. Copie o arquivo para outro local confiável, preferencialmente fora do aparelho.
+5. Mantenha mais de uma cópia datada.
+
+**O botão Guardar não envia nada automaticamente para a nuvem.** O navegador controla o download; o aplicativo não consegue garantir que você guardou o arquivo.
+
+### Como restaurar
+
+1. **Faça primeiro um backup dos dados atuais.**
+2. Escolha **Restaurar** e selecione um arquivo de **Backup Geral** compatível.
+3. Leia o aviso de substituição integral.
+4. Confirme somente se deseja trocar os projetos atuais pelo conteúdo do arquivo.
+5. Verifique os projetos, registros e hábitos após a operação.
+
+**Nunca use Restaurar para importar um único projeto.** A restauração geral rejeita arquivos de projeto individual. Os arquivos passam por validações de estrutura e tamanho; isso não dispensa verificar o conteúdo após importar.
+
+### Quando fazer backup
+
+Recomenda-se guardar uma cópia **ao final de sessões importantes**, antes de atualizar ou reinstalar o PWA, antes de excluir registros ou projetos, antes de limpar dados do navegador e antes de trocar de dispositivo. O alerta opcional pode ajudar, mas não faz backup automaticamente.
+
+<a id="19-impressao-e-relatorios"></a>
+
+## 19. Impressão e relatórios
+
+A opção **Imprimir** prepara um relatório do projeto ativo e abre a função de impressão do navegador. Conforme o fluxo, é possível imprimir a **lista de projetos** e relatórios de um **dia específico**.
+
+Os relatórios apresentam dados como **nome do projeto**, **data de emissão**, **tempo acumulado**, **registros**, **início**, **término** e **totais por dia**. Os títulos diários seguem **Meu Dia dd-mm-aaaa**. Atividades que atravessam a meia-noite são distribuídas entre as datas sem duplicar o tempo total.
+
+### Salvar em PDF
+
+Na janela de impressão, escolha **Salvar como PDF** se o navegador oferecer essa opção. Confira margens, orientação, quebras de página e horários na pré-visualização antes de salvar ou imprimir.
+
+**Importante:** imprimir não cria backup restaurável. O PDF serve para consulta e documentação; o **JSON** serve para restaurar os dados no aplicativo.
+
+<a id="20-alertas-lembretes-opcionais"></a>
+
+## 20. Alertas: lembretes opcionais
+
+A página **Alertas** (painel de alertas) oferece dois lembretes independentes, inicialmente desativados:
+
+**Alerta de backup:** a cada **15 minutos de uso**, quando habilitado, recomenda guardar uma cópia dos projetos. A mensagem explica que o armazenamento do navegador pode ser perdido. É possível iniciar o backup pelo aviso ou dispensá-lo.
+
+**Alerta de hábitos e Elixires:** também em intervalos de **15 minutos**, quando habilitado, lembra o usuário de praticar hábitos e oferece acesso à página **Hábitos**.
+
+As opções são controladas por **caixas de seleção** e ficam salvas no navegador. Os alertas são **locais**, não são notificações push do sistema e dependem de a página estar aberta e visível. Se o navegador suspender a aba, o aviso poderá atrasar. Não há backup automático nem execução de hábitos em segundo plano.
+
+<a id="21-armazenamento-saude-dos-dados"></a>
+
+## 21. Armazenamento: saúde dos dados
+
+A página **Armazenamento** é um **Monitor de Armazenamento Local**, não um medidor de RAM. Ela consulta informações que o navegador permite acessar e apresenta estimativas úteis para acompanhar o crescimento dos projetos.
+
+### Indicadores
+
+1. **Uso estimado da origem:** quantidade aproximada de armazenamento ocupada pelo site, informada por `navigator.storage.estimate()`.
+2. **Cota estimada:** limite de armazenamento indicado pelo navegador para a origem; não representa o espaço livre físico do aparelho.
+3. **Dados do Impulso:** tamanho estimado dos dados principais do aplicativo em `localStorage`.
+4. **Armazenamento local total:** soma aproximada das chaves e valores do `localStorage` da origem.
+5. **Cache offline:** tamanho aproximado dos recursos presentes no Cache Storage acessível ao aplicativo.
+6. **Backup Geral estimado:** tamanho aproximado do JSON que seria produzido naquele momento.
+
+O painel também pode exibir **distribuição por projeto**, **porcentagem estimada de uso da cota**, **estado da persistência**, **última solicitação de download de Backup Geral** e **botão Atualizar medições**.
+
+### Persistência
+
+O navegador pode permitir solicitar armazenamento persistente. Se concedido, isso **reduz alguns riscos de remoção automática**, mas não protege contra limpeza manual dos dados, desinstalação, troca de aparelho ou outros eventos. A solicitação pode ser negada sem indicar defeito no aplicativo.
+
+### Como interpretar corretamente
+
+- O uso total estimado pode **já incluir** cache e armazenamento local; **não some** os indicadores como se fossem parcelas independentes.
+- Alguns navegadores não oferecem todas as APIs; nesses casos, a informação pode aparecer como **Não disponível**.
+- O tamanho de um projeto é uma aproximação baseada na serialização de seus dados.
+- A data do último backup significa **download solicitado**, não confirmação de arquivo salvo.
+- O painel não exclui registros nem executa limpeza automática.
+
+<a id="22-configuracao-paletas-e-aparencia"></a>
+
+## 22. Configuração: paletas e aparência
+
+A página **Configuração** permite escolher a **identidade visual** e, independentemente, a **aparência clara ou escura**. Existem sete identidades, totalizando **quatorze combinações**:
+
+| Identidade | Característica | Cores de referência |
+|---|---|---|
+| **Impulso Original** | Aparência clássica do aplicativo | Cores tradicionais do projeto. |
+| **Impulso Vinho** | Harmonia Itten com magenta, roxo e rosa | `#940065`, `#87008A`, `#FF3377`. |
+| **Impulso Blue Sky** | Harmonia análoga turquesa–azul | `#00C7B0`, `#007BC7`, `#0018C7`. |
+| **Impulso Trinity** | Harmonia triádica laranja–verde–roxo | `#FF6B00`, `#00FF6B`, `#6B00FF`. |
+| **Impulso Granfino** | Grafite, prata e neutros elegantes | `#1F1F1F`, `#3E3E3E`, `#ADBFC2`. |
+| **Impulso Ecológico** | Harmonia análoga verde, com acentos luminosos | `#628000`, `#228000`, `#00801E`, `#C7FF10`. |
+| **Impulso Místico** | Harmonia análoga roxo–magenta, com superfícies profundas | `#34187C`, `#66187C`, `#7C1860`, `#160A33`. |
+
+As paletas possuem superfícies próprias para cada modo de aparência. Granfino combina grafite e prata; Ecológico utiliza fundos verde-escuros profundos e tons de verde-limão para realces. As folhas de estilo específicas definem tokens cromáticos, contrastes e a identidade do splash.
+
+### Alterar o visual
+
+1. Abra **Configuração**.
+2. Escolha uma das sete identidades: **Original**, **Vinho**, **Blue Sky**, **Trinity**, **Granfino**, **Ecológico** ou **Místico**.
+3. Selecione **Claro** ou **Escuro**, ou use o controle correspondente no cabeçalho.
+4. Navegue pelas páginas para conferir a aparência escolhida.
+
+A escolha é salva **neste navegador** e não altera os dados dos projetos. Para voltar à identidade anterior, basta selecioná-la novamente; não é necessário restaurar um backup.
+
+### Tokens de Itten — Granfino, Ecológico e Místico
+
+**Granfino:** `--itten-primary: #1F1F1F`; `--itten-secondary: #3E3E3E`; `--itten-accent: #616161`. A extensão cromática inclui `#808080`, `#3B2B2B`, `#48614F`, `#786487`, `#A6A287`, `#ADBFC2`, `#3B2B34`, `#4E6148` e `#656487`.
+
+**Ecológico:** `--itten-primary: #628000`; `--itten-secondary: #228000`; `--itten-accent: #00801E`. Os tokens `--itten-color-4` a `--itten-color-12` correspondem, respectivamente, a `#2F3D00`, `#103D00`, `#003D0E`, `#99C700`, `#35C700`, `#00C72F`, `#C7FF10`, `#4FFF10` e `#10FF48`.
+
+**Místico:** `--itten-primary: #34187C`; `--itten-secondary: #66187C`; `--itten-accent: #7C1860`. Os tokens `--itten-color-4` a `--itten-color-12` correspondem a `#1B0C40`, `#350C40`, `#400C32`, `#4D24B8`, `#9724B8`, `#B8248E`, `#160A33`, `#2A0A33` e `#330A28`. A interface usa texto branco sobre os cards escuros do inventário, e o splash apresenta iluminação roxo–magenta.
+
+Os tokens de cada paleta são definidos em suas folhas CSS e aplicados quando a identidade correspondente está selecionada. O splash **Ignição** também acompanha a escolha: prata no Granfino, verde-limão no Ecológico e roxo–magenta no Místico, mantendo aproximadamente 3,7 segundos de apresentação.
+
+### Acessibilidade das cores
+
+As paletas buscam empregar pares de contraste adequados a textos e controles. Cores vibrantes não devem receber texto branco quando o contraste for insuficiente. Estados importantes, como vitória, erro, cofre aberto e cofre fechado, devem ser comunicados também por **rótulos e símbolos**, não apenas por cor. No Ecológico, superfícies profundas (`#003D0E`, `#103D00`, `#2F3D00`) usam texto branco; superfícies muito luminosas (`#C7FF10`, `#4FFF10`, `#10FF48`) exigem texto preto ou escuro. A interface utiliza rótulos como **Equipar**, **✓ Equipado**, e indicadores textuais de cofres para não depender exclusivamente do verde. No Místico, as superfícies escuras da paleta usam texto branco e estados de Elixires e cofres mantêm rótulos e símbolos além da cor. A conformidade de toda a interface deve ser verificada nas telas reais e nos dispositivos utilizados.
+
+<a id="23-privacidade-integridade-e-limites-tecnicos"></a>
+
+## 23. Privacidade, integridade e limites técnicos
+
+- **Armazenamento local:** os projetos são salvos no navegador, principalmente em `localStorage`.
+- **Sem sincronização automática:** abrir o aplicativo em outro navegador, perfil ou aparelho não transfere os dados anteriores.
+- **Dados sujeitos à remoção:** limpar dados do site, usar navegação privada ou políticas de limpeza do navegador pode apagar projetos e preferências.
+- **Sem conta e sem servidor de registros:** o aplicativo não exige autenticação para os recursos locais descritos.
+- **Backups são responsabilidade do usuário:** arquivos JSON guardados externamente são a principal proteção contra perdas.
+- **Horário do dispositivo:** registros dependem do relógio e do fuso configurados no aparelho. Se estiverem incorretos, os horários e totais por data também podem ficar incorretos.
+- **Limites de armazenamento:** projetos extensos podem esgotar a capacidade disponível; acompanhe o monitor e exporte backups.
+- **Não é sistema de ponto oficial:** os relatórios são instrumentos de organização pessoal, não comprovantes certificados.
+- **A meta de 10.000 horas é simbólica:** não mede competência nem substitui avaliação de resultados.
+
+<a id="24-solucao-de-problemas"></a>
+
+## 24. Solução de problemas
+
+| Sintoma | O que verificar ou fazer |
+|---|---|
+| **O aplicativo não abre ou permanece na abertura** | Atualize a página conectado; feche e reabra; confira o console do navegador se souber utilizá-lo. Evite limpar os dados antes de garantir um backup. |
+| **Mudanças não aparecem após publicar** | O service worker pode estar servindo arquivos antigos. Recarregue conectado e aguarde a atualização; teste novamente. Não apague o armazenamento local indiscriminadamente. |
+| **Projeto desapareceu** | Confirme se está no mesmo navegador, perfil e endereço do site; consulte **Projetos**. Se os dados foram removidos, use um Backup Geral confiável. |
+| **Ponto não parece contar** | Verifique se a sessão está iniciada, se o relógio do aparelho está correto e se há um projeto ativo. Volte à página Ponto para conferir o estado. |
+| **Tempo total parece menor que a soma das linhas** | Intervalos sobrepostos são consolidados para evitar dupla contagem. Confira as datas e os horários. |
+| **Atividade aparece em dois dias** | É esperado quando atravessa a meia-noite; o tempo é dividido, mas o registro não é duplicado. |
+| **Não consigo equipar outro hábito** | O limite é de **6 Elixires Ativos**. Desequipe um hábito para liberar vaga. |
+| **Hábito não aparece no Inventário** | Revise a pesquisa e o filtro de categoria. O catálogo precisa ter sido carregado no cache para funcionar offline. |
+| **Chefão derrotado, mas cofre fechado** | Conclua um hábito **depois** da vitória; derrotar o chefão sozinho não libera a frase. |
+| **Elixir desapareceu** | Confira se o registro de hábito foi excluído ou se o tempo acumulado diminuiu após alterações. |
+| **Alerta não apareceu** | Confira se foi habilitado, se já se passaram 15 minutos e se a página estava aberta e visível. |
+| **Medição de armazenamento indisponível** | O navegador pode não oferecer a API necessária ou pode restringi-la. Não é uma leitura simulada. |
+| **Persistência negada** | A decisão é do navegador. Continue guardando backups externos. |
+| **Backup não está na pasta de downloads** | Verifique permissões e bloqueios de download. O aplicativo registra apenas a solicitação; repita a exportação e confirme o arquivo. |
+| **Restaurar apagaria projetos atuais** | Cancele. Faça primeiro um backup atual e só restaure quando desejar substituir a coleção inteira. |
+| **Tema não ficou como esperado** | Abra **Configuração**, escolha outra identidade e alterne claro/escuro. Se necessário, atualize a página após o cache ser renovado. |
+| **Impressão cortada** | Use a pré-visualização, ajuste margens, escala e orientação ou salve em PDF. |
+
+<a id="25-perguntas-frequentes"></a>
+
+## 25. Perguntas frequentes
+
+**Preciso criar uma conta?** Não. O uso descrito neste manual é local ao navegador.
+
+**Posso trabalhar em vários projetos?** Sim. Cada projeto tem registros, hábitos, chefões e recompensas próprios.
+
+**O Ponto continua quando abro outra tela?** A sessão permanece registrada e pode ser retomada na página Ponto. Confira seu estado após interrupções do navegador.
+
+**Posso registrar trabalho de ontem?** Sim, pela Entrada Manual, com data e horário corretos.
+
+**O que acontece quando trabalho atravessa a meia-noite?** O registro é mantido, e o tempo é distribuído entre os dias correspondentes.
+
+**Os hábitos contam como registros?** Sim, hábitos concluídos geram registros próprios e aparecem em Meu Dia.
+
+**Quantos hábitos posso equipar?** Até **seis** por projeto.
+
+**O catálogo precisa de internet?** Depois que o arquivo do catálogo estiver armazenado no cache offline, pode ser consultado sem conexão.
+
+**Como ganho um Elixir?** Derrote um chefão com tempo de trabalho e, depois, conclua um hábito para abrir um cofre elegível.
+
+**Uma conclusão abre todos os cofres disponíveis?** Não. No máximo um cofre por conclusão.
+
+**Posso perder um Elixir?** Sim, se excluir o registro que o concedeu ou reduzir a progressão que sustentava a vitória.
+
+**O que significa HP?** *Hit Points*: pontos de resistência do chefão na representação RPG.
+
+**O que é a meta de maestria?** Um marco simbólico de 10.000 horas acumuladas, sem certificação profissional.
+
+**Guardar é igual a Restaurar?** Não. Guardar gera um arquivo; Restaurar lê um Backup Geral e substitui os projetos atuais após confirmação.
+
+**O monitor mostra memória RAM?** Não. Mostra estimativas de armazenamento do site.
+
+**A paleta muda meus dados?** Não. A identidade visual é uma preferência independente dos projetos.
+
+**Posso usar sem internet?** Sim, quando os recursos essenciais já estiverem no cache e o navegador os conservar.
+
+**Se instalar em outro celular, os projetos aparecem?** Não automaticamente. É necessário transferir e importar/restaurar um arquivo compatível.
+
+<a id="26-roteiro-de-testes"></a>
+
+## 26. Roteiro de testes
+
+Use esta lista após publicar ou atualizar o aplicativo. Prefira um projeto de teste e **faça backup antes de testar exclusões ou restaurações**.
+
+### Navegação e projetos
+
+- [ ] Abrir o site, observar a Ignição por aproximadamente 3,7 segundos e passar à interface.
+- [ ] Testar a abertura com movimento reduzido, com as sete paletas e após atualizar o cache.
+- [ ] Conferir Estatísticas no projeto atual e na visão global, com diferentes períodos, exportação JSON e impressão.
+- [ ] Abrir e fechar o menu; conferir os seis grupos e a ordem dos itens.
+- [ ] Criar dois projetos, renomear um e confirmar que os dados são independentes.
+- [ ] Abrir **Sobre** e conferir os links.
+
+### Trabalho e registros
+
+- [ ] Iniciar um Ponto, navegar por outras páginas, voltar e concluí-lo.
+- [ ] Lançar uma Entrada Manual com início e término no mesmo dia.
+- [ ] Lançar outra Entrada Manual atravessando a meia-noite.
+- [ ] Conferir os títulos **Meu Dia dd-mm-aaaa**, os horários e a divisão dos totais.
+- [ ] Conferir o Histórico e o comportamento de intervalos sobrepostos.
+
+### Hábitos, Arena e Elixires
+
+- [ ] Pesquisar hábitos, filtrar categorias e equipar até seis.
+- [ ] Desequipar e criar um hábito personalizado.
+- [ ] Iniciar, pausar, retomar e concluir um Pomodoro.
+- [ ] Conferir o registro de hábito em Meu Dia.
+- [ ] Abrir Radar e verificar o tempo e a meta.
+- [ ] Abrir Cerimônias, conferir o desbloqueio por horas reais, rever uma conquista, fechar com Esc, verificar os bloqueios e o modo de movimento reduzido.
+- [ ] Consultar as 10 fases e os 200 chefões da Arena.
+- [ ] Consultar uma ficha de chefão vencido no Codex.
+- [ ] Derrotar um chefão, concluir um hábito e verificar o cofre e a frase.
+- [ ] Testar copiar/compartilhar, conforme o suporte do navegador.
+- [ ] Em projeto de teste, excluir um registro associado a um Elixir e verificar a consequência.
+
+### Segurança, aparência e documentos
+
+- [ ] Gerar Backup Geral e confirmar o arquivo JSON salvo.
+- [ ] Exportar e importar um projeto individual.
+- [ ] Restaurar um Backup Geral **somente em ambiente de teste**.
+- [ ] Imprimir relatório de projeto, de dia e lista de projetos.
+- [ ] Ativar e desativar os dois alertas; conferir seu comportamento com a página visível.
+- [ ] Abrir Armazenamento, atualizar medições e verificar a indicação de persistência.
+- [ ] Testar **Impulso Original, Vinho, Blue Sky e Trinity**, em claro e escuro.
+- [ ] Conferir legibilidade, foco de teclado, controles, ícones e rótulos em cada tema.
+- [ ] Testar no celular, no desktop e sem internet após o cache inicial.
+
+<a id="27-arquivos-do-projeto"></a>
+
+## 27. Arquivos do projeto
+
+| Arquivo | Finalidade |
+|---|---|
+| `index.html` | Estrutura principal, navegação, controles e tela de abertura. |
+| `styles.css` | Estilos gerais, responsividade e aparência Original. |
+| `theme-impulso.css` | Identidade **Impulso Vinho**. |
+| `theme-impulso-analogo.css` | Identidade **Impulso Blue Sky**. |
+| `theme-impulso-triadico.css` | Identidade **Impulso Trinity**. |
+| `app.js` | Navegação, projetos, cronômetros, registros, progressão, Elixires, armazenamento, backups e configurações. |
+| `habitos_elixires_v2.json` | Catálogo offline de 200 sugestões de hábitos. |
+| `manifest.json` | Metadados de instalação do PWA. |
+| `sw.js` | Registro de recursos essenciais para cache e uso offline. |
+| `README.md` | Este manual do usuário. |
+| `LICENSE` | Licença do projeto. |
+| `logo.svg`, `logo.png` | Identidade visual e documentação. |
+| `ImpulsoCover.png`, `ImpulsoApp.png` | Imagens de apresentação do projeto. |
+| `icon-192.png`, `icon-512.png` | Ícones do aplicativo. |
+| `rocket-192-v11.png`, `rocket-512-v11.png` | Recursos gráficos do foguete. |
+
+| `theme-impulso-granfino.css` | Identidade **Impulso Granfino**. |
+| `theme-impulso-ecologico.css` | Identidade **Impulso Ecológico**. |
+| `ImpulsoVision.svg` | Imagem da página Visão, revelada em 200 quadradinhos. |
+
+<a id="28-glossario"></a>
+
+## 28. Glossário
+
+**Arena:** campanha gamificada de desafios associados ao tempo trabalhado.  
+**Backup Geral:** arquivo JSON com todos os projetos.  
+**Cache offline:** cópias de arquivos do aplicativo mantidas pelo navegador para uso sem rede.  
+**Chefão:** adversário simbólico derrotado ao atingir um marco de tempo.  
+**Codex:** coleção de fichas dos adversários da Arena.  
+**Cofre:** recompensa associada a um chefão derrotado, aberta mediante conclusão de hábito elegível.  
+**Elixir:** frase colecionável liberada pelo sistema de recompensas.  
+**Elixir Ativo:** hábito equipado para execução na página Hábitos.  
+**Visão:** imagem do foguete, descoberta por escolhas do usuário com créditos obtidos de Elixires colecionáveis.  
+**HP:** pontos de resistência do chefão.  
+**Inventário de Elixires:** catálogo de sugestões de hábitos.  
+**JSON:** formato de arquivo usado para exportação, importação e backups.  
+**LocalStorage:** armazenamento local do navegador utilizado para dados do aplicativo.  
+**Ponto:** ferramenta de cronometragem de uma atividade real.  
+**Pomodoro:** temporizador associado à prática de um hábito.  
+**PWA:** aplicativo web com recursos de instalação e funcionamento offline, conforme suporte do navegador.  
+**Radar:** visualização do tempo acumulado e da meta de longo prazo.  
+**Service worker:** recurso do navegador que gerencia o cache offline do aplicativo.  
+**Tema:** combinação entre identidade cromática e aparência clara ou escura.  
+**Ignição:** abertura cinematográfica com foguete, anel energético e revelação do nome.  
+**Estatísticas:** central de indicadores por projeto ou consolidados globalmente.
 
 ---
 
-# PARTE III — REQUISITOS, ACESSO E INSTALAÇÃO
+**Impulso — Motor de Produtividade Pessoal.**  
+*A constância começa com um pequeno impulso.*
 
-## 9. Requisitos mínimos
 
-O Khronos requer um navegador moderno com JavaScript habilitado. Para a experiência PWA, são desejáveis suporte a Web App Manifest, Service Worker, Cache Storage e armazenamento local. O navegador deve permitir a gravação de dados do site e a execução de scripts. O acesso inicial pela internet é necessário para carregar os arquivos e preencher o cache offline.
 
-A instalação como aplicativo depende das regras do navegador e do sistema operacional. Não existe instalador tradicional para Windows nem arquivo APK nesta versão. A interface pode ser utilizada diretamente no endereço web, mesmo quando o navegador não oferece a opção de instalação.
+### Correção de reprodução — Impulso 62
 
-## 10. Acesso pelo navegador
+A reprodução de uma cerimônia agora reinicia as animações dentro do mesmo diálogo, sem fechar e reabrir a janela. A apresentação mantém suas dimensões ao repetir. Se o dispositivo estiver configurado para reduzir movimento, a animação é suprimida por acessibilidade, mas os textos e a conquista permanecem visíveis.
 
-Abra o endereço oficial:
 
-https://magpe-stack.github.io/Khronos/
+### Correção de controles — Impulso 63
 
-Na primeira visita, aguarde o carregamento da interface. O Service Worker será registrado quando o navegador permitir. Depois que os arquivos essenciais forem armazenados, o aplicativo poderá ser aberto sem conexão, desde que o cache e os dados locais continuem preservados.
+A janela de Cerimônias usa um único diálogo. Os botões **Fechar cerimônia** e **Reproduzir novamente** são atendidos por eventos delegados no próprio diálogo, inclusive após qualquer atualização do conteúdo. A reprodução reinicia as animações CSS sem substituir os elementos nem alterar as dimensões da janela. O sistema respeita a preferência de acessibilidade **reduzir movimento**, que pode tornar a apresentação estática.
 
-Se o endereço exibir uma página 404, verifique se o repositório foi publicado corretamente, se existe um arquivo `index.html` na raiz e se a configuração do GitHub Pages aponta para a pasta e a ramificação adequadas. O nome do repositório e a capitalização das letras devem coincidir com o endereço publicado.
 
-## 11. Instalação no Android
+### Cerimônias — reprodução e acessibilidade (versão 64)
 
-No Google Chrome para Android, abra o endereço oficial. Utilize o menu do navegador e procure uma opção como **Instalar aplicativo** ou **Adicionar à tela inicial**. A denominação e a disponibilidade variam conforme a versão do Chrome e os critérios de instalação. Confirme a operação quando a opção estiver disponível.
+As cerimônias são animações CSS executadas no próprio navegador. Ao abrir uma cerimônia, a sequência inicia automaticamente, salvo quando o sistema solicita **movimento reduzido**. Nesse caso, a apresentação permanece estática e aparece o botão **Ativar animação nesta cerimônia**, que permite consentir com os efeitos somente naquela visualização. **Reproduzir novamente** reinicia os efeitos sem fechar o diálogo. **Fechar cerimônia** permanece disponível.
 
-Depois da instalação, o Khronos poderá aparecer na tela inicial e abrir em uma janela com aparência de aplicativo. A instalação não cria automaticamente uma conta nem transfere projetos para outros dispositivos. Os dados continuam associados ao armazenamento do navegador ou do ambiente que hospeda o PWA.
 
-## 12. Uso em desktop
+### Cerimônias — janela sem barras de rolagem (versão 65)
 
-No Chrome ou em outro navegador compatível, abra o endereço oficial. Se a instalação for oferecida, utilize o comando de instalação presente na interface do navegador. Também é possível continuar usando a versão web sem instalar nada.
+A janela de cerimônia agora utiliza dimensões limitadas pela área visível do navegador e não exibe barras de rolagem internas. O conteúdo é organizado com espaçamentos compactos e, quando necessário, reduzido proporcionalmente para caber na tela, incluindo o aviso de movimento reduzido e os três controles. A animação e a opção de reprodução voluntária são preservadas. Em telas extremamente pequenas, o conteúdo pode ficar menor para permanecer integralmente visível.
 
-O Khronos foi desenhado com abordagem mobile-first, mas sua grade de cartões se adapta a telas maiores. Em monitores desktop, a navegação permanece acessível pelo menu hambúrguer, enquanto o alternador de tema fica no canto superior direito.
 
-## 13. Funcionamento offline
+### Navegação hierárquica — Impulso 66
 
-O modo offline depende de uma primeira visita bem-sucedida e da conclusão do armazenamento dos arquivos. O Service Worker usa um cache versionado para os recursos principais, como HTML, CSS, JavaScript, manifesto e ícones. Depois disso, a ausência de internet não impede necessariamente a abertura do aplicativo.
+O menu principal apresenta **Início**, **Ações**, **Vitórias**, **Dados**, **Configurações** e **Sair**. Ao selecionar um dos quatro primeiros grupos, abre-se o respectivo submenu:
 
-O cache não é uma garantia de preservação permanente. O navegador ou o sistema operacional podem remover dados por políticas de armazenamento, limpeza manual ou falta de espaço. Além disso, uma atualização de código exige que o navegador obtenha os novos arquivos em algum momento com conexão disponível.
+- **Início:** Novo, Projetos, Guardar, Restaurar e Imprimir. O painel inicial permanece disponível ao abrir um projeto.
+- **Ações:** Ponto, Hábitos e Entradas.
+- **Vitórias:** Arena, Codex, Elixires, Cerimônias e Visão.
+- **Dados:** Meu Dia, Radar, Estatísticas e Armazenamento.
+- **Configurações:** reúne os **Temas** (sete identidades cromáticas e luminosidade) e os **Alertas** (backup e hábitos/Elixires) na mesma página. O botão Alertas foi retirado do menu, mas seus controles e preferências foram preservados.
+- **Sair:** mantém a confirmação e o comportamento anteriores.
 
----
+O submenu é expansível, compatível com teclado e indica se está aberto. Os registros, as conquistas e os backups não são modificados pela reorganização.
 
-# PARTE IV — INTERFACE E NAVEGAÇÃO
 
-## 14. Tela de abertura
+## Sessões de Foco (versão 71)
 
-Ao iniciar, o Khronos apresenta uma tela de abertura com o símbolo da engrenagem, o nome do aplicativo e o subtítulo “Motor de Hábitos Atômicos”. A engrenagem executa uma rotação visual contínua. Na implementação 1.0, o temporizador de três segundos começa quando o JavaScript inicializa; portanto, a duração percebida desde o início do carregamento da página pode ser maior.
+No menu **Ações → Foco**, configure uma atividade (até 50 caracteres), um objetivo (até 200), o tipo de compromisso (**Entrega** ou **Dedicação**) e a duração planejada (1–1440 minutos). Inicie a sessão, pause e retome quando necessário e, ao concluir, avalie se o objetivo foi alcançado integralmente, parcialmente ou não alcançado. Uma observação opcional de até 200 caracteres pode registrar o aprendizado.
 
-Pessoas que ativaram a preferência de movimento reduzido no sistema têm a animação limitada pelas regras CSS de acessibilidade. A tela de abertura é apenas uma apresentação visual e não representa uma verificação do armazenamento, uma sincronização ou um processo de login.
+O tempo efetivo é calculado pelos intervalos de atividade, excluindo pausas. A sessão permanece salva no projeto ao navegar entre páginas ou reabrir o PWA. Ao concluir, os intervalos entram no motor de tempo do projeto, no Meu Dia, no Calendário e no Histórico, sem duplicação de intervalos sobrepostos. O histórico específico de Foco mostra as 50 sessões mais recentes, com duração planejada, efetiva e avaliação. Os backups gerais e individuais preservam os registros e sessões em andamento.
 
-## 15. Cabeçalho
-
-O cabeçalho reúne três elementos principais. À esquerda fica o botão do menu hambúrguer, que abre e fecha as opções de navegação e ação. Ao lado aparece a marca Khronos com a engrenagem. À direita, isolado dos demais comandos, está o botão de alternância entre os temas claro e escuro.
-
-A marca é interativa: um clique retorna à página inicial. O botão de tema altera a aparência sem modificar os graus ou os registros. O tema claro é utilizado inicialmente; a preferência escolhida posteriormente é salva no navegador.
-
-## 16. Menu hambúrguer
-
-O menu concentra as principais ações: Início, Novo Projeto, Meus Projetos, Galeria de Conquistas, Histórico, Entrada Manual, Exportar Projeto JSON, Backup Geral, Importar ou Restaurar JSON, Imprimir Relatório, Sobre e Ajuda. O menu é fechado quando o usuário seleciona uma ação ou clica fora dele.
-
-Essa organização preserva espaço na tela principal, especialmente em smartphones. Algumas ações exigem um projeto selecionado. Caso nenhum projeto esteja disponível, o aplicativo informa que é necessário criar ou selecionar um projeto antes de continuar.
-
-## 17. Dashboard
-
-A tela inicial mostra uma visão consolidada dos graus acumulados nos projetos. Também apresenta contadores de unidades completas e uma seleção de projetos recentes. O dashboard é uma visão geral, não um editor de registros.
-
-A soma geral é calculada a partir dos tempos dos projetos existentes. Assim, o total global pode crescer quando há projetos com relógios em andamento. A implementação permite que diferentes projetos tenham registros temporais ativos simultaneamente; para evitar dupla contagem de tempo real, recomenda-se pausar um projeto antes de iniciar outro.
-
-## 18. Tema claro e escuro
-
-O modo claro utiliza superfícies claras, texto escuro e destaques derivados da paleta Itten. O modo escuro utiliza fundos azulados profundos e textos claros. A troca pode ser feita a qualquer momento pelo botão no topo direito.
-
-Os estados não devem depender apenas de cores: o relógio exibe textos como “Contagem em andamento” e “Relógio pausado”, enquanto os botões apresentam rótulos próprios. Embora a interface tenha sido planejada para contraste e legibilidade, uma auditoria formal WCAG 2.1 ainda é necessária antes de afirmar conformidade integral AA ou AAA.
-
----
-
-# PARTE V — GESTÃO DE PROJETOS
-
-## 19. Criar um novo projeto
-
-Abra o menu e selecione **Novo Projeto**. Uma caixa de diálogo solicitará o nome. Digite um título identificável, como “Romance de ficção científica”, “Estudo de programação” ou “Prática de inglês”, e confirme.
-
-O projeto recebe um identificador interno, data de criação, pontuação inicial de zero graus e histórico vazio. Depois da criação, ele se torna o projeto selecionado e a interface abre sua tela de acompanhamento. O nome pode conter letras, números e espaços, respeitando o limite definido no formulário.
-
-## 20. Meus Projetos
-
-A seção **Meus Projetos** lista os projetos cadastrados, normalmente organizados do mais recente para o mais antigo. Cada cartão mostra o nome, os graus acumulados, o chefão atual, a Fase correspondente, o progresso do desafio e um comando para abrir o projeto.
-
-O cartão também informa se existe uma contagem ativa ou se o relógio está pausado. Para acessar um projeto, utilize **Abrir projeto**. Isso altera o projeto selecionado, que passa a ser utilizado pelas ações de entrada manual, exportação individual, impressão e galeria.
-
-## 21. Seleção e alternância
-
-É possível manter vários projetos no armazenamento e alternar entre eles. A seleção de um projeto não encerra automaticamente o relógio de outro. Portanto, antes de trocar de atividade, entre no projeto atual e pressione **Pausar**. Em seguida, abra o projeto desejado e pressione **Continuar**.
-
-Essa rotina evita que dois projetos acumulem graus pelo mesmo período de relógio. Se o usuário desejar contabilizar atividades simultâneas, deve compreender que o total global será a soma dos tempos registrados, e não necessariamente a duração cronológica exclusiva.
-
-## 22. Recursos ainda não presentes
-
-Na implementação documentada, não existem comandos específicos de renomear, excluir, arquivar ou duplicar projetos. Também não há pastas, etiquetas, prioridades, metas personalizadas, compartilhamento colaborativo ou sincronização entre aparelhos.
-
-Não procure esses comandos em menus ocultos: eles não fazem parte desta versão. Caso precise reorganizar os nomes, isso deverá ser tratado em uma atualização futura. Não é recomendado editar manualmente o conteúdo do armazenamento local, pois uma alteração incorreta pode comprometer a leitura dos dados.
-
----
-
-# PARTE VI — CRONÔMETRO E REGISTRO DE ATIVIDADES
-
-## 23. Iniciar a contagem
-
-Abra um projeto e localize o painel **Relógio de Graus**. Quando estiver pausado, o botão apresentará **Continuar**. Pressione-o no momento em que começar a atividade. O sistema registra o horário inicial e passa a calcular o tempo transcorrido.
-
-O relógio apresenta horas, minutos e segundos. Logo abaixo, a pontuação correspondente aparece em graus. A contagem não depende de um evento por segundo para permanecer matematicamente correta: a interface é atualizada periodicamente, mas o total é derivado da diferença entre horários.
-
-## 24. Pausar a contagem
-
-Quando interromper o trabalho, pressione **Pausar**. O aplicativo encerra o intervalo atual, adiciona a duração ao acumulado do projeto e cria um registro no histórico. O botão volta a mostrar **Continuar**.
-
-Use a pausa em intervalos que não deseja contabilizar, como refeições, descanso, telefonemas pessoais ou outras atividades fora do escopo do projeto. O Khronos não decide automaticamente quais pausas são apropriadas: o critério é do usuário.
-
-## 25. Retomar a contagem
-
-Depois de uma pausa, pressione **Continuar**. A pontuação acumulada é preservada, e um novo intervalo começa a ser contabilizado. Ao pausar novamente, esse novo intervalo é adicionado ao histórico.
-
-Por exemplo, um projeto pode acumular 20 minutos pela manhã, 40 minutos à tarde e 30 minutos à noite. Ao final, terá 90 minutos, equivalentes a 540 graus. A continuidade do projeto não exige que todo o tempo seja registrado em uma única sessão.
-
-## 26. Aba em segundo plano e tela bloqueada
-
-O navegador pode suspender temporizadores e atualizações visuais quando a aba está em segundo plano ou quando o telefone é bloqueado. A implementação do Khronos utiliza horários absolutos para calcular o intervalo transcorrido. Assim, ao retornar à página, a contagem pode refletir o período em que a interface não foi atualizada.
-
-Isso não garante execução permanente do JavaScript em segundo plano. Também não comprova trabalho ininterrupto. Se o navegador encerrar o processo, o aplicativo dependerá dos dados previamente salvos para reconstruir a sessão. A mudança manual do relógio do dispositivo pode afetar a duração calculada.
-
-## 27. Entrada manual
-
-Para adicionar tempo realizado fora da estação de trabalho, selecione o projeto, abra o menu e escolha **Entrada Manual**. Escolha a unidade **Minutos** ou **Graus**, informe uma quantidade positiva e, se desejar, escreva uma observação curta.
-
-O sistema converte a quantidade para milissegundos e adiciona o resultado ao total do projeto. Um registro separado é criado com o tipo “Entrada manual”, a data e a observação. Essa identificação permite distinguir atividades declaradas das sessões cronometradas.
-
-## 28. Exemplos de entrada manual
-
-Se você estudou durante 45 minutos sem o aplicativo, escolha minutos e informe 45. O projeto receberá 270 graus. Se deseja registrar exatamente um Pulso, escolha graus e informe 180. O resultado será equivalente a 30 minutos.
-
-Não informe graus no campo de minutos ou minutos no campo de graus, pois o resultado será diferente. Verifique a unidade antes de confirmar. A versão 1.0 não oferece um comando próprio para desfazer ou editar um registro manual após a gravação.
-
-## 29. Histórico de atividades
-
-O histórico reúne os intervalos finalizados e as entradas manuais. Cada registro apresenta a origem do tempo, sua quantidade, o horário e uma observação quando disponível. A tela geral de histórico agrega registros dos diferentes projetos, ordenados pelos horários informados.
-
-Uma sessão ainda em andamento não aparece como registro finalizado até ser pausada. O total do relógio, entretanto, já pode incluir seu tempo em curso. Essa diferença entre **tempo acumulado** e **sessões finalizadas** é esperada.
-
----
-
-# PARTE VII — CHEFÕES, FASES E CONQUISTAS
-
-## 30. O sistema de chefões
-
-Os chefões são personagens simbólicos que representam obstáculos comuns à continuidade dos hábitos. O objetivo não é diagnosticar dificuldades pessoais, mas oferecer uma narrativa de progressão. Ao acumular graus, o projeto avança em direção à derrota do chefão atual.
-
-Na versão 1.0, cada chefão exige o equivalente a uma Fase completa: **86.400 graus**. O progresso é calculado automaticamente, e o próximo chefão é selecionado quando o projeto ultrapassa o marco. O número de chefões derrotados corresponde à quantidade de Fases completas acumuladas.
-
-## 31. Chefões temáticos
-
-Os cinco primeiros chefões são **Procrastinação**, **Preguiça**, **Distração Digital**, **Cansaço Mental** e **Paralisia por Análise**. Outros personagens da sequência incluem Desorganização, Impaciência, Inconstância, Autossabotagem e Desistência.
-
-Após a sequência definida, os nomes voltam a ser utilizados ciclicamente em Fases posteriores. A dificuldade temporal é constante na implementação atual: cada Fase demanda a mesma quantidade de graus. Não existe combate por comandos, sistema de dano variável ou inteligência artificial dos chefões.
-
-## 32. Barra de progresso
-
-A barra indica a porcentagem do intervalo de 86.400 graus já percorrido na Fase atual. Um projeto com 43.200 graus, por exemplo, estará na metade da primeira Fase. Ao atingir 86.400 graus, completa o desafio e passa à Fase seguinte.
-
-A barra não mede a qualidade da execução, a dificuldade subjetiva da tarefa ou o estado psicológico do usuário. Ela representa exclusivamente a relação matemática entre os graus acumulados e o marco temporal da Fase.
-
-## 33. Galeria de Conquistas
-
-A galeria exibe medalhas desbloqueadas e conquistas ainda bloqueadas. Cada conquista possui nome, marco em graus, raridade e representação visual. O desbloqueio é automático quando o projeto selecionado atinge o valor exigido.
-
-A galeria é associada ao projeto selecionado. Portanto, conquistas obtidas em um projeto não são automaticamente transferidas para outro. O dashboard pode somar todos os graus, mas as recompensas individuais são calculadas a partir do histórico de cada projeto.
-
-## 34. Marcos de medalhas
-
-| Conquista | Marco | Raridade |
-|---|---:|---|
-| Primeiro Movimento | 1 grau | Bronze |
-| Primeiro Pulso | 180 graus | Bronze |
-| Primeiro Giro | 360 graus | Prata |
-| Cinco Giros | 1.800 graus | Prata |
-| Primeiro Turno | 2.880 graus | Ouro |
-| Dez Turnos | 28.800 graus | Ouro |
-| Primeira Fase | 86.400 graus | Platina |
-| Cinco Fases | 432.000 graus | Platina |
-| Dez Fases | 864.000 graus | Diamante |
-| Vinte Fases | 1.728.000 graus | Diamante |
-| Primeira Propulsão | 3.628.800 graus | Lendário |
-| Duas Propulsões | 7.257.600 graus | Lendário |
-| Cinco Propulsões | 18.144.000 graus | Mítico |
-
-Os nomes e raridades são regras fixas da versão atual. Não há editor de conquistas personalizadas. Uma medalha desbloqueada é mostrada na galeria enquanto o projeto mantém graus suficientes para aquele marco.
-
-## 35. Diplomas honoríficos
-
-O Khronos apresenta diplomas honoríficos para conquistas desbloqueadas a partir de 2.880 graus. Cada diploma identifica o projeto, o marco atingido e a distinção de raridade. Os diplomas são gerados dinamicamente a partir da pontuação; não são certificados emitidos por instituição externa.
-
-A seção de impressão inclui os diplomas elegíveis no relatório do projeto. O documento tem valor motivacional e pessoal, não equivalendo a certificado acadêmico, profissional, de carga horária auditada ou de participação institucional.
-
----
-
-# PARTE VIII — EXPORTAÇÃO, BACKUP E RESTAURAÇÃO
-
-## 36. Por que fazer backup?
-
-O Khronos guarda informações no armazenamento local do navegador. Esse modelo evita a necessidade de servidor, mas também significa que os dados não são recuperados automaticamente caso o dispositivo seja perdido, formatado ou tenha seus dados de navegação apagados.
-
-O backup é a principal medida de proteção. Recomenda-se gerar cópias antes de atualizações importantes, depois de períodos significativos de trabalho e antes de limpar o navegador. Guarde ao menos uma cópia fora do dispositivo utilizado para registrar as sessões.
-
-## 37. Backup Geral
-
-Abra o menu e escolha **Backup Geral**. O aplicativo prepara um arquivo JSON com todos os projetos e seus registros, além de informações de configuração exportáveis. O download é iniciado pelo navegador.
-
-A nomenclatura segue o padrão:
-
-`backup-khronos-AAAA-MM-DD-HH-MM.json`
-
-Exemplo: `backup-khronos-2026-11-06-21-30.json`.
-
-O horário do nome é obtido do relógio local do dispositivo. Dois backups gerados no mesmo minuto podem receber o mesmo nome, e o navegador decidirá como tratar downloads com nomes repetidos.
-
-## 38. Exportação individual
-
-Selecione o projeto desejado e escolha **Exportar Projeto JSON** no menu. O arquivo conterá o projeto selecionado, com sua pontuação e seus registros. O nome seguirá o padrão:
-
-`export-khronos-AAAA-MM-DD-HH-MM.json`
-
-A exportação individual é útil para transportar ou preservar um projeto sem incluir os demais. Ela não apaga nem altera o projeto original. Um projeto exportado pode ser importado posteriormente como cópia independente.
-
-## 39. Sessões ativas durante exportação
-
-Quando um relógio está em andamento, a exportação calcula o intervalo transcorrido até o momento da geração do arquivo. O arquivo exportado representa uma fotografia temporal daquele instante e não mantém a sessão em execução.
-
-No aplicativo original, a sessão pode continuar ativa depois do download. Portanto, o total do projeto original poderá superar o total do arquivo exportado. Para obter um marco de encerramento claro, pause o relógio antes de exportar.
-
-## 40. Importar projeto
-
-Abra o menu e selecione **Importar / Restaurar JSON**. Escolha um arquivo de exportação individual compatível. O Khronos lê o JSON, valida sua estrutura básica e adiciona uma nova cópia do projeto ao conjunto existente.
-
-A cópia importada recebe um novo identificador e tem seu nome complementado com a indicação “(importado)”. Esse comportamento evita conflito direto de identificadores com o projeto original. A importação não exclui os projetos já presentes.
-
-## 41. Restaurar Backup Geral
-
-Selecione o arquivo de backup global. O aplicativo exibirá uma confirmação porque a restauração **substitui o conjunto atual de projetos** pelo conjunto contido no arquivo. Antes de confirmar, gere um backup atualizado dos dados existentes, se eles forem importantes.
-
-Depois da restauração, os projetos presentes no arquivo passam a compor a base local. Os projetos que existiam apenas no armazenamento anterior deixam de aparecer. A operação não faz mesclagem automática entre backups globais diferentes.
-
-## 42. Validação dos arquivos
-
-A importação aceita JSON com a estrutura esperada pela versão 1.0. O aplicativo verifica a versão, a presença dos projetos, campos essenciais, tipos básicos e registros reconhecidos. Também impõe um limite de tamanho de arquivo na leitura.
-
-Essa validação reduz erros comuns, mas não constitui auditoria criptográfica nem garantia contra arquivos maliciosamente construídos. Importe somente arquivos de origem confiável. A versão atual não utiliza assinatura digital, senha, criptografia ou verificação por hash dos backups.
-
-## 43. Proteção e privacidade dos backups
-
-Arquivos JSON são documentos de texto estruturado. Eles podem conter nomes de projetos, observações, horários e durações. Qualquer pessoa com acesso ao arquivo pode potencialmente ler essas informações.
-
-Se os dados forem privados, guarde os backups em local protegido. Não publique um backup pessoal em repositório público e não envie o arquivo para terceiros sem verificar seu conteúdo. A ausência de servidor no Khronos não impede exposição de dados quando o usuário compartilha voluntariamente o arquivo.
-
----
-
-# PARTE IX — RELATÓRIOS E IMPRESSÃO
-
-## 44. Gerar relatório
-
-Abra o projeto que deseja documentar. No menu hambúrguer, selecione **Imprimir Relatório**. O Khronos abre uma nova janela com o relatório formatado e solicita a impressão pelo mecanismo nativo do navegador.
-
-O relatório contém identificação do projeto, data de geração, data de criação, pontuação em graus, duração, equivalências temporais, chefão atual, conquistas desbloqueadas, diplomas elegíveis e histórico de registros.
-
-## 45. Salvar como PDF
-
-Se o navegador ou sistema operacional disponibilizar a opção **Salvar como PDF** na caixa de impressão, ela poderá ser utilizada para gerar um documento eletrônico. Essa função é oferecida pelo navegador, não por uma biblioteca de PDF incorporada ao Khronos.
-
-Antes de salvar, confira a visualização de impressão, o tamanho do papel, as margens e a orientação. Em projetos com histórico extenso, o relatório poderá ocupar muitas páginas. O aplicativo não possui nesta versão um editor avançado de layout de impressão.
-
-## 46. Problemas com janelas pop-up
-
-A impressão utiliza a abertura de uma nova janela. Se o navegador bloquear pop-ups, o relatório pode não aparecer. Verifique o indicador de bloqueio na barra de endereços e permita a abertura para o site, caso confie nele.
-
-Em alguns ambientes, a impressão pode ser aberta de forma diferente ou exigir uma segunda ação do usuário. Se o relatório não surgir, tente novamente em uma aba normal do Chrome, com bloqueadores temporariamente ajustados para o endereço do aplicativo.
-
----
-
-# PARTE X — ARMAZENAMENTO, SEGURANÇA E CONFIABILIDADE
-
-## 47. Onde ficam os dados?
-
-A versão 1.0 utiliza `localStorage` para persistir o estado principal. Os dados são associados à origem do site no navegador. Eles não são enviados automaticamente ao GitHub, a um servidor do desenvolvedor ou a uma conta online.
-
-O Service Worker e o Cache Storage guardam arquivos da aplicação para permitir uso offline. Esses caches são diferentes do armazenamento de projetos. Apagar apenas um cache de recursos não equivale necessariamente a apagar os projetos; entretanto, a opção de limpar todos os dados do site pode remover ambos.
-
-## 48. Limites do armazenamento local
-
-O `localStorage` tem capacidade limitada, que varia entre navegadores e ambientes. O Khronos salva o estado em formato JSON, incluindo os registros históricos. Com grande quantidade de projetos ou sessões, o espaço ocupado cresce.
-
-Se o navegador recusar uma gravação, o aplicativo apresenta uma mensagem de erro. Isso significa que o registro pode não ter sido persistido. Para projetos muito longos, é prudente exportar backups regularmente e verificar se os novos registros permanecem após recarregar a página.
-
-## 49. O que acontece se o navegador fechar?
-
-O estado do cronômetro é salvo quando uma sessão começa e em outros momentos definidos pelo aplicativo. Se o navegador encerrar a aba, a recuperação dependerá do último estado efetivamente gravado. Ao reabrir, uma sessão ainda marcada como ativa poderá continuar refletindo o tempo decorrido.
-
-Esse comportamento deve ser interpretado com cuidado: se você deixou uma sessão ativa por engano, o aplicativo não saberá distinguir o período trabalhado do período de ausência. Também existem riscos de perda de alterações recentes se o processo for encerrado abruptamente ou se uma gravação falhar.
-
-## 50. Alteração do relógio do dispositivo
-
-O cálculo utiliza horários fornecidos pelo sistema. Mudanças manuais de data ou hora podem causar diferenças na duração computada. O aplicativo não utiliza uma fonte externa de tempo certificada nem dispõe de um relógio independente resistente a manipulações.
-
-Para reduzir inconsistências, mantenha a configuração automática de data e hora do dispositivo ativada. Evite alterar o horário durante sessões em andamento. Se perceber valores inesperados, pause o cronômetro, verifique o relógio do aparelho e preserve um backup antes de realizar novas operações.
-
-## 51. Privacidade
-
-Não há cadastro de usuário, autenticação, rastreamento remoto implementado ou transmissão automática dos projetos para um servidor próprio. Isso reduz a quantidade de dados compartilhados durante a operação normal.
-
-Por outro lado, pessoas com acesso ao mesmo perfil de navegador ou ao dispositivo desbloqueado podem visualizar os projetos. A proteção do aparelho, o bloqueio de tela e os cuidados com arquivos exportados continuam importantes. O Khronos não fornece bloqueio por senha próprio.
-
-## 52. Integridade dos registros
-
-A versão atual não possui trilha de auditoria imutável, assinaturas criptográficas, proteção contra alteração do armazenamento ou mecanismo de detecção de adulteração. Entradas manuais modificam legitimamente a pontuação. Por isso, não use os relatórios como prova independente de horas efetivamente trabalhadas.
-
-O histórico é um recurso de acompanhamento pessoal. Em contextos que exigem comprovação formal, utilize sistemas específicos com autenticação, controles de acesso e auditoria adequada.
-
----
-
-# PARTE XI — ACESSIBILIDADE E EXPERIÊNCIA DE USO
-
-## 53. Design mobile-first
-
-O Khronos foi desenhado para telas pequenas, com botões de toque, cartões responsivos e navegação concentrada no menu. Em telas maiores, os cartões são organizados em mais colunas. A interface procura manter os comandos principais reconhecíveis sem depender de gestos complexos.
-
-No smartphone, utilize preferencialmente a orientação em que os textos e botões fiquem confortáveis. O layout se adapta à largura disponível, mas o comportamento final deve ser verificado em aparelhos reais e com diferentes configurações de tamanho de fonte.
-
-## 54. Paleta cromática Itten
-
-A identidade visual emprega os tokens de cores fornecidos para o projeto, incluindo os tons de azul, azul-esverdeado, violeta e verde. As cores de base são `#273877`, `#64A076` e `#C960D7`. Os demais tokens são organizados como variáveis CSS, facilitando manutenção e consistência.
-
-A paleta visual não deve ser confundida com certificação de contraste. Para validar conformidade WCAG 2.1 AA ou AAA, é necessário medir as combinações reais de texto e fundo, estados de foco, bordas, elementos desabilitados e componentes nos dois temas.
-
-## 55. Navegação por teclado
-
-Botões, links e campos utilizam elementos HTML nativos, permitindo navegação por teclado nos navegadores compatíveis. O foco visível recebe destaque CSS. As caixas de diálogo utilizam o elemento `dialog`, que oferece comportamento nativo de abertura modal.
-
-Para navegar, utilize Tab e Shift+Tab. Pressione Enter ou Espaço para ativar controles apropriados. A tecla Escape pode fechar o menu e, conforme o comportamento nativo do navegador, a caixa de diálogo. A acessibilidade completa com leitores de tela ainda requer testes específicos.
-
-## 56. Movimento reduzido
-
-O CSS considera a preferência do sistema por movimento reduzido. Quando ativada, as animações e transições são praticamente eliminadas. Isso inclui a rotação visual da engrenagem na abertura.
-
-A redução de movimento não altera a pontuação, a duração das sessões ou as regras de conquista. Ela afeta apenas a apresentação visual. O usuário pode modificar essa preferência nas configurações de acessibilidade do próprio dispositivo.
-
----
-
-# PARTE XII — SOLUÇÃO DE PROBLEMAS
-
-## 57. O site mostra erro 404
-
-Confirme o endereço oficial, o nome do repositório e a presença de `index.html` na raiz. Verifique se o GitHub Pages foi ativado para a ramificação correta e se a publicação terminou. Arquivos com letras maiúsculas e minúsculas diferentes podem gerar erros de caminho.
-
-Se o site foi publicado recentemente, aguarde a conclusão do processo e atualize a página. Consulte também a área de implantação do repositório para identificar falhas de publicação.
-
-## 58. A página abre sem estilos
-
-Verifique se `styles.css` está na raiz e se o nome coincide exatamente com a referência do HTML. Abra as ferramentas de desenvolvedor do Chrome e consulte a aba Network para identificar requisições com erro.
-
-Uma versão antiga do Service Worker também pode estar entregando arquivos desatualizados. Atualize a versão do cache quando publicar mudanças e recarregue o aplicativo após a instalação do novo Service Worker.
-
-## 59. Botões não funcionam
-
-Confira se `app.js` foi carregado sem erros. Abra o Console do navegador e procure mensagens relacionadas a JavaScript. Certifique-se de que o arquivo não foi truncado durante a cópia para o repositório.
-
-O Khronos depende de JavaScript para navegar, salvar projetos, controlar o relógio e gerar exportações. Com scripts bloqueados ou erros de sintaxe, essas funções não estarão disponíveis.
-
-## 60. O ícone não aparece
-
-Confirme que os arquivos `icon-192.png` e `icon-512.png` existem na raiz e são PNGs válidos com dimensões correspondentes. Verifique se o manifesto referencia os caminhos corretos e se os arquivos abrem diretamente pelo navegador.
-
-Ícones instalados podem permanecer em cache por algum tempo. Uma atualização de imagem nem sempre aparece imediatamente no atalho existente. Dependendo do sistema, pode ser necessário atualizar a instalação ou recriar o atalho.
-
-## 61. A instalação PWA não é oferecida
-
-Verifique o acesso por HTTPS, a validade do manifesto, os ícones e o registro do Service Worker. Confirme que o navegador e a plataforma oferecem instalação para aquela configuração.
-
-A ausência de um botão de instalação não significa necessariamente que a página esteja inutilizável. O Khronos pode continuar funcionando como aplicativo web. A interface 1.0 não possui um botão próprio que capture o evento de instalação do navegador.
-
-## 62. Os graus parecem incorretos
-
-Primeiro, confirme a equivalência: seis graus por minuto. Em seguida, verifique se a sessão ficou ativa enquanto o usuário estava ausente, se há mais de um projeto com relógio em andamento ou se foram adicionadas entradas manuais.
-
-Confira também a data e a hora do aparelho. Se a divergência persistir, preserve um backup, anote a sequência de ações e teste com um projeto novo. Não apague os dados antes de salvar o que for recuperável.
-
-## 63. Os dados desapareceram
-
-Verifique se está utilizando o mesmo navegador, perfil e origem do site. Dados de uma aba anônima, de outro navegador ou de outro dispositivo não são automaticamente compartilhados. Confira se houve limpeza de dados de navegação.
-
-Se possuir um backup, utilize **Importar / Restaurar JSON**. Lembre-se de que restaurar um backup global substitui o conjunto atual. Caso não exista backup e o armazenamento local tenha sido apagado, a versão 1.0 não oferece recuperação remota.
-
-## 64. O backup não baixa
-
-Verifique as permissões de download do navegador, o espaço disponível e a pasta de downloads. Confira se há bloqueios de segurança ou configurações que exigem confirmação para salvar arquivos.
-
-Tente gerar o backup novamente e observe se aparece uma notificação do navegador. Se o arquivo for salvo, abra-o apenas para confirmar que contém JSON legível; não altere seu conteúdo sem necessidade.
-
-## 65. A importação falha
-
-Confirme que selecionou um arquivo `.json` compatível com o Khronos 1.0. Arquivos de outros aplicativos não possuem necessariamente a mesma estrutura. Verifique se o download foi concluído e se o arquivo não está vazio ou corrompido.
-
-Uma mensagem de incompatibilidade também pode ocorrer quando os campos esperados estão ausentes ou foram alterados manualmente. Se possível, teste outra cópia do backup original. Não tente resolver problemas de importação removendo aleatoriamente campos do JSON.
-
-## 66. O aplicativo não funciona offline
-
-Abra o site com conexão e permita que os arquivos sejam carregados integralmente. Depois, teste novamente sem internet. Se o cache estiver incompleto ou tiver sido removido, a abertura offline poderá falhar.
-
-O uso offline depende das políticas do navegador e da disponibilidade dos recursos armazenados. Para testar, utilize as ferramentas de desenvolvedor ou o modo avião após uma visita online bem-sucedida.
-
----
-
-# PARTE XIII — MANUTENÇÃO TÉCNICA
-
-## 67. Estrutura de arquivos
-
-A distribuição básica contém:
-
-```text
-Khronos/
-├── index.html
-├── styles.css
-├── app.js
-├── manifest.json
-├── sw.js
-├── icon-192.png
-├── icon-512.png
-└── README.md
-```
-
-O `index.html` define a estrutura e os elementos da interface. O `styles.css` reúne temas, responsividade e apresentação. O `app.js` implementa dados, navegação, contagem, projetos e exportações. O `manifest.json` fornece metadados de instalação. O `sw.js` gerencia o cache offline. Os PNGs são os ícones do aplicativo.
-
-## 68. Atualização do Service Worker
-
-Ao publicar uma atualização que modifique os arquivos estáticos, altere o identificador de cache no `sw.js`, por exemplo, de `khronos-static-v1` para `khronos-static-v2`. Isso permite que o novo Service Worker utilize um cache diferente e remova versões antigas durante sua ativação.
-
-A atualização não é necessariamente instantânea em todas as abas. Teste o carregamento após fechar e reabrir o aplicativo. Evite modificar a estrutura dos dados persistidos sem planejar migração, pois backups antigos podem se tornar incompatíveis com versões futuras.
-
-## 69. Testes recomendados
-
-Antes de publicar uma versão definitiva, execute testes de criação de projetos, pausa, retomada, alternância entre projetos, sessões com tela bloqueada, entradas manuais, marcos de conquistas, passagem de Fase, exportação, importação, restauração, impressão e uso offline.
-
-Inclua testes de falha: armazenamento cheio, JSON inválido, interrupção do navegador, relógio do dispositivo alterado, arquivo de backup grande, múltiplas sessões ativas e atualizações com cache antigo. A implementação 1.0 ainda não foi certificada por uma suíte automatizada completa.
-
-## 70. Limitações conhecidas da versão 1.0
-
-O aplicativo não possui exclusão, renomeação ou edição de projetos; não permite corrigir registros individuais; não oferece autenticação ou sincronização; não tem metas personalizadas nem notificações; não comprova trabalho efetivo; e não impede sessões simultâneas em projetos diferentes.
-
-Além disso, a visualização do chefão pode exigir uma nova renderização após a passagem de Fase durante uma sessão ativa. O armazenamento local pode atingir limites. A importação exige validações adicionais para cenários adversariais, e a interface ainda precisa de auditoria formal de acessibilidade. Essas limitações devem orientar futuras atualizações.
-
-## 71. Boas práticas de utilização
-
-Comece com poucos projetos e nomes claros. Pause o relógio sempre que deixar de trabalhar. Utilize entradas manuais apenas para períodos que realmente deseja registrar. Consulte a galeria como instrumento de motivação, não como medida absoluta de mérito.
-
-Faça backups regulares, especialmente após grandes avanços. Mantenha o dispositivo atualizado e protegido. Antes de restaurar um backup, preserve os dados atuais. Ao comparar períodos, considere não apenas os graus acumulados, mas também a qualidade do trabalho, o descanso e os resultados concretos.
-
----
-
-# PARTE XIV — GLOSSÁRIO E REFERÊNCIAS
-
-## 72. Glossário
-
-**Grau:** unidade temporal básica do Khronos, equivalente a dez segundos. **Pulso:** 180 graus ou trinta minutos. **Giro:** 360 graus ou uma hora. **Turno:** 2.880 graus ou oito horas. **Fase:** 86.400 graus ou trinta Turnos. **Propulsão:** 3.628.800 graus ou quarenta e duas Fases.
-
-**Chefão:** desafio simbólico associado a uma Fase. **Conquista:** marco desbloqueado por graus acumulados. **Diploma:** representação honorífica gerada pelo aplicativo. **Sessão:** intervalo de cronômetro encerrado pela pausa. **Entrada manual:** tempo declarado pelo usuário. **Dashboard:** painel de visão geral. **PWA:** aplicação web que pode oferecer instalação e recursos offline. **Service Worker:** script do navegador que gerencia determinados eventos e recursos em cache. **JSON:** formato textual estruturado utilizado nos arquivos de exportação.
-
-## 73. Endereços oficiais
-
-**Aplicativo:** https://magpe-stack.github.io/Khronos/  
-**Repositório:** https://github.com/magpe-stack/Khronos  
-**Manual:** https://github.com/magpe-stack/Khronos/blob/main/README.md
-
-Estes são os endereços previstos para a distribuição oficial. Sua disponibilidade depende da publicação e manutenção do repositório correspondente.
-
-## 74. Considerações finais
-
-O Khronos foi criado para tornar visível uma dimensão frequentemente negligenciada dos projetos: a acumulação de pequenos períodos de dedicação. Seu sistema de graus oferece uma linguagem alternativa para observar essa continuidade, enquanto os chefões e as conquistas introduzem elementos lúdicos no acompanhamento do tempo.
-
-Nenhuma pontuação substitui o discernimento sobre o que merece ser feito. Um projeto pode acumular muitos graus e ainda precisar de mudanças de método. Outro pode avançar significativamente com poucas horas de trabalho bem orientado. O aplicativo deve ser utilizado como apoio à consciência temporal, não como fonte de pressão constante.
-
-**Khronos — O tempo multiplica seus hábitos.**
-
----
-
-*Fim do Manual Completo do Software — Khronos 1.0.*
+**Interpretação:** ultrapassar a duração prevista não é considerado vitória automática. O aplicativo apresenta o desvio de tempo e a avaliação do objetivo separadamente. Sessões de Foco e Ponto não podem ser iniciadas simultaneamente; conclua a sessão ativa antes de iniciar outra. Como o funcionamento é local, mantenha backups regulares.
